@@ -13,12 +13,12 @@ deckcartes([1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,
 5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,
 10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12])
 
-%joueur(nomjoueur, [valeurscartessecondes], [nomsjoueurs],tempstotal, gagnant)
+%joueur(nomjoueur, [valeurscartessecondes], [nomsjoueurs])
 
-joueur(italie,_, [italie_1,italie_2,italie_3],_,_)
-joueur(hollande,_, [hollande_1,hollande_2,hollande_3],_,_)
-joueur(belgique,_, [belgique_1,belgique_2,belgique_3],_,_)
-joueur(allemagne,_, [allemagne_1,allemagne_2,allemagne_3],_,_)
+joueur(italie,_, [italie_1,italie_2,italie_3])
+joueur(hollande,_, [hollande_1,hollande_2,hollande_3])
+joueur(belgique,_, [belgique_1,belgique_2,belgique_3])
+joueur(allemagne,_, [allemagne_1,allemagne_2,allemagne_3])
 
 %Predicat déclaration de toutes cases possibles
 
@@ -34,10 +34,7 @@ joueur(allemagne,_, [allemagne_1,allemagne_2,allemagne_3],_,_)
 */
 
 %Obtention de la plus haute valeur des cartes secondes pour chaque joueur
-maxchaquejoueur(italie,Maxvali):- joueur(italie,Listjoueuri,_,_,_),maxlist(Listjoueuri,Maxvali)
-maxchaquejoueur(hollande,Maxvalh):- joueur(hollande,Listjoueurh,_,_,_),maxlist(Listjoueurh,Maxvalh)
-maxchaquejoueur(belgique,Maxvalb):- joueur(belgique,Listjoueurb,_,_,_),maxlist(Listjoueurb,Maxvalb)
-maxchaquejoueur(allemagne,Maxvala):- joueur(allemagne,Listjoueura,_,_,_),maxlist(Listjoueura,Maxvala)
+maxchaquejoueur(Nomjoueur,Maxval):- joueur(Nomjoueur,Listjoueur,_),maxlist(Listjoueur,Maxval)
 
 %Obtention deuxième plus haute valeur with delete)
 secondmaxchaquejoueur(Nomjoueur, Plushauteval,Secondeplushauteval):- joueur(Nomjoueur,Listjoueur,_,_,_),delete(Listjoueur,Plushauteval,Nouvelleliste),maxlist(Nouvelleliste,Secondeplushauteval)
@@ -45,7 +42,7 @@ secondmaxchaquejoueur(Nomjoueur, Plushauteval,Secondeplushauteval):- joueur(Nomj
 %Permet de trouver le joueur la plus haute parmi ceux de la liste récursivement
 %(Quand leur carte la plus haute est la même, va chercher la seconde carte la plus haute et ainsi de suite)
 
-
+%à terminer
 maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-% if plushautevaluecom in liste joueur in list then --> search fornext highest value (prédicat secong highest with delete) compare those next value x >y
 maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-% if plushautevaluecom in liste joueur in list then --> search fornext highest value (prédicat secong highest with delete) compare those next value x==y
 maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-
@@ -100,3 +97,25 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
 
  ordreddebut([C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12]):- maxtousjoueurs(Premierjoueur), secondplace(Secondjoueur),troisiemeplace(Troisiemejoueur), quatriemeplace(Quatriemejoueur),
  joueur(Premierjoueur,_,[C1,C5,C9],_,_),joueur(Secondjoueur,_,[C2,C6,C10],_,_),joueur(Troisiemejoueur,_,[C3,C7,C11],_,_),joueur(Quatriemejoueur,_,[C4,C8,C12],_,_)
+
+ /*
+ ---------------------
+ ---------------------
+     Prédicats gagnant
+ ----------------------
+ */
+
+%------- Calcul du temps de chacun des coureurs ---------
+% tempspartiel(Nomcoureur, Tempspartiel
+%BESOIN DE PRECISER POSITION APRES LIGNE ARRIVEE
+tempspartiel(Nomcoureur,Tempspartiel):-position(Nomcoureur, Case), Tempspartiel is 95-%valeur venant de POSITION
+
+%Vérifie si un coureur a passé sa ligne d'arrivée --> utilisée pour le calcul du temps total +10 après chaque toour (dés qu'un coureur a passé la ligne d'arrivée)
+apasselignearrivee(Nomcoureur):-position(Nomcoureur, Case), % Condition sur le numéro de case (??? ligne d'arrivée ==?)
+
+%Obtention du temps total d'un joueur
+tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartiel(C1,T1), Tempspartiel(C2,T2),Tempspartiel(C3,T3), Tempstotal is T1+T2+T3
+
+% ------- Définition du gagnant de la partie --------
+gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tempstotal(Perdant1, Temps1), tempstotal(Perdant2, Temps2), Tempsmin<Temps, Tempsmin<Temps1,Tempsmin<Temps2
+%Comment gérer cas où deux ont même tempstotal (2 gagnants??)
