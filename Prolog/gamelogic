@@ -1,0 +1,26 @@
+
+
+/*
+---------------------
+    Prédicats début
+----------------------
+situation début/base de connaissance
+---------------------
+*/
+
+deckcartes([1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,
+5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,
+10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12])
+
+%joueur(nomjoueur, [valeurscartessecondes], [nomsjoueurs],tempstotal, gagnant)
+
+joueur(italie,_, [italie_1,italie_2,italie_3],_,_)
+joueur(hollande,_, [hollande_1,hollande_2,hollande_3],_,_)
+joueur(belgique,_, [belgique_1,belgique_2,belgique_3],_,_)
+joueur(allemagne,_, [allemagne_1,allemagne_2,allemagne_3],_,_)
+
+%Predicat déclaration de toutes cases possibles
+
+
+
+%Prédicat pour pioche carte (début)--> mise à jour liste cartes secondes (joueur/globale)
