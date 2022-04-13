@@ -105,10 +105,11 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
  -----------------------------------
  */
 
-%représentation du tas de cartes
+%représentation du tas de cartes (liste), représentation liste carte secondes de chaque joueur,
+%Liste des coureurs devant passé leur tour
 %Position de chaque coureur
 %un coureur a passé la ligne d'arrivée ? (pour le calcul du temps total)
-
+%autre chose (variable,...) succeptible d'être modifié par une action du joueur (une répercussion de celles-ci)
 
 
 
@@ -139,18 +140,20 @@ gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tem
 -----------------------------
 -----------------------------
     Fonction terminale
-(vérifie si le jeu est terminé)
 -----------------------------
+(vérifie si le jeu est terminé)
+
 */
 %Par rapport à la position de chaque coureur (ont-ils tous passé la ligne d'arrivée ?)
-% Si  oui, alors ce prédicat est vrai et la ^partie est finie (vérification gagnant et affichage écran fin)
+% Si  oui, alors ce prédicat est vrai et la partie est finie (vérification gagnant et affichage écran fin)
+
 
 
 
 /*
 -----------------------------
 -----------------------------
-    ACTIONS
+          ACTIONS
 -----------------------------
 */
 
