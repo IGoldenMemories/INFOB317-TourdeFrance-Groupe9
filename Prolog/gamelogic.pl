@@ -1,10 +1,10 @@
 :- use_module(library(lists))
 
 /*
----------------------
----------------------
+------------------------------
+-----------------------------
     Prédicats début
-----------------------
+------------------------------
 situation début/base de connaissance
 ---------------------
 */
@@ -99,10 +99,25 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
  joueur(Premierjoueur,_,[C1,C5,C9],_,_),joueur(Secondjoueur,_,[C2,C6,C10],_,_),joueur(Troisiemejoueur,_,[C3,C7,C11],_,_),joueur(Quatriemejoueur,_,[C4,C8,C12],_,_)
 
  /*
- ---------------------
- ---------------------
+ -----------------------------------
+ -----------------------------------
+     Définition d'un état de jeu
+ -----------------------------------
+ */
+
+%représentation du tas de cartes
+%Position de chaque coureur
+%un coureur a passé la ligne d'arrivée ? (pour le calcul du temps total)
+
+
+
+
+
+ /*
+ -----------------------------
+ -----------------------------
      Prédicats gagnant
- ----------------------
+ -----------------------------
  */
 
 %------- Calcul du temps de chacun des coureurs ---------
@@ -120,13 +135,32 @@ tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartie
 gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tempstotal(Perdant1, Temps1), tempstotal(Perdant2, Temps2), Tempsmin<Temps, Tempsmin<Temps1,Tempsmin<Temps2
 %Comment gérer cas où deux ont même tempstotal (2 gagnants??)
 
+/*
+-----------------------------
+-----------------------------
+    Fonction terminale
+(vérifie si le jeu est terminé)
+-----------------------------
+*/
+%Par rapport à la position de chaque coureur (ont-ils tous passé la ligne d'arrivée ?)
+% Si  oui, alors ce prédicat est vrai et la ^partie est finie (vérification gagnant et affichage écran fin)
+
+
 
 /*
----------------------
----------------------
+-----------------------------
+-----------------------------
     ACTIONS
-----------------------
+-----------------------------
 */
 
 %---------- Aspiration ----------------
 %Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
+
+%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
+%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
+
+
+%Un coureur se trouve JUSTE à CÔté et possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
+
+%Un coureur se trouve JUSTE à CÔté  et possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
