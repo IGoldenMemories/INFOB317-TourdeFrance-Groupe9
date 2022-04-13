@@ -119,3 +119,14 @@ tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartie
 % ------- Définition du gagnant de la partie --------
 gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tempstotal(Perdant1, Temps1), tempstotal(Perdant2, Temps2), Tempsmin<Temps, Tempsmin<Temps1,Tempsmin<Temps2
 %Comment gérer cas où deux ont même tempstotal (2 gagnants??)
+
+
+/*
+---------------------
+---------------------
+    ACTIONS
+----------------------
+*/
+
+%---------- Aspiration ----------------
+%Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
