@@ -12,11 +12,15 @@
 
 %Fonction d'évaluation
 %idée (minimiser le temps total (condition pour gagner))
+%-------------------------------------
 %choisir action qui permet:
 %   - d'arriver le plus vite à la ligne d'arrivée
 %   - de minimiser la distance entre le coureur (de qui c'est le tour) et la ligne d'arrivée)
+%ou si état est final (calcul de son utilité)
+%---------------------------------------------------------------------
 
-%Valeur évaluation :
+
+%Valeur utilité (si état est terminal) : A ECLAIRCIR
 %   - +10 (temps total plus petit que celui de tous les autres) (gagné)
 %   - +5 (égalité en temps total le plus petit (avec 1 joueur)) (gagné)?
 %   - +2 (égalité  en temps total le plus petit (avec 2 joueurs)) (gagné)?
