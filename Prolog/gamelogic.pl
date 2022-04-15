@@ -9,9 +9,6 @@ situation début/base de connaissance
 ---------------------
 */
 
-
-
-
 %joueur(nomjoueur, [valeurscartessecondes], [nomsjoueurs])
 
 joueur(italie,_, [italie_1,italie_2,italie_3])
@@ -20,7 +17,58 @@ joueur(belgique,_, [belgique_1,belgique_2,belgique_3])
 joueur(allemagne,_, [allemagne_1,allemagne_2,allemagne_3])
 
 %Predicat déclaration de toutes cases possibles
+%case sans lettre en largeur ou pas
+case(Idcase):-numero(Idcase,Numero), position(Idcase,Positionlargeur)
+%case chance
+case(Idcase):-numero(Idcase,Numero), position(Idcase,Positionlargeur),casechance(Idcase)
+%case avec lettre
+case(Idcase):-numero(Idcase,Numero), lettre(Idcase,Lettre)
+%case chance
+case(Idcase):-numero(Idcase,Numero), lettre(Idcase,Lettre),casechance(Idcase)
 
+
+%1ère ligne après ligne départ
+%numero(U-->1èrecase)
+%position(U-->1èrecase,1-->le plus à gauche)
+%position(U2-->1èrecase,2-->au milieu)
+%position(U3-->1èrecase,3-->le plus à droite)
+numero(u,1)
+position(u,1)
+numero(u2,1)
+position(u2,2)
+numero(u3,1)
+position(u3,3)
+
+%Exemple pour les lettres et case chance
+numero(n,9)
+lettre(n,a)
+casechance(n)
+numero(nb,9)
+lettre(nb,b)
+numero(nc,9)
+lettre(nc,c)
+
+%Exemple couloir parallèle avec lettre
+numero(vsi,26)
+lettre(vsi,a)
+casechance(vsi)
+numero(vsib,26)
+lettre(vsib,b)
+% !! D avant C dans la progression sur plateau !!
+numero(vsic,26)
+lettre(vsic,c)
+numero(vsid,26)
+lettre(vsid,d)
+
+%Exemple couloir parallèle avec numero/position
+numero(vh,28)
+position(vh,1)
+casechance(vh)
+numero(vh2,28)
+position(vh2,2)
+%Pour position située dans 1er coulior position (_,4)
+numero(vh4,28)
+position(vh4,4)
 
 
 %Prédicat pour pioche carte (début)--> mise à jour liste cartes secondes (joueur/globale)
@@ -225,7 +273,14 @@ caselibre([c|casessuivantes],idcase):- not(position(nomcoureur,c)),idcase=c,case
 
 caselibreapres(case,idcase):- split_string(case,".","",casesep),nth0(0,casesep,numero),nouvindex=numero+1,nth0(nouvindex,cases,casessuivantes),length(casessuivantes,L),L>1,caselibre(casessuivantes,idcase).
 
-peutdepasser(nomcoureur,valeurcarteseconde):- joueur(_,cartessecondes, nomcoureur,_,_),member(valeurcarteseconde,cartessecondes),valeurcarteseconde >= 4.
+peutdepasser(nomcoureur,valeurcarteseconde):- joueur(_,cartessecondes, Listecoureur,_,_),member(Nomcoureur,Listecoureur), member(valeurcarteseconde,cartessecondes),valeurcarteseconde >= 4.
+%Coureur le plus près derrière doit pouvoir utiliser une cartes seconde (que son joueur possède) de valeur minimale 4
+
+%pluspreesderriere(Nomcoureur,Nomcoureurderriere):- aller chercher toutes les positions des coureurs et calculer distance minimale
+%calculdistance(Nomcoureur, Nomcoureurderrierepotentiel, Distanceentrecesdeuxcoureurs):- position valeur numero (différence) ou cas avec lettre à préciser
+%estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
+
+
 
 
 depassement(nomcoureur,valeurcarteseconde,ordrephasedynamique,prochaincoureur):- valeurcarteseconde>0,position(nomcoureur,case),caselibreapres(case,idcase), peutdepasser(nomcoureur,valeurcarteseconde),position(nomcoureur,idcase),valcartesec=valeurcarteseconde-1,depassement(nomcoureur,valcartesec),miseajourpositioncoureur(nomcoureur,idcase),estletourde(nomcoureur,ordrephasedynamique,prochaincoureur).
