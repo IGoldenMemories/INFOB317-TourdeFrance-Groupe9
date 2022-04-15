@@ -24,6 +24,7 @@
 %   - +10 (temps total plus petit que celui de tous les autres) (gagné)
 %   - +5 (égalité en temps total le plus petit (avec 1 joueur)) (gagné)?
 %   - +2 (égalité  en temps total le plus petit (avec 2 joueurs)) (gagné)?
+%   - +1 (égalité  en temps total le plus petit (avec 3 joueurs)) (gagné)?
 %   - +0 (temps total plus grand qu'un autre (perdu))
 
 
