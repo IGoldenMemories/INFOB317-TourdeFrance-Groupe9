@@ -23,8 +23,13 @@ case(Idcase):-numero(Idcase,Numero), position(Idcase,Positionlargeur)
 case(Idcase):-numero(Idcase,Numero), position(Idcase,Positionlargeur),casechance(Idcase)
 %case avec lettre
 case(Idcase):-numero(Idcase,Numero), lettre(Idcase,Lettre)
+case(Idcase):-numero(Idcase,Numero), lettre(Idcase,Lettre),estcouloir(Idcase)
 %case chance
 case(Idcase):-numero(Idcase,Numero), lettre(Idcase,Lettre),casechance(Idcase)
+case(Idcase):-numero(Idcase,Numero), lettre(Idcase,Lettre),casechance(Idcase),estcouloir(Idcase)
+
+%case se situant après la ligne d'arrivée
+case(Idcase):- numero(Idcase,Numero),position(Idcase,Positionlargeur),apresarrivee(Idcase)
 
 
 %1ère ligne après ligne départ
@@ -48,19 +53,22 @@ lettre(nb,b)
 numero(nc,9)
 lettre(nc,c)
 
-%Exemple couloir parallèle avec lettre
+%Exemple 1er couloir parallèle avec lettre
 numero(vsi,26)
 lettre(vsi,a)
 casechance(vsi)
 numero(vsib,26)
 lettre(vsib,b)
 % !! D avant C dans la progression sur plateau !!
+%exemple dans couloir
 numero(vsic,26)
 lettre(vsic,c)
+estcouloir(vsic)
 numero(vsid,26)
 lettre(vsid,d)
+estcouloir(vsid)
 
-%Exemple couloir parallèle avec numero/position
+%Exemple 1er couloir parallèle avec numero/position
 numero(vh,28)
 position(vh,1)
 casechance(vh)
@@ -69,6 +77,54 @@ position(vh2,2)
 %Pour position située dans 1er coulior position (_,4)
 numero(vh4,28)
 position(vh4,4)
+
+%Exemple 2ème couloir parallèle avec lettre
+numero(no,90)
+lettre(no,a)
+
+%Pour position située dans 2ème couloir avec lettre
+%!! C avant B dans ordre progression !!
+numero(nob,90)
+lettre(nob,b)
+estcouloir(nob)
+numero(noc,90)
+lettre(noc,c)
+casechance(noc)
+estcouloir(noc)
+
+%Exemple 2ème couloir parallèle avec numero/position
+numero(nu,91)
+position(nu,1)
+% Pour position dans couloir (position(_,3))
+numero(nu3,91)
+position(nu3,3)
+
+%Exemple après ligne arrivée
+%sur ligne (0)
+numero(p,0)
+position(p,1)
+apresarrivee(p)
+numero(p2,0)
+position(p2,2)
+apresarrivee(p2)
+numero(p3,0)
+position(p3,3)
+apresarrivee(p3)
+
+%Fin plushaute
+numero(pn,9)
+position(pn,9)
+apresarrivee(pn)
+numero(pn2,9)
+position(pn2,2)
+apresarrivee(pn2)
+numero(pn3,9)
+position(pn3,3)
+apresarrivee(pn3)
+
+
+
+
 
 
 %Prédicat pour pioche carte (début)--> mise à jour liste cartes secondes (joueur/globale)
