@@ -627,10 +627,6 @@ position(pn3,3)
 apresarrivee(pn3)
 
 
-
-
-
-
 %Prédicat pour pioche carte (début)--> mise à jour liste cartes secondes (joueur/globale)
 
 
@@ -721,10 +717,12 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
 %état initial
 jeu([1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,
 5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,
-10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12], [],[],[],[], [], [depart,depart,depart,depart,depart,depart,depart,depart,depart,depart,depart,depart], faux)
+10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12], [],[],[],[], [], [[italie_1,depart],[italie_2,depart],[italie_3,depart],[hollande_1,depart],[hollande_2,depart],[hollande_3,depart]
+,[belgique_1,depart],[belgique_2,depart],[belgique_3,depart],[allemagne_1,depart],[allemagne_2,depart],[allemagne_3,depart]], faux)
 
 %état final
-jeu(_, _,_,_,_,_, [arrivee,arrivee,arrivee,arrivee,arrivee,arrivee,arrivee,arrivee,arrivee,arrivee,arrivee,arrivee], vrai)
+jeu(_, _,_,_,_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,arrivee],[hollande_2,arrivee],[hollande_3,arrivee]
+,[belgique_1,arrivee],[belgique_2,arrivee],[belgique_3,arrivee],[allemagne_1,arrivee],[allemagne_2,arrivee],[allemagne_3,arrivee]], vrai)
 
 
 
@@ -788,7 +786,7 @@ miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes):- joueur(nomjoueur,n
 
 %Pour chaque case, s'il s'agit d'un lieu de chute, on cherche le numéro de la case, grâce à un numéro, on apprend le nom du coureur dessus, qui est ajouté à la liste des coureurs dans la chute.
 
-coureursentrainedanschute(caseschute,coureurschute):- foreach(member(case,caseschute),(lieudechute(case,caseschute),estcase(case,numero),caseaveclettre(case,lettre),number_string(numero,num),string_concat(num,".",num1),string_concat(num1,lettre,n),position(nomcoureur,n),append(nomcoureur,coureurschute,coureurschute))).
+coureursentrainedanschute(caseschute,coureurschute):- foreach(member(case,caseschute),(lieudechute(case,caseschute),case(case,numero),caseaveclettre(case,lettre),number_string(numero,num),string_concat(num,".",num1),string_concat(num1,lettre,n),position(nomcoureur,n),append(nomcoureur,coureurschute,coureurschute))).
 
 
 %Pour chaque coureur dans la chute, on cherche à quel joueur il appartient en vérifiant dans la liste des coureurs de chaque joueur. S'il y est et que le joueur n'est pas encore dans la liste des joueurs impactés, il est ajouté.
@@ -805,11 +803,11 @@ joueursentrainedanschute([nomcoureur|coureurschute],joueurs,joueurschute):- fore
 % Pour qu'il s'agisse d'un lieu de chute, il faut qu'il y ait une chute. Pour les deux cases, on cherche à obtenir leurs numéros. S'ils sont égaux, les cases sont dans la même largeur.
 
 
-  % lieudechute([case1,case2|caseschute]):- chute(coureurs,coureurs), estcase(case1,numero1), estcase(case2,numero2), numero1==numero2, lieudechute(caseschute).
+  % lieudechute([case1,case2|caseschute]):- chute(coureurs,coureurs), case(case1,numero1), case(case2,numero2), numero1==numero2, lieudechute(caseschute).
 
 lieudechute([_|[]],caseschute2):- chute(coureurs,coureurs).
 
-lieudechute([case1|caseschute],caseschute2):-chute(coureurs,coureurs),estcase(case1,numero1),foreach(member(case2, caseschute2), (estcase(case2,numero2), case1/==case2, numero1==numero2)),lieudechute(caseschute,caseschute2).
+lieudechute([case1|caseschute],caseschute2):-chute(coureurs,coureurs),case(case1,numero1),foreach(member(case2, caseschute2), (case(case2,numero2), case1/==case2, numero1==numero2)),lieudechute(caseschute,caseschute2).
 
 
 % Ordre chute
