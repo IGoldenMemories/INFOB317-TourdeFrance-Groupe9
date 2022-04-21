@@ -25,10 +25,17 @@
 %   - +5 (égalité en temps total le plus petit (avec 1 joueur)) (gagné)?
 %   - +2 (égalité  en temps total le plus petit (avec 2 joueurs)) (gagné)?
 %   - +1 (égalité  en temps total le plus petit (avec 3 joueurs)) (gagné)?
-%   - +0 (temps total plus grand qu'un autre (perdu))
+%   - +0 (temps total plus petit qu'un autre (perdu))
 
+%PAS VALEUR UNIQUE RETOURNée --> SOUS PREDICATS utiljoueur(Nomjoueur,ValeurUtilpouretatfinal)
+%Util([Valeurutiljoueur1,Valeurutiljoueur2,Valeurutiljoueur3,Valeurutiljoueur4])
+%tempstotal(Nomjoueur,Tempstotal) --> gagnant(cas où un seul gagnant)
+%--> todo gagnant2, gagnant3 gagnant4
+%gagnant(Nomjoueur)--> Nomjoueur Util(Nomjoueur,10)
+%gagnant(Nomautrejoueur)--> Nomjoueur /== Nomautrejoueur Util(Nomjoueur,0)
+%autre cas +5,+2,+1
 
-
+%--> Relire le choix fait aux branches min max cas où plusieurs joueurs
 
 %Définition de la profondeur maximale de recherche
 

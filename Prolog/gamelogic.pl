@@ -813,6 +813,7 @@ estletourde(Nomcoureur,Ordrephasedebut,Prochaincoureur):- nth0(Index,Ordrephased
 estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur):- nth0(Index,Ordrephasedynamique,Nomcoureur),I is Index+1,nth0(I,Ordrephasedynamique,Prochaincoureur).
 
 lidis([]).
+coureursderriereli([]).
 %Peut dépasser si la distance entre le coureur et celui derrière qui est le plus proche est supérieure à 4
 peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,Cartessecondes, Listecoureur,_,_),lidis(Lidis),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,Cartessecondes),estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
 
@@ -823,18 +824,18 @@ peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,Cartessecondes, 
 
 
 %Liste de tous les coureurs derrière
-coureursderriereli([]).
-estderriere(Nomcoureur,[c|coureurs],coureursderriereli,Coureursderriere):- jeu(_,_,_,_,_,_,[[Nomcoureur,idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),numero1>numero2,insert(c,coureursderriereli,Coureursderriere).
+
+estderriere(Nomcoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):- jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),numero1>numero2,insert(c,coureursderriereli,Coureursderriere).
 
 
 %Distance avec chaque coureur derrière
 %calculdistance(Nomcoureur, [c|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
 
-calculdistance(Nomcoureur, [c|Coureursderriere],lidis, Listedistances):- jeu(_,_,_,_,_,_,[[Nomcoureur,idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),distance=numero1-numero2,insert(distance,lidis,Listedistances).
+calculdistance(Nomcoureur, [c|Coureursderriere],Lidis, Listedistances):- jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),distance=numero1-numero2,insert(distance,lidis,Listedistances).
 
 
 %estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
-estdistanceminimale(Listedistances,Distanceminimale):- max_list(listedistances,Distanceminimale).
+estdistanceminimale(Listedistances,Distanceminimale):- max_list(Listedistances,Distanceminimale).
 
 depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,_,_,_,_,[[Nomcoureur,idcase1]],_),caselibreapres(idcase1,Coureurs,casesuivantesli,idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,idcase2),valcartesec=Valeurcarteseconde-1,depassement(Nomcoureur,valcartesec),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
 
@@ -886,12 +887,13 @@ finjeu(Coureurs):- listecoureurarrive(Listearr),coureurs(Coureurs),foreach(membe
 %---------- Aspiration ----------------
 %Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
 
-%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
-aspiration(Coureur,Valeurcartesec,Casearrivee):-
-%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver à côté un autre coureur en utilisant la valeur de la carte seconde +1
-aspiration(Coureur,Valeurcartesec,Casearrivee):-
+%Un coureur se trouve JUSTE DERRIERE un autre coureur et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
+aspiration(Coureur,Valeurcartesec,Casearrivee):- %Verification exists autre coureur avec numero case = numero case +1, nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
+%Cas où lettre y réfléchir
+%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver à côté un autre coureur en utilisant la valeur de la carte seconde +1 ,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
+aspiration(Coureur,Valeurcartesec,Casearrivee):-%Verification exists autre coureur avec numero case = numero case +1,
 
 %Un coureur se trouve JUSTE à CÔté et possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
-aspiration(Coureur,Valeurcartesec,Casearrivee):-
+aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
 %Un coureur se trouve JUSTE à CÔté  et possibilité d'arriver juste derrière un autre coureur en utilisant la valeur de la carte seconde +1
-aspiration(Coureur,Valeurcartesec,Casearrivee):-
+aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
