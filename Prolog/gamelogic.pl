@@ -16,6 +16,10 @@ joueur(hollande,_, [hollande_1,hollande_2,hollande_3])
 joueur(belgique,_, [belgique_1,belgique_2,belgique_3])
 joueur(allemagne,_, [allemagne_1,allemagne_2,allemagne_3])
 
+%liste avec tous les noms de coureurs
+coureurs([italie_1,italie_2,italie_3,hollande_1,hollande_2,hollande_3,belgique_1,belgique_2,belgique_3,allemagne_1,allemagne_2,allemagne_3])
+listidcases([])
+
 %Predicat déclaration de toutes cases possibles
 %case sans lettre en largeur ou pas
 case(Idcase):-numero(Idcase,Numero), position(Idcase,Positionlargeur)
@@ -707,7 +711,7 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
      Définition d'un état de jeu
  -----------------------------------
  */
-
+%jeu([Cartes secondes tas], [Cartes])
 %représentation du tas de cartes (liste), représentation liste carte secondes de chaque joueur,
 %Liste des coureurs devant passé leur tour
 %Position de chaque coureur
