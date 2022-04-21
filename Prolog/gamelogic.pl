@@ -711,7 +711,7 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
      Définition d'un état de jeu
  -----------------------------------
  */
-%jeu([Cartes secondes tas], [Cartes])
+%jeu([Cartes secondes tas], [Cartesjoueur1],[Cartesjoueur2],[Cartesjoueur3],[Cartesjoueur4],[Listecoureurspasseleurtour],[[Coureur1,idcase1]])
 %représentation du tas de cartes (liste), représentation liste carte secondes de chaque joueur,
 %Liste des coureurs devant passé leur tour
 %Position de chaque coureur
@@ -738,16 +738,16 @@ jeu(_, _,_,_,_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hol
 -----------------------------------
 */
 
-passesontour(nomcoureur,1):- coureur(nomcoureur,_,_,1,_,_).
-passesontour(nomcoureur,0):- coureur(nomcoureur,_,_,0,_,_).
-
-passetour([]).
-passetour([nomcoureur|listecoureurs]):- coureursentrainedanschute(caseschute,coureurschute),member(nomcoureur,coureurschute),passesontour(nomcoureur,1).
 
 
-chute([nomcoureur|coureurs],coureurs2):- position(nomcoureur,case1), foreach(member(coureur, coureurs2),(position(coureur,case2),nomcoureur/==coureur, case1==case2)), chute(coureurs,coureurs2).
+%Vérification chute grâce aux positions des coureurs
+chute([nomcoureur|listecoureurs],coureurs):- jeu(_,_,_,_,_,_,[[nomcoureur,case1]],_), foreach(member(coureur, coureurs),(jeu(_,_,_,_,_,_,[[coureur,case2]],_),nomcoureur/==coureur, case1==case2,not(estcouloir(case1)),not(estcouloir(case2)))), chute(listecoureurs,coureurs).
 
 
+%Pour chaque coureur présent sur le lieu de chute, il est ajouté à la liste des coureurs dans la chute et dans celles des coureurs passant leur tour
+
+miseajourpassetour(coureur):- jeu(_,_,_,_,_,[coureur],_,_).
+coureursentrainedanschute([case|caseschute],listeidcases):- lieudechute(case,listeidcases),foreach(jeu(_,_,_,_,_,_,[[coureur,case]],_),miseajourpassetour(coureur)).
 
 
 
@@ -788,31 +788,27 @@ miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes):- joueur(nomjoueur,n
 miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes):- joueur(nomjoueur,nouvcartessecondes,_,_,_), length(nouvcartessecondes,L), L==0, repiocher5cartes(nomjoueur,nouvcartessecondes,carteschoisies,nouvellescartessecondes).
 
 
-%Pour chaque case, s'il s'agit d'un lieu de chute, on cherche le numéro de la case, grâce à un numéro, on apprend le nom du coureur dessus, qui est ajouté à la liste des coureurs dans la chute.
-
-coureursentrainedanschute(caseschute,coureurschute):- foreach(member(case,caseschute),(lieudechute(case,caseschute),case(case,numero),caseaveclettre(case,lettre),number_string(numero,num),string_concat(num,".",num1),string_concat(num1,lettre,n),position(nomcoureur,n),append(nomcoureur,coureurschute,coureurschute))).
 
 
-%Pour chaque coureur dans la chute, on cherche à quel joueur il appartient en vérifiant dans la liste des coureurs de chaque joueur. S'il y est et que le joueur n'est pas encore dans la liste des joueurs impactés, il est ajouté.
-
-joueursentrainedanschute([],joueurschute).
-joueursentrainedanschute([nomcoureur|coureurschute],joueurs,joueurschute):- foreach(member(nomjoueur,joueurs),(joueur(nomjoueur,_, nomscoureurs,_,_),member(nomcoureur,nomscoureurs),nonmember(nomjoueur,joueurschute), append(nomjoueur,joueurschute,joueurschute))), joueursentrainedanschute(coureurschute,joueurschute).
+% lieudechute([case1,case2|caseschute]):- chute(coureurs,coureurs), case(case1,numero1), case(case2,numero2), numero1==numero2, lieudechute(caseschute). 
+lieudechute([_|[]],listeidcases):- chute(coureurs,coureurs). 
+lieudechute([case1|idcases],listeidcases):-chute(coureurs,coureurs),case(case1,numero1),foreach(member(case2, caseschute2), (case(case2,numero2), case1/==case2, numero1==numero2,not(estcouloir(case1)),not(estcouloir(case2)))),lieudechute(idcases,listeidcases).
 
 
 
 
+%Si case libre dans la largeur suivante, elle est renvoyée dans le prédicat de dépassement, et le coureur pourra y aller
+caselibre([],Coureurs,Idcase2).
+caselibre([c|casessuivantes],Coureurs,Idcase2):- foreach(member(coureur,Coureurs),not(jeu(_,_,_,_,_,_,[[coureur,c]],_))),Idcase2=c,caselibre(casessuivantes,Idcase2).
+
+
+%Etablir les cases suivantes (largeur) à partir d'id
+casessuivantesli([]).
+caselibreapres(Idcase1,Coureurs,casesuivantesli,Idcase2):- numero(Idcase1,Numero1),numcaseapres=Numero+1,numero(Idcase,numcaseapres),insert(Idcase,casesuivantesli,casessuivantes),length(casessuivantes,L),L>1,caselibre(casessuivantes,Coureurs,Idcase2).
 
 
 
-% Pour qu'il s'agisse d'un lieu de chute, il faut qu'il y ait une chute. Pour les deux cases, on cherche à obtenir leurs numéros. S'ils sont égaux, les cases sont dans la même largeur.
-
-
-  % lieudechute([case1,case2|caseschute]):- chute(coureurs,coureurs), case(case1,numero1), case(case2,numero2), numero1==numero2, lieudechute(caseschute).
-
-lieudechute([_|[]],caseschute2):- chute(coureurs,coureurs).
-
-lieudechute([case1|caseschute],caseschute2):-chute(coureurs,coureurs),case(case1,numero1),foreach(member(case2, caseschute2), (case(case2,numero2), case1/==case2, numero1==numero2)),lieudechute(caseschute,caseschute2).
-
+miseajourpositioncoureur(Nomcoureur,Nouvposition):- jeu(_,_,_,_,_,_,[[Nomcoureur,Nouvposition]],_).
 
 % Ordre chute
 
@@ -835,17 +831,30 @@ caselibre([c|casessuivantes],idcase):- not(position(nomcoureur,c)),idcase=c,case
 
 caselibreapres(case,idcase):- split_string(case,".","",casesep),nth0(0,casesep,numero),nouvindex=numero+1,nth0(nouvindex,cases,casessuivantes),length(casessuivantes,L),L>1,caselibre(casessuivantes,idcase).
 
-peutdepasser(nomcoureur,valeurcarteseconde):- joueur(_,cartessecondes, Listecoureur,_,_),member(Nomcoureur,Listecoureur), member(valeurcarteseconde,cartessecondes),valeurcarteseconde >= 4.
-%Coureur le plus près derrière doit pouvoir utiliser une cartes seconde (que son joueur possède) de valeur minimale 4
+%Peut dépasser si la distance entre le coureur et celui derrière qui est le plus proche est supérieure à 4
+peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,cartessecondes, Listecoureur,_,_),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,cartessecondes),estderriere(Nomcoureur,Coureurs,coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
+
 
 %pluspreesderriere(Nomcoureur,Nomcoureurderriere):- aller chercher toutes les positions des coureurs et calculer distance minimale
 %calculdistance(Nomcoureur, Nomcoureurderrierepotentiel, Distanceentrecesdeuxcoureurs):- position valeur numero (différence) ou cas avec lettre à préciser
 %estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
 
 
+%Liste de tous les coureurs derrière
+coureursderriereli([]).
+estderriere(Nomcoureur,[c|coureurs],coureursderriereli,Coureursderriere):- jeu(_,_,_,_,_,_,[[Nomcoureur,idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),numero1>numero2,insert(c,coureursderriereli,Coureursderriere).
 
 
-depassement(nomcoureur,valeurcarteseconde,ordrephasedynamique,prochaincoureur):- valeurcarteseconde>0,position(nomcoureur,case),caselibreapres(case,idcase), peutdepasser(nomcoureur,valeurcarteseconde),position(nomcoureur,idcase),valcartesec=valeurcarteseconde-1,depassement(nomcoureur,valcartesec),miseajourpositioncoureur(nomcoureur,idcase),estletourde(nomcoureur,ordrephasedynamique,prochaincoureur).
+%Distance avec chaque coureur derrière
+%calculdistance(Nomcoureur, [c|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
+lidis([]).
+calculdistance(Nomcoureur, [c|Coureursderriere],lidis, Listedistances):- jeu(_,_,_,_,_,_,[[Nomcoureur,idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),distance=numero1-numero2,insert(distance,lidis,Listedistances).
+
+
+%estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
+estdistanceminimale(Listedistances,Distanceminimale):- max_list(listedistances,Distanceminimale).
+
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,_,_,_,_,[[Nomcoureur,idcase1]],_),caselibreapres(idcase1,Coureurs,casesuivantesli,idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,idcase2),valcartesec=Valeurcarteseconde-1,depassement(Nomcoureur,valcartesec),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
 
 
 
