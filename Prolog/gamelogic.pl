@@ -711,8 +711,8 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
      Définition d'un état de jeu
  -----------------------------------
  */
-%jeu([Cartes secondes tas], [Cartesjoueur1],[Cartesjoueur2],[Cartesjoueur3],[Cartesjoueur4],[Listecoureurspasseleurtour],[[Coureur1,idcase1]])
-%représentation du tas de cartes (liste), représentation liste carte secondes de chaque joueur,
+%jeu([Cartes secondes tas],[Listecoureurspasseleurtour],[[Coureur1,idcase1]])
+%représentation du tas de cartes (liste)
 %Liste des coureurs devant passé leur tour
 %Position de chaque coureur
 %un coureur a passé la ligne d'arrivée ? (pour le calcul du temps total)
@@ -721,11 +721,11 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
 %état initial
 jeu([1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,
 5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,
-10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12], [],[],[],[], [], [[italie_1,depart],[italie_2,depart],[italie_3,depart],[hollande_1,depart],[hollande_2,depart],[hollande_3,depart]
+10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12], [], [[italie_1,depart],[italie_2,depart],[italie_3,depart],[hollande_1,depart],[hollande_2,depart],[hollande_3,depart]
 ,[belgique_1,depart],[belgique_2,depart],[belgique_3,depart],[allemagne_1,depart],[allemagne_2,depart],[allemagne_3,depart]], faux)
 
 %état final
-jeu(_, _,_,_,_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,arrivee],[hollande_2,arrivee],[hollande_3,arrivee]
+jeu(_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,arrivee],[hollande_2,arrivee],[hollande_3,arrivee]
 ,[belgique_1,arrivee],[belgique_2,arrivee],[belgique_3,arrivee],[allemagne_1,arrivee],[allemagne_2,arrivee],[allemagne_3,arrivee]], vrai)
 
 
@@ -741,48 +741,33 @@ jeu(_, _,_,_,_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hol
 
 
 %Vérification chute grâce aux positions des coureurs
-chute([nomcoureur|listecoureurs],coureurs):- jeu(_,_,_,_,_,_,[[nomcoureur,case1]],_), foreach(member(coureur, coureurs),(jeu(_,_,_,_,_,_,[[coureur,case2]],_),nomcoureur/==coureur, case1==case2,not(estcouloir(case1)),not(estcouloir(case2)))), chute(listecoureurs,coureurs).
+chute([Nomcoureur|Listecoureurs],Case1):- coureurs(Coureurs),jeu(_,_,[[Nomcoureur,Case1]],_), foreach(member(Coureur, Coureurs),(jeu(_,_,[[Coureur,Case2]],_),Nomcoureur/==Coureur, Case1==Case2,not(estcouloir(Case1)),not(estcouloir(Case2)))), chute(Listecoureurs,Coureurs).
 
 
 %Pour chaque coureur présent sur le lieu de chute, il est ajouté à la liste des coureurs dans la chute et dans celles des coureurs passant leur tour
 
-miseajourpassetour(coureur):- jeu(_,_,_,_,_,[coureur],_,_).
-coureursentrainedanschute([case|caseschute],listeidcases):- lieudechute(case,listeidcases),foreach(jeu(_,_,_,_,_,_,[[coureur,case]],_),miseajourpassetour(coureur)).
+miseajourpassetour(Coureur):- jeu(_,[Coureur],_,_).
+%Ajoute les coureurs dans la largeur (sur même ligne) que lieu de chute à la liste des coureurs devant passer leur tour
+coureursentrainedanschute():- lieudechute(Listeidcaseschute),foreach(member(Casechute,Listeidcaseschute),(jeu(_,_,Listecoureur,_),foreach(member(Listecoureur),nth0(1,Nomcoureurrmiseajourpassetour(Coureur)).
 
 
 
-enleverpremierecarte(L,0,L,_c).
-enleverpremierecarte([c|cartes],X,cartessecondes,c) :-
-   X>0,
-   X0 is X-1,
-   enleverpremierecarte(cartes,X0,cartessecondes,c).
-
-enlevercartes([c|cartes],X,cartessecondes):- enleverpremierecarte([c|cartes],X,cartessecondes,c).
-
-defausseXcartes(nomjoueur,X,nouvcartessecondes):- joueur(nomjoueur,cartessecondes,_,_,_), length(cartessecondes,L), X <= L, enlevercartes(cartessecondes,X,nouvcartessecondes),joueur(nomjoueur,nouvcartessecondes,_,_,_).
-
-%Multijoueurs
-
-defausseXcartes(joueurschute,X,nouvcartessecondes):- foreach(member(nomjoueur,joueurschute),(joueur(nomjoueur,cartessecondes,_,_,_), length(cartessecondes,L), X <= L, enlevercartes(cartessecondes,X,nouvcartessecondes),joueur(nomjoueur,nouvcartessecondes,_,_,_))).
+%Vérifie que la carte seconde dont  le joueur souhaite se défausser est dans sa liste de carte seconde
 
 
-defaussecarte(nomjoueur,carte,nouvcartessecondes,cartessecondesrestantes):- joueur(nomjoueur,cartessecondes,_,_,_), member(carte,cartessecondes), delete(cartessecondes,carte,nouvcartessecondes),jeu(_,_,joueur(nomjoueur,_,_,_,_),_,deckcartes,_,_),insert(deckcartes,carte,cartessecondesrestantes),miseajourcartessecondesliste(nomjoueur,cartessecondesrestantes),miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes).
-
-defausseXcarte(nomjoueur,[carte|cartes],nouvcartessecondes,cartessecondesrestantes):- joueur(nomjoueur,cartessecondes,_,_,_), member(carte,cartessecondes), length(cartes,X), length(cartessecondes,L),X+1<= L, delete(cartessecondes,carte,nouvcartessecondes),jeu(_,_,joueur(nomjoueur,_,_,_,_),_,deckcartes,_,_),insert(deckcartes,carte,cartessecondesrestantes),miseajourcartessecondesliste(nomjoueur,cartessecondesrestantes), miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes),
-defausseXcarte(nomjoueur,cartes,nouvcartessecondes).
-
+defaussecarte(Nomjoueur,Carte):- joueur(Nomjoueur,Cartessecondes,_,_,_), member(Carte,Cartessecondes), delete(Cartessecondes,Carte,Nouvcartessecondes),jeu(Deckcartes,_,_,_),insert(Deckcartes,Carte,Cartessecondesrestantes),miseajourcartessecondesliste(Nomjoueur,Cartessecondesrestantes),miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes).
 
 
 
 insert(X, [], [X]).
-insert(X, [Y | listeelements], [X,Y | listeelements]) :- X @< Y, !.
-insert(X, [Y | liste1], [Y | liste2]) :- insert(X, liste1, liste2).
+insert(X, [Y | Listeelements], [X,Y | listeelements]) :- X @< Y, !.
+insert(X, [Y | Liste1], [Y | liste2]) :- insert(X, liste1, liste2).
 
 repiocher5cartes(nomjoueur,cartessecondes,[],nouvellescartessecondes,cartessecondesrestantes):- miseajourcartessecondesjoueur(nomjoueur,nouvellescartessecondes,_),miseajourcartessecondesliste(cartessecondesrestantes).
 repiocher5cartes(nomjoueur,cartessecondes,[carte|carteschoisies],nouvellescartessecondes,cartessecondesrestantes):- jeu(_,_,joueur(nomjoueur,_,_,_,_),_,deckcartes,_,_), member(carte,deckcartes), delete(deckcartes,carte,cartessecondesrestantes), insert(cartessecondes,carte,nouvellescartessecondes), repiocher5cartes(nomjoueur,cartessecondes,carteschoisies,ncartessec,cartessecrestantes).
 
 
-miseajourcartessecondesliste(nomjoueur,cartessecondesrestantes):- jeu(_,_,joueur(nomjoueur,_,_,_,_),_,cartessecondesrestantes,_,_).
+miseajourcartessecondesliste(cartessecondesrestantes):- jeu(_,_,joueur(nomjoueur,_,_,_,_),_,cartessecondesrestantes,_,_).
 
 miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes):- joueur(nomjoueur,nouvcartessecondes,_,_,_),length(nouvcartessecondes,L), L>0.
 miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes):- joueur(nomjoueur,nouvcartessecondes,_,_,_), length(nouvcartessecondes,L), L==0, repiocher5cartes(nomjoueur,nouvcartessecondes,carteschoisies,nouvellescartessecondes).
@@ -791,48 +776,45 @@ miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes):- joueur(nomjoueur,n
 
 
 % lieudechute([case1,case2|caseschute]):- chute(coureurs,coureurs), case(case1,numero1), case(case2,numero2), numero1==numero2, lieudechute(caseschute). 
-lieudechute([_|[]],listeidcases):- chute(coureurs,coureurs). 
-lieudechute([case1|idcases],listeidcases):-chute(coureurs,coureurs),case(case1,numero1),foreach(member(case2, caseschute2), (case(case2,numero2), case1/==case2, numero1==numero2,not(estcouloir(case1)),not(estcouloir(case2)))),lieudechute(idcases,listeidcases).
+%lieudechute([_|[]],listeidcases):- chute(coureurs,coureurs). 
+lieudechute(Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),chute(Coureurs,Idcase),numero(Idcase,Numero1),listidcases(Listetoutescases),foreach(member(Case2, Listetoutescases), (numero(Case2,Numero2), Case1/==Case2, Numero1==Numero2,not(estcouloir(Case1)),not(estcouloir(Case2)))), insert(Case2,Listechute,Listeidcaseschute)
 
-
+listechute([])
 
 
 %Si case libre dans la largeur suivante, elle est renvoyée dans le prédicat de dépassement, et le coureur pourra y aller
 caselibre([],Coureurs,Idcase2).
-caselibre([c|casessuivantes],Coureurs,Idcase2):- foreach(member(coureur,Coureurs),not(jeu(_,_,_,_,_,_,[[coureur,c]],_))),Idcase2=c,caselibre(casessuivantes,Idcase2).
+caselibre([C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),not(jeu(_,_,[[coureur,C]],_))),Idcase2=c,caselibre(casessuivantes,Idcase2).
 
 
 %Etablir les cases suivantes (largeur) à partir d'id
 casessuivantesli([]).
-caselibreapres(Idcase1,Coureurs,casesuivantesli,Idcase2):- numero(Idcase1,Numero1),numcaseapres=Numero+1,numero(Idcase,numcaseapres),insert(Idcase,casesuivantesli,casessuivantes),length(casessuivantes,L),L>1,caselibre(casessuivantes,Coureurs,Idcase2).
+caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2):- numero(Idcase1,Numero1),Numcaseapres,numero(Idcase,Numcaseapres),insert(Idcase,Casesuivantesli,Casessuivantes),length(Casessuivantes,L),L>1,caselibre(Casessuivantes,Coureurs,Idcase2),Numcaseapres is Numero+1.
 
 
 
 miseajourpositioncoureur(Nomcoureur,Nouvposition):- jeu(_,_,_,_,_,_,[[Nomcoureur,Nouvposition]],_).
 
 % Ordre chute
-
+%Flou à éclaircir
 ordrechuteli([]).
-ordrechute([nomcoureur|ordrephasedynamique],caseschute,ordrechuteli,ordrechuteliste):- position(nomcoureur,case),lieudechute(case,caseschute),insert(nomcoureur,ordrechuteli,ordrechuteliste),ordrechute(ordrephasedynamique,caseschute,ordrechuteliste,ordrechutelist).
+ordrechute([Nomcoureur|Ordrephasedynamique],Ordrechuteli,Ordrechuteliste):- etat(_,_,ListeCoureur,_), nth0(_,ListeCoureur,[Nomcoureur,Case]),insert(Nomcoureur,Ordrechuteli,Ordrechuteliste),ordrechute(Ordrephasedynamique,Ordrechuteliste,Ordrechutelist).
 
 
-% Gros prédicat chute en série
+% Gros prédicat chute en série (autre(s) coureur(s) sur largeur impacté(s))
 
-chuteenserie(coureurs,ordrephasedynamique,caseschute,ordrechuteli,joueurs,cartes,nouvcartessecondes,cartessecondesrestantes):- chute(coureurs,coureurs),ordrechute(ordrephasedynamique,caseschute,ordrechuteli,ordrechuteliste), passetour(ordrechuteliste),joueursentrainedanschute(ordrechuteliste,joueurs,joueurschute),foreach(member(nomjoueur,joueurschute),defausseXcarte(nomjoueur,cartes,nouvcartessecondes,cartessecondesrestantes)).
+%chuteenserie(Coureurs,Ordrephasedynamique,caseschute,ordrechuteli,joueurs,cartes,nouvcartessecondes,cartessecondesrestantes):- chute(coureurs,coureurs),ordrechute(ordrephasedynamique,caseschute,ordrechuteli,ordrechuteliste), passetour(ordrechuteliste),joueursentrainedanschute(ordrechuteliste,joueurs,joueurschute),foreach(member(nomjoueur,joueurschute),defausseXcarte(nomjoueur,cartes,nouvcartessecondes,cartessecondesrestantes)).
 
 
 % Dépassement
 
-estletourde(nomcoureur,ordrephasedynamique,prochaincoureur):- nth0(index,ordrephasedynamique,nomcoureur),i=index+1,nth0(i,ordrephasedynamique,prochaincoureur).
+estletourde(Nomcoureur,Ordrephasedebut,Prochaincoureur):- nth0(Index,Ordrephasedebut,Nomcoureur),I is Index+1,nth0(I,Ordrephasedebut,Prochaincoureur).
 
-miseajourpositioncoureur(nomcoureur,nouvposition):- coureur(nomcoureur,nouvposition,_,_,_,_).
+estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur):- nth0(Index,Ordrephasedynamique,Nomcoureur),I is Index+1,nth0(I,Ordrephasedynamique,Prochaincoureur).
 
-caselibre([c|casessuivantes],idcase):- not(position(nomcoureur,c)),idcase=c,caselibre(casessuivantes,idcase).
-
-caselibreapres(case,idcase):- split_string(case,".","",casesep),nth0(0,casesep,numero),nouvindex=numero+1,nth0(nouvindex,cases,casessuivantes),length(casessuivantes,L),L>1,caselibre(casessuivantes,idcase).
-
+lidis([]).
 %Peut dépasser si la distance entre le coureur et celui derrière qui est le plus proche est supérieure à 4
-peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,cartessecondes, Listecoureur,_,_),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,cartessecondes),estderriere(Nomcoureur,Coureurs,coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
+peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,Cartessecondes, Listecoureur,_,_),lidis(Lidis),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,Cartessecondes),estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
 
 
 %pluspreesderriere(Nomcoureur,Nomcoureurderriere):- aller chercher toutes les positions des coureurs et calculer distance minimale
@@ -847,7 +829,7 @@ estderriere(Nomcoureur,[c|coureurs],coureursderriereli,Coureursderriere):- jeu(_
 
 %Distance avec chaque coureur derrière
 %calculdistance(Nomcoureur, [c|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
-lidis([]).
+
 calculdistance(Nomcoureur, [c|Coureursderriere],lidis, Listedistances):- jeu(_,_,_,_,_,_,[[Nomcoureur,idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),distance=numero1-numero2,insert(distance,lidis,Listedistances).
 
 
@@ -890,8 +872,8 @@ gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tem
 */
 %Par rapport à la position de chaque coureur (ont-ils tous passé la ligne d'arrivée ?)
 % Si  oui, alors ce prédicat est vrai et la partie est finie (vérification gagnant et affichage écran fin)
-
-
+listecoureurarrive([])
+finjeu(Coureurs):- listecoureurarrive(Listearr),coureurs(Coureurs),foreach(member(C,Coureurs),(jeu(_,_,_,_,_,_,Listeposition),nth0(_, ListeCoureur,[Nomcoureur|Poscoureur]),apresarrivee(Poscoureur),insert(Listearr,Nomcoureur,Listetotal))),length(Listetotal,12)
 
 
 /*
@@ -905,9 +887,11 @@ gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tem
 %Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
 
 %Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
-%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
-
+aspiration(Coureur,Valeurcartesec,Casearrivee):-
+%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver à côté un autre coureur en utilisant la valeur de la carte seconde +1
+aspiration(Coureur,Valeurcartesec,Casearrivee):-
 
 %Un coureur se trouve JUSTE à CÔté et possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
-
-%Un coureur se trouve JUSTE à CÔté  et possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
+aspiration(Coureur,Valeurcartesec,Casearrivee):-
+%Un coureur se trouve JUSTE à CÔté  et possibilité d'arriver juste derrière un autre coureur en utilisant la valeur de la carte seconde +1
+aspiration(Coureur,Valeurcartesec,Casearrivee):-
