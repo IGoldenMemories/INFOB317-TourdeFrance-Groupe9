@@ -783,8 +783,8 @@ listechute([])
 
 
 %Si case libre dans la largeur suivante, elle est renvoyée dans le prédicat de dépassement, et le coureur pourra y aller
-caselibre([],Coureurs,Idcase2).
-caselibre([C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),not(jeu(_,_,[[coureur,C]],_))),Idcase2=c,caselibre(casessuivantes,Idcase2).
+caselibre([],Idcase2).
+caselibre([C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),not(jeu(_,_,[[Coureur,C]],_))),Idcase2=C,caselibre(Casessuivantes,Idcase2).
 
 
 %Etablir les cases suivantes (largeur) à partir d'id
