@@ -825,19 +825,19 @@ peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,Cartessecondes, 
 
 %Liste de tous les coureurs derrière
 
-estderriere(Nomcoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):- jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),numero1>numero2,insert(c,coureursderriereli,Coureursderriere).
+estderriere(Nomcoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):- jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[C,Idcase2]],_),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1>Numero2,insert(C,Coureursderriereli,Coureursderriere).
 
 
 %Distance avec chaque coureur derrière
-%calculdistance(Nomcoureur, [c|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
+%calculdistance(Nomcoureur, [C|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
 
-calculdistance(Nomcoureur, [c|Coureursderriere],Lidis, Listedistances):- jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[c,idcase2]],_),numero(idcase1,numero1),numero(idcase,numero2),distance=numero1-numero2,insert(distance,lidis,Listedistances).
+calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[CIidcase2]],_),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Distance is Numero1-Numero2,insert(Distance,Lidis,Listedistances).
 
 
 %estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
 estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
 
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,_,_,_,_,[[Nomcoureur,idcase1]],_),caselibreapres(idcase1,Coureurs,casesuivantesli,idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,idcase2),valcartesec=Valeurcarteseconde-1,depassement(Nomcoureur,valcartesec),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
 
 
 
@@ -887,7 +887,7 @@ finjeu(Coureurs):- listecoureurarrive(Listearr),coureurs(Coureurs),foreach(membe
 %Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
 
 coureursdevantli([]).
-estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant):- jeu(_,_,_,_,_,_,[[Coureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[C,idcase2]],_),numero(Idcase1,Numero1),numero(Idcase2,Numero2),numero1<numero2,insert(C,Coureursdevantli,Coureursdevant).
+estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant):- jeu(_,_,_,_,_,_,[[Coureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[C,Idcase2]],_),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1<Numero2,insert(C,Coureursdevantli,Coureursdevant).
 estdistancemaximale(Listedistances,Distancemax):- max_list(Listedistances,Distancemax).
 
 %Un coureur se trouve JUSTE DERRIERE un autre coureur et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
