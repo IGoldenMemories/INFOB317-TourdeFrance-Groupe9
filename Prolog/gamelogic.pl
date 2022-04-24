@@ -748,7 +748,7 @@ chute([Nomcoureur|Listecoureurs],Case1):- coureurs(Coureurs),jeu(_,_,[[Nomcoureu
 
 miseajourpassetour(Coureur):- jeu(_,[Coureur],_,_).
 %Ajoute les coureurs dans la largeur (sur même ligne) que lieu de chute à la liste des coureurs devant passer leur tour
-coureursentrainedanschute():- lieudechute(Listeidcaseschute),foreach(member(Casechute,Listeidcaseschute),(jeu(_,_,Listecoureur,_),foreach(member(Listecoureur),nth0(1,Nomcoureurrmiseajourpassetour(Coureur)).
+coureursentrainedanschute():- lieudechute(Listeidcaseschute),foreach(member(Casechute,Listeidcaseschute),(jeu(_,_,Listecoureur,_),foreach(member(Nomcoureur,Listecoureur),(jeu(_,_,[[Nomcoureur,Case]],_),member(Case,Listeidcaseschute),miseajourpassetour(Coureur))).
 
 
 
