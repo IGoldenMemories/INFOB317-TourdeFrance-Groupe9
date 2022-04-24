@@ -777,9 +777,11 @@ miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,N
 
 % lieudechute([case1,case2|caseschute]):- chute(coureurs,coureurs), case(case1,numero1), case(case2,numero2), numero1==numero2, lieudechute(caseschute). 
 %lieudechute([_|[]],listeidcases):- chute(coureurs,coureurs). 
-lieudechute(Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),chute(Coureurs,Idcase),numero(Idcase,Numero1),listidcases(Listetoutescases),foreach(member(Case2, Listetoutescases), (numero(Case2,Numero2), Case1/==Case2, Numero1==Numero2,not(estcouloir(Case1)),not(estcouloir(Case2)))), insert(Case2,Listechute,Listeidcaseschute)
 
 listechute([])
+lieudechute(Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),chute(Coureurs,Idcase),numero(Idcase,Numero1),listidcases(Listetoutescases),foreach(member(Case2, Listetoutescases), (numero(Case2,Numero2), Case1/==Case2, Numero1==Numero2,not(estcouloir(Case1)),not(estcouloir(Case2)))), insert(Case2,Listechute,Listeidcaseschute)
+
+
 
 
 %Si case libre dans la largeur suivante, elle est renvoyée dans le prédicat de dépassement, et le coureur pourra y aller
