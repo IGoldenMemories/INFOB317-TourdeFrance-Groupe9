@@ -853,10 +853,10 @@ depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochainc
 %------- Calcul du temps de chacun des coureurs ---------
 % tempspartiel(Nomcoureur, Tempspartiel
 %BESOIN DE PRECISER POSITION APRES LIGNE ARRIVEE
-tempspartiel(Nomcoureur,Tempspartiel):-position(Nomcoureur, Case), Tempspartiel is 95-%valeur venant de POSITION
+tempspartiel(Nomcoureur,Tempspartiel):-jeu(_,_,_,_,_,_,[[Nomcoureur,Case]],_), Tempspartiel is 95-%valeur venant de POSITION
 
 %Vérifie si un coureur a passé sa ligne d'arrivée --> utilisée pour le calcul du temps total +10 après chaque toour (dés qu'un coureur a passé la ligne d'arrivée)
-apasselignearrivee(Nomcoureur):-position(Nomcoureur, Case), % Condition sur le numéro de case (??? ligne d'arrivée ==?)
+apasselignearrivee(Nomcoureur):-jeu(_,_,_,_,_,_,[[Nomcoureur,Case]],_),numero(Case,Num),Num>=95 % Condition sur le numéro de case (??? ligne d'arrivée ==?)
 
 %Obtention du temps total d'un joueur
 tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartiel(C1,T1), Tempspartiel(C2,T2),Tempspartiel(C3,T3), Tempstotal is T1+T2+T3
