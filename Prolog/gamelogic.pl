@@ -763,14 +763,14 @@ insert(X, [], [X]).
 insert(X, [Y | Listeelements], [X,Y | listeelements]) :- X @< Y, !.
 insert(X, [Y | Liste1], [Y | liste2]) :- insert(X, liste1, liste2).
 
-repiocher5cartes(nomjoueur,cartessecondes,[],nouvellescartessecondes,cartessecondesrestantes):- miseajourcartessecondesjoueur(nomjoueur,nouvellescartessecondes,_),miseajourcartessecondesliste(cartessecondesrestantes).
-repiocher5cartes(nomjoueur,cartessecondes,[carte|carteschoisies],nouvellescartessecondes,cartessecondesrestantes):- jeu(_,_,joueur(nomjoueur,_,_,_,_),_,deckcartes,_,_), member(carte,deckcartes), delete(deckcartes,carte,cartessecondesrestantes), insert(cartessecondes,carte,nouvellescartessecondes), repiocher5cartes(nomjoueur,cartessecondes,carteschoisies,ncartessec,cartessecrestantes).
+repiocher5cartes(Nomjoueur,Cartessecondes,[],Nouvellescartessecondes,Cartessecondesrestantes):- miseajourcartessecondesjoueur(Nomjoueur,Nouvellescartessecondes,_),miseajourcartessecondesliste(Cartessecondesrestantes).
+repiocher5cartes(Nomjoueur,Cartessecondes,[Carte|Carteschoisies],Nouvellescartessecondes,Cartessecondesrestantes):- jeu(Deckcartes,_,_,_), member(Carte,Deckcartes), delete(Deckcartes,Carte,Cartessecondesrestantes), insert(Cartessecondes,Carte,Nouvellescartessecondes), repiocher5cartes(Nomjoueur,Cartessecondes,Carteschoisies,Ncartessec,Cartessecrestantes).
 
 
-miseajourcartessecondesliste(cartessecondesrestantes):- jeu(_,_,joueur(nomjoueur,_,_,_,_),_,cartessecondesrestantes,_,_).
+miseajourcartessecondesliste(Cartessecondesrestantes):- jeu(Cartessecondesrestantes,_,_,_).
 
-miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes):- joueur(nomjoueur,nouvcartessecondes,_,_,_),length(nouvcartessecondes,L), L>0.
-miseajourcartessecondesjoueur(nomjoueur,nouvcartessecondes):- joueur(nomjoueur,nouvcartessecondes,_,_,_), length(nouvcartessecondes,L), L==0, repiocher5cartes(nomjoueur,nouvcartessecondes,carteschoisies,nouvellescartessecondes).
+miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Nouvcartessecondes,_,_,_),length(Nouvcartessecondes,L), L>0.
+miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Nouvcartessecondes,_,_,_), length(Nouvcartessecondes,L), L==0, repiocher5cartes(Nomjoueur,Nouvcartessecondes,Carteschoisies,Nouvellescartessecondes).
 
 
 
