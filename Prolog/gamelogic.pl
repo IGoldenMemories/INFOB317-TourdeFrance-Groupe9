@@ -774,14 +774,14 @@ insert(X, [], [X]).
 insert(X, [Y | Listeelements], [X,Y | listeelements]) :- X @< Y, !.
 insert(X, [Y | Liste1], [Y | liste2]) :- insert(X, liste1, liste2).
 
-repiocher5cartes(Nomjoueur,Cartessecondes,[]).
-repiocher5cartes(Nomjoueur,Cartessecondes,[Carte|Carteschoisies]):- jeu(Deckcartes,_,_,_), member(Carte,Deckcartes), delete(Deckcartes,Carte,Cartessecondesrestantes), Deckcartes is Cartessecondesrestantes, insert(Cartessecondes,Carte,Nouvellescartessecondes),miseajourcartessecondesjoueur(Nomjoueur,Nouvellescartessecondes),Cartessecondes is Nouvellescartessecondes, repiocher5cartes(Nomjoueur,Cartessecondes,Carteschoisies).
+repiocher5cartes(Nomjoueur,[]).
+repiocher5cartes(Nomjoueur,[Carte|Carteschoisies]):- jeu(Deckcartes,_,_,_),joueur(Nomjoueur,Cartessecondes,_,_,_), member(Carte,Deckcartes), delete(Deckcartes,Carte,Cartessecondesrestantes), Deckcartes is Cartessecondesrestantes, insert(Cartessecondes,Carte,Nouvcartessecondes),miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes),repiocher5cartes(Nomjoueur,Carteschoisies).
 
 
 %miseajourcartessecondesliste(Cartessecondesrestantes):- jeu(Cartessecondesrestantes,_,_,_).
 
-miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Nouvcartessecondes,_,_,_),length(Nouvcartessecondes,L), L>0.
-miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Nouvcartessecondes,_,_,_), length(Nouvcartessecondes,L), L==0, repiocher5cartes(Nomjoueur,Nouvcartessecondes,Carteschoisies,Nouvellescartessecondes).
+miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Cartessecondes,_,_,_),Cartessecondes is Nouvcartessecondes,length(Cartessecondes,L), L>0.
+miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Cartessecondes,_,_,_),Cartessecondes is Nouvcartessecondes, length(Cartessecondes,L), L==0, repiocher5cartes(Nomjoueur,Carteschoisies).
 
 
 
