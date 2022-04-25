@@ -764,7 +764,7 @@ coureursentrainedanschute():- lieudechute(Listeidcaseschute),foreach(member(Case
 %Vérifie que la carte seconde dont  le joueur souhaite se défausser est dans sa liste de carte seconde
 
 
-defaussecarte(Nomjoueur,Carte):- joueur(Nomjoueur,Cartessecondes,_,_,_), member(Carte,Cartessecondes), delete(Cartessecondes,Carte,Nouvcartessecondes),jeu(Deckcartes,_,_,_),insert(Deckcartes,Carte,Cartessecondesrestantes),miseajourcartessecondesliste(Nomjoueur,Cartessecondesrestantes),miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes).
+defaussecarte(Nomjoueur,Carte):- joueur(Nomjoueur,Cartessecondes,_,_,_), member(Carte,Cartessecondes), delete(Cartessecondes,Carte,Nouvcartessecondes),jeu(Deckcartes,_,_,_),insert(Deckcartes,Carte,Cartessecondesrestantes),miseajourcartessecondesliste(Deckcartes,Cartessecondesrestantes),miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes).
 
 
 
