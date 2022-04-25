@@ -804,7 +804,7 @@ caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2):- numero(Idcase1,Numero
 
 
 
-miseajourpositioncoureur(Nomcoureur,Nouvposition):- jeu(_,_,_,_,_,_,[[Nomcoureur,Nouvposition]],_).
+miseajourpositioncoureur(Nomcoureur,Nouvposition,[[Nomcoureur,Pos]|Listepositionscoureurs],[[Nomcoureur,NPos]|Listepositionscoureurs]):- NPos is Nouvposition.
 
 % Ordre chute
 %Flou à éclaircir
