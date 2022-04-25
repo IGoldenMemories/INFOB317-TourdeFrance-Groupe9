@@ -772,8 +772,8 @@ insert(X, [], [X]).
 insert(X, [Y | Listeelements], [X,Y | listeelements]) :- X @< Y, !.
 insert(X, [Y | Liste1], [Y | liste2]) :- insert(X, liste1, liste2).
 
-repiocher5cartes(Nomjoueur,Cartessecondes,[],Nouvellescartessecondes,Cartessecondesrestantes):- miseajourcartessecondesjoueur(Nomjoueur,Nouvellescartessecondes,_),miseajourcartessecondesliste(Cartessecondesrestantes).
-repiocher5cartes(Nomjoueur,Cartessecondes,[Carte|Carteschoisies],Nouvellescartessecondes,Cartessecondesrestantes):- jeu(Deckcartes,_,_,_), member(Carte,Deckcartes), delete(Deckcartes,Carte,Cartessecondesrestantes), insert(Cartessecondes,Carte,Nouvellescartessecondes), repiocher5cartes(Nomjoueur,Cartessecondes,Carteschoisies,Ncartessec,Cartessecrestantes).
+repiocher5cartes(Nomjoueur,Cartessecondes,[]).
+repiocher5cartes(Nomjoueur,Cartessecondes,[Carte|Carteschoisies]):- jeu(Deckcartes,_,_,_), member(Carte,Deckcartes), delete(Deckcartes,Carte,Cartessecondesrestantes), insert(Cartessecondes,Carte,Nouvellescartessecondes),miseajourcartessecondesjoueur(Nomjoueur,Nouvellescartessecondes),miseajourcartessecondesliste(Deckcartes,Cartessecondesrestantes),Cartessecondes is Nouvellescartessecondes, repiocher5cartes(Nomjoueur,Cartessecondes,Carteschoisies).
 
 
 miseajourcartessecondesliste(Cartessecondesrestantes):- jeu(Cartessecondesrestantes,_,_,_).
