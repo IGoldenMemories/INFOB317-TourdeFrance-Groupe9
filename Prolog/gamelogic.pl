@@ -43,7 +43,7 @@ trouver_position(Nomcoureur,[Coureurpos|Listepositionscoureurs],Pos):- trouver_p
 %Trouver coureur sur case
 
 trouver_coureur(Pos,[[Nomcoureur,Pos]|_],Nomcoureur).
-trouver_position(Pos,[Coureurpos|Listepositionscoureurs],Nomcoureur):- trouver_position(Pos,Listepositionscoureurs,Nomcoureur).
+trouver_coureur(Pos,[Coureurpos|Listepositionscoureurs],Nomcoureur):- trouver_coureur(Pos,Listepositionscoureurs,Nomcoureur).
 
 %1ère ligne après ligne départ
 %numero(U-->1èrecase)
@@ -750,14 +750,14 @@ jeu(_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,a
 
 
 %Vérification chute grâce aux positions des coureurs
-chute([Nomcoureur|Listecoureurs],Case1):- coureurs(Coureurs),jeu(_,_,[[Nomcoureur,Case1]],_), foreach(member(Coureur, Coureurs),(jeu(_,_,[[Coureur,Case2]],_),Nomcoureur/==Coureur, Case1==Case2,not(estcouloir(Case1)),not(estcouloir(Case2)))), chute(Listecoureurs,Coureurs).
+chute([Nomcoureur|Listecoureurs],Case1):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Case1), foreach(member(Coureur, Coureurs),trouver_position(Coureur,Listecoureur,Case2),Nomcoureur/==Coureur, Case1==Case2,not(estcouloir(Case1)),not(estcouloir(Case2)))), chute(Listecoureurs,Coureurs).
 
 
 %Pour chaque coureur présent sur le lieu de chute, il est ajouté à la liste des coureurs dans la chute et dans celles des coureurs passant leur tour
 
 miseajourpassetour(Coureur):- jeu(_,[Coureur],_,_).
 %Ajoute les coureurs dans la largeur (sur même ligne) que lieu de chute à la liste des coureurs devant passer leur tour
-coureursentrainedanschute():- lieudechute(Listeidcaseschute),foreach(member(Casechute,Listeidcaseschute),(jeu(_,_,Listecoureur,_),foreach(member(Nomcoureur,Listecoureur),(jeu(_,_,[[Nomcoureur,Case]],_),member(Case,Listeidcaseschute),miseajourpassetour(Coureur))).
+coureursentrainedanschute():- lieudechute(Listeidcaseschute),foreach(member(Casechute,Listeidcaseschute),(jeu(_,_,Listecoureur,_),foreach(member(Nomcoureur,Listecoureur),trouver_position(Nomcoureur,Listecoureur,Case),member(Case,Listeidcaseschute),miseajourpassetour(Coureur))).
 
 
 
@@ -788,7 +788,7 @@ miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,N
 %lieudechute([_|[]],listeidcases):- chute(coureurs,coureurs). 
 
 listechute([])
-lieudechute(Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),chute(Coureurs,Idcase),numero(Idcase,Numero1),listidcases(Listetoutescases),foreach(member(Case2, Listetoutescases), (numero(Case2,Numero2), Case1/==Case2, Numero1==Numero2,not(estcouloir(Case1)),not(estcouloir(Case2)))), insert(Case2,Listechute,Listeidcaseschute)
+lieudechute(Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),chute(Coureurs,Idcase),numero(Idcase,Numero1),listidcases(Listetoutescases),foreach(member(Case2, Listetoutescases), (numero(Case2,Numero2), Case1/==Case2, Numero1==Numero2,not(estcouloir(Case1)),not(estcouloir(Case2),insert(Case2,Listechute,Listeidcaseschute))).
 
 
 
@@ -836,19 +836,19 @@ peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,Cartessecondes, 
 
 %Liste de tous les coureurs derrière
 
-estderriere(Nomcoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):- jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[C,Idcase2]],_),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1>Numero2,insert(C,Coureursderriereli,Coureursderriere).
+estderriere(Nomcoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):- jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Case1),trouver_position(C,Listecoureur,Case2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1>Numero2,insert(C,Coureursderriereli,Coureursderriere), Coureurderriereli is Coureursderriere, estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere).
 
 
 %Distance avec chaque coureur derrière
 %calculdistance(Nomcoureur, [C|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
 
-calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[CIidcase2]],_),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Distance is Numero1-Numero2,insert(Distance,Lidis,Listedistances).
+calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Distance is Numero1-Numero2,insert(Distance,Lidis,Listedistances),Lidis is Listedistances,calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances).
 
 
 %estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
 estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
 
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,_,_,_,_,[[Nomcoureur,Idcase1]],_),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
 
 
 
@@ -862,10 +862,10 @@ depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochainc
 %------- Calcul du temps de chacun des coureurs ---------
 % tempspartiel(Nomcoureur, Tempspartiel
 %BESOIN DE PRECISER POSITION APRES LIGNE ARRIVEE
-tempspartiel(Nomcoureur,Tempspartiel):-jeu(_,_,_,_,_,_,[[Nomcoureur,Case]],_), Tempspartiel is 95-%valeur venant de POSITION
+tempspartiel(Nomcoureur,Tempspartiel):-jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Case), numero(Case,Num), Tempspartiel is 95-%Num
 
 %Vérifie si un coureur a passé sa ligne d'arrivée --> utilisée pour le calcul du temps total +10 après chaque toour (dés qu'un coureur a passé la ligne d'arrivée)
-apasselignearrivee(Nomcoureur):-jeu(_,_,_,_,_,_,[[Nomcoureur,Case]],_),numero(Case,Num),Num>=95 % Condition sur le numéro de case (??? ligne d'arrivée ==?)
+apasselignearrivee(Nomcoureur):-jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Case),numero(Case,Num),Num>=95 % Condition sur le numéro de case (??? ligne d'arrivée ==?)
 
 %Obtention du temps total d'un joueur
 tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartiel(C1,T1), Tempspartiel(C2,T2),Tempspartiel(C3,T3), Tempstotal is T1+T2+T3
@@ -898,30 +898,30 @@ finjeu(Coureurs):- listecoureurarrive(Listearr),coureurs(Coureurs),foreach(membe
 %Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
 
 coureursdevantli([]).
-estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant):- jeu(_,_,_,_,_,_,[[Coureur,Idcase1]],_),jeu(_,_,_,_,_,_,[[C,Idcase2]],_),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1<Numero2,insert(C,Coureursdevantli,Coureursdevant).
+estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant):- jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1<Numero2,insert(C,Coureursdevantli,Coureursdevant),Coureursdevantli is Coureursdevant,estdevant(Coureur,Coureurs,Coureursdevantli,Coureursdevant).
 estdistancemaximale(Listedistances,Distancemax):- max_list(Listedistances,Distancemax).
 
 %Un coureur se trouve JUSTE DERRIERE un autre coureur et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
 aspiration(Coureur,Valeurcartesec,Casearrivee):- %Verification exists autre coureur avec numero case = numero case +1, nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
 
-aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,[[Coureur,Idcase1]],_),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),jeu(_,_,[[Coureursuivant,Idcase]],_)
+aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),jeu(_,_,[[Coureursuivant,Idcase]],_)
 
 
 %Cas où lettre y réfléchir
 %Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver à côté un autre coureur en utilisant la valeur de la carte seconde +1 ,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
 aspiration(Coureur,Valeurcartesec,Casearrivee):-%Verification exists autre coureur avec numero case = numero case +1,
 
-aspiration(Coureur,Valeurcartesec,Casearrivee):-  coureurs(Coureurs),jeu(_,_,[[Coureur,Idcase1]],_),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,jeu(_,_,[[Coureursuivant,Idcase]],_)
+aspiration(Coureur,Valeurcartesec,Casearrivee):-  coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,jeu(_,_,[[Coureursuivant,Idcase]],_)
 
 
 %Un coureur se trouve JUSTE à CÔté et possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
 aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
 
-aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,[[Coureur,Idcase1]],_),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(jeu(_,_,[[C,Idcase2]],_),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2), Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,jeu(_,_,[[Coureursuivant,Idcase]],_)
+aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(jeu(_,_,[[C,Idcase2]],_),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2), Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,jeu(_,_,[[Coureursuivant,Idcase]],_)
 
 %Un coureur se trouve JUSTE à CÔté  et possibilité d'arriver juste derrière un autre coureur en utilisant la valeur de la carte seconde +1
 aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
 
-aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,[[Coureur,Idcase1]],_),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(jeu(_,_,[[C,Idcase2]],_),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2),Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),jeu(_,_,[[Coureursuivant,Idcase]],_)
+aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(jeu(_,_,[[C,Idcase2]],_),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2),Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),jeu(_,_,[[Coureursuivant,Idcase]],_)
 
 
