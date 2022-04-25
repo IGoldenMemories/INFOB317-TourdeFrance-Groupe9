@@ -795,7 +795,8 @@ lieudechute(Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),chute(
 
 %Si case libre dans la largeur suivante, elle est renvoyée dans le prédicat de dépassement, et le coureur pourra y aller
 caselibre([],Idcase2).
-caselibre([C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),not(jeu(_,_,[[Coureur,C]],_))),Idcase2 is C,caselibre(Casessuivantes,Idcase2).
+caselibre([C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),not(jeu(_,_,[[Coureur,C]],_))),Idcase2 is C.
+caselibre([C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),jeu(_,_,[[Coureur,C]],_)),caselibre(Casessuivantes,Idcase2).
 
 
 %Etablir les cases suivantes (largeur) à partir d'id
@@ -848,7 +849,7 @@ calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_
 %estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
 estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
 
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Listecoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Ordrephasedynamique,Prochaincoureur),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
 
 
 
