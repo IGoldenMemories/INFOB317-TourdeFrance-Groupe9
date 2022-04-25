@@ -35,6 +35,15 @@ case(Idcase):-numero(Idcase,Numero), lettre(Idcase,Lettre),casechance(Idcase),es
 %case se situant après la ligne d'arrivée
 case(Idcase):- numero(Idcase,Numero),position(Idcase,Positionlargeur),apresarrivee(Idcase)
 
+%Trouver position du coureur
+
+trouver_position(Nomcoureur,[[Nomcoureur,Pos]|_],Pos).
+trouver_position(Nomcoureur,[Coureurpos|Listepositionscoureurs],Pos):- trouver_position(Nomcoureur,Listepositionscoureurs,Pos).
+
+%Trouver coureur sur case
+
+trouver_coureur(Pos,[[Nomcoureur,Pos]|_],Nomcoureur).
+trouver_position(Pos,[Coureurpos|Listepositionscoureurs],Nomcoureur):- trouver_position(Pos,Listepositionscoureurs,Nomcoureur).
 
 %1ère ligne après ligne départ
 %numero(U-->1èrecase)
