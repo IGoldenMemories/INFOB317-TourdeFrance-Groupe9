@@ -757,16 +757,85 @@ idcaselist([]).
 
 estdevantcase(Idcase1,Idcase2,Idcasedevant):-
   numero(Idcase1,Num1),numero(Idcase2,Num2),Num1==Num2, idcaselist(Liste),insert(Idcase1,Liste,Nouvelleliste),insert(Idcase2,Nouvelleliste,Listefinale),random_permutation(Listefinale, Permutation),nth0(0,Permutation,Idcasedevant).
-  
+
 
 
 
 
 %ordre de la phase dynamique
 %Avant la ligne arrivée (personne ne l'a passé)
-ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee), Listeordredynamique):- not(Apasselignearrivee),
-   coureurs(Listecoureurs),foreach( member(Coureur,Listecoureurs),trouver_position(Coureur,Listeposition,Position)
 
+numerocoureur(Nomcoureur,Numero,Listeposition,Position):- trouver_position(Nomcoureur,Listeposition,Position), numero(Position,Numero)
+listenumerocoureur(Listeposition,[Num1,Num2,Num3,Num4,Num5,Num6,Num7,Num8,Num9,Num10,Num11,Num12]):-
+  numerocoureur(italie_1,Num1,Listeposition,Position), numerocoureur(italie_2,Num5,Listeposition,Position),numerocoureur(italie_3,Num6,Listeposition,Position),
+  numerocoureur(hollande_1,Num4,Listeposition,Position), numerocoureur(hollande_2,Num2,Listeposition,Position),numerocoureur(hollande_3,Num3,Listeposition,Position),
+  numerocoureur(belgique_1,Num7,Listeposition,Position), numerocoureur(belgique_2,Num8,Listeposition,Position),numerocoureur(belgique_3,Num9,Listeposition,Position),
+  numerocoureur(allemagne_1,Num10,Listeposition,Position), numerocoureur(allemagne_2,Num11,Listeposition,Position),numerocoureur(allemagne_3,Num12,Listeposition,Position)
+
+
+fabriqueordredynamique(Listetriee,Listeposition,[Coureur1, Coureur2, Coureur3, Coureur4,Coureur5,Coureur6,Coureur7,Coureur8,Coureur9,Coureur10,Coureur11,Coureur12]):-
+  nth0(0,Listetriee,Num1), numero(Idcase1,Num1) , trouver_coureur(Idcase1,Listeposition,Coureur1),
+  nth0(1,Listetriee,Num2), numero(Idcase2,Num2) , trouver_coureur(Idcase2,Listeposition,Coureur2),
+  nth0(2,Listetriee,Num3), numero(Idcase3,Num3) , trouver_coureur(Idcase3,Listeposition,Coureur3),
+  nth0(3,Listetriee,Num4), numero(Idcase4,Num4) , trouver_coureur(Idcase4,Listeposition,Coureur4),
+  nth0(4,Listetriee,Num5), numero(Idcase5,Num5) , trouver_coureur(Idcase5,Listeposition,Coureur5),
+  nth0(5,Listetriee,Num6), numero(Idcase6,Num6) , trouver_coureur(Idcase6,Listeposition,Coureur6),
+  nth0(6,Listetriee,Num7), numero(Idcase7,Num7) , trouver_coureur(Idcase7,Listeposition,Coureur7),
+  nth0(7,Listetriee,Num8), numero(Idcase8,Num8) , trouver_coureur(Idcase8,Listeposition,Coureur8),
+  nth0(8,Listetriee,Num9), numero(Idcase9,Num9) , trouver_coureur(Idcase9,Listeposition,Coureur9),
+  nth0(9,Listetriee,Num10), numero(Idcase10,Num10) , trouver_coureur(Idcase10,Listeposition,Coureur10),
+  nth0(10,Listetriee,Num11), numero(Idcase11,Num11) , trouver_coureur(Idcase11,Listeposition,Coureur11),
+  nth0(11,Listetriee,Num12), numero(Idcase12,Num12) , trouver_coureur(Idcase12,Listeposition,Coureur12)
+
+
+
+ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee), Listeordredynamique):- not(Apasselignearrivee),
+coureurs(Listecoureurs),listenumerocoureur(Listeposition,Listenumeroatrier), msort(Listenumeroatrier,Listetriee),fabriqueordredynamique(Listetriee,Listeposition,Listeordredynamique).
+% not(Apasselignearrivee), --> a regarder plus tard
+
+
+
+% Dépassement
+
+estletourde(Nomcoureur,Ordrephasedebut,Prochaincoureur):- nth0(Index,Ordrephasedebut,Nomcoureur),I is Index+1,nth0(I,Ordrephasedebut,Prochaincoureur).
+
+estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur):- nth0(Index,Ordrephasedynamique,Nomcoureur),I is Index+1,nth0(I,Ordrephasedynamique,Prochaincoureur).
+
+lidis([]).
+coureursderriereli([]).
+%Peut dépasser si la distance entre le coureur et celui derrière qui est le plus proche est supérieure à 4
+peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,Cartessecondes, Listecoureur,_,_),lidis(Lidis),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,Cartessecondes),estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
+
+
+%pluspreesderriere(Nomcoureur,Nomcoureurderriere):- aller chercher toutes les positions des coureurs et calculer distance minimale
+%calculdistance(Nomcoureur, Nomcoureurderrierepotentiel, Distanceentrecesdeuxcoureurs):- position valeur numero (différence) ou cas avec lettre à préciser
+%estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
+
+
+%Liste de tous les coureurs derrière
+
+estderriere(_,[],_,_).
+estderriere(Nomcoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):- jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Case1),trouver_position(C,Listecoureur,Case2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1>Numero2,insert(C,Coureursderriereli,Coureursderriere), Coureurderriereli is Coureursderriere, estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere).
+
+
+%Distance avec chaque coureur derrière
+%calculdistance(Nomcoureur, [C|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
+
+calculdistance(_, [],_,_).
+calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Distance is Numero1-Numero2,insert(Distance,Lidis,Listedistances),Lidis is Listedistances,calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances).
+
+
+%estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
+estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
+
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde==0, ordrephasedynamiqu(),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Listecoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Ordrephasedynamique,Prochaincoureur).
+
+
+
+
+
+%
 %Avant la ligne arrivée
 
 /*
@@ -847,44 +916,6 @@ ordrechute([Nomcoureur|Ordrephasedynamique],Ordrechuteli,Ordrechuteliste):- etat
 % Gros prédicat chute en série (autre(s) coureur(s) sur largeur impacté(s))
 
 %chuteenserie(Coureurs,Ordrephasedynamique,caseschute,ordrechuteli,joueurs,cartes,nouvcartessecondes,cartessecondesrestantes):- chute(coureurs,coureurs),ordrechute(ordrephasedynamique,caseschute,ordrechuteli,ordrechuteliste), passetour(ordrechuteliste),joueursentrainedanschute(ordrechuteliste,joueurs,joueurschute),foreach(member(nomjoueur,joueurschute),defausseXcarte(nomjoueur,cartes,nouvcartessecondes,cartessecondesrestantes)).
-
-
-% Dépassement
-
-estletourde(Nomcoureur,Ordrephasedebut,Prochaincoureur):- nth0(Index,Ordrephasedebut,Nomcoureur),I is Index+1,nth0(I,Ordrephasedebut,Prochaincoureur).
-
-estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur):- nth0(Index,Ordrephasedynamique,Nomcoureur),I is Index+1,nth0(I,Ordrephasedynamique,Prochaincoureur).
-
-lidis([]).
-coureursderriereli([]).
-%Peut dépasser si la distance entre le coureur et celui derrière qui est le plus proche est supérieure à 4
-peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs):- joueur(_,Cartessecondes, Listecoureur,_,_),lidis(Lidis),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,Cartessecondes),estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
-
-
-%pluspreesderriere(Nomcoureur,Nomcoureurderriere):- aller chercher toutes les positions des coureurs et calculer distance minimale
-%calculdistance(Nomcoureur, Nomcoureurderrierepotentiel, Distanceentrecesdeuxcoureurs):- position valeur numero (différence) ou cas avec lettre à préciser
-%estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
-
-
-%Liste de tous les coureurs derrière
-
-estderriere(_,[],_,_).
-estderriere(Nomcoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):- jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Case1),trouver_position(C,Listecoureur,Case2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1>Numero2,insert(C,Coureursderriereli,Coureursderriere), Coureurderriereli is Coureursderriere, estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere).
-
-
-%Distance avec chaque coureur derrière
-%calculdistance(Nomcoureur, [C|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
-
-calculdistance(_, [],_,_).
-calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Distance is Numero1-Numero2,insert(Distance,Lidis,Listedistances),Lidis is Listedistances,calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances).
-
-
-%estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
-estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
-
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde==0, ordrephasedynamiqu(),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Listecoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Ordrephasedynamique,Prochaincoureur).
-
 
 
  /*
