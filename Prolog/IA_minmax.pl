@@ -35,9 +35,22 @@
 %gagnant(Nomautrejoueur)--> Nomjoueur /== Nomautrejoueur Util(Nomjoueur,0)
 %autre cas +5,+2,+1
 
-%--> Relire le choix fait aux branches min max cas où plusieurs joueurs
+%--> Relire le choix fait aux branches min max cas où plusieurs joueurs (dans slides)
 
 %Définition de la profondeur maximale de recherche
 
 
 %Calcul du coup optimal.
+%minimax(Etat, P)  p-->Min ou Max:
+%{ util(Etat, VAleurutil) si Etat est final --> finjeu(Coureurs)
+%  trouver le max  parmi les MiniMax(Trans(s, a), non p) possible (p=MAX)  --> trouver le max selon Valeurutil dans util() recursif
+%  trouver le min parmi les MiniMax(Trans(s, a), non p) (p=MIN)  --> trouver le min selon Valeurutil dans util() recursif
+%}
+
+%----------------------------
+% MAX va choisir la branche qui maximise "son" utilité
+%max()
+
+%----------------------------
+% MIN va choisir la branche qui minimise l’utilité
+%min()
