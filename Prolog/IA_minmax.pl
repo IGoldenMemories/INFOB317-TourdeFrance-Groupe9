@@ -1,3 +1,6 @@
+% IA will read the gamelogic file
+:- consult(gamelogic).
+
 /* Différentes choses à implémenter/décider
 
   - Générer l’arbre du jeu jusqu’aux états terminaux
