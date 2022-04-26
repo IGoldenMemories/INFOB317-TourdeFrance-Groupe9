@@ -1,9 +1,29 @@
-<<<<<<< Updated upstream
-% IA will read the gamelogic file
-=======
 %inclu tous les prédicats définis dans gamelogic.pl
->>>>>>> Stashed changes
 :- consult(gamelogic).
+
+%Une fonction de transition
+%-------
+%☞ Trans : S × A → S
+%transition (état1, état2, action):- ok si ? selon action !!
+%--> slide from 615->618 (exemples implémentation)
+
+%Pour chaque action 1-> vérification pas dans Passetour
+    %                2-> vérification dans passe tour et exécution de  miseajourpassetourdelete(Listepassetour,Coureur,Nouvlistepassetour)
+transition(jeu(_,Passetour,Positions,Apasselignearrivee),jeu(),depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Ordrephasedynamique,_)):-
+  peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs)
+%miseàjourposition
+transition(jeu(),jeu(),action(aspiration,Coureur))
+transition(jeu(),jeu(),action(casechance,Coureur))
+transition(jeu(),jeu(),action(mouvementlibre,Coureur))
+
+
+%Un ensemble Act d’actions
+%-----------
+%☞ dépendant des joueurs(passetour,position,carte secondes en leur poSITION, tour
+%et des configurations(repris dans état)
+%☞ Actions : S × P → Act (où P ici signifie les Joueurs et Coureurs) --> sous-états?
+
+
 
 /* Différentes choses à implémenter/décider
 

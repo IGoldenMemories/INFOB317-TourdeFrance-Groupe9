@@ -794,6 +794,47 @@ coureurs(Listecoureurs),listenumerocoureur(Listeposition,Listenumeroatrier), mso
 % not(Apasselignearrivee), --> a regarder plus tard
 
 
+/*
+-----------------------------
+-----------------------------
+          ACTIONS
+-----------------------------
+*/
+%---------- Aspiration ----------------
+%Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
+
+coureursdevantli([]).
+estdevant(_,[],_,_).
+estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant):- jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1<Numero2,insert(C,Coureursdevantli,Coureursdevant),Coureursdevantli is Coureursdevant,estdevant(Coureur,Coureurs,Coureursdevantli,Coureursdevant).
+estdistancemaximale(Listedistances,Distancemax):- max_list(Listedistances,Distancemax).
+
+%Un coureur se trouve JUSTE DERRIERE un autre coureur et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
+%aspiration(Coureur,Valeurcartesec,Casearrivee):- %Verification exists autre coureur avec numero case = numero case +1, nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
+
+aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1
+,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),trouver_coureur(Idcase,Listecoureur,Coureursuivant)
+
+
+%--> défaussement de cartes se fait à la prise de commande
+%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver à côté un autre coureur en utilisant la valeur de la carte seconde +1 ,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
+aspiration(Coureur,Valeurcartesec,Casearrivee):-%Verification exists autre coureur avec numero case = numero case +1,
+%--> défaussement de cartes se fait à la prise de commande
+aspiration(Coureur,Valeurcartesec,Casearrivee):-  coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1
+,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,trouver_coureur(Idcase,Listecoureur,Coureursuivant)
+
+%--> défaussement de cartes se fait à la prise de commande
+%Un coureur se trouve JUSTE à CÔté et possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
+aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
+%--> défaussement de cartes se fait à la prise de commande
+aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(trouver_position(C,Listecoureur,Idcase2),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2)
+, Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,trouver_coureur(Idcase,Listecoureur,Coureursuivant)
+
+%--> défaussement de cartes se fait à la prise de commande
+%Un coureur se trouve JUSTE à CÔté  et possibilité d'arriver juste derrière un autre coureur en utilisant la valeur de la carte seconde +1
+aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
+%--> défaussement de cartes se fait à la prise de commande
+aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(trouver_position(C,Listecoureur,Idcase2),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2)
+,Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),trouver_coureur(Idcase,Listecoureur,Coureursuivant)
 
 % Dépassement
 
@@ -828,12 +869,13 @@ calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_
 %estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
 estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
 
+%--> défaussement de cartes se fait à la prise de commande
 depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde==0, ordrephasedynamiqu(),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Listecoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Idcase2,Listecoureur,Nouvellelistecoureur),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Ordrephasedynamique,Prochaincoureur).
 
-
-
-
+%--> à quel joueur est le coureur pour Nomjoueur ???
+mouvementlibre(Nomcoureur,Valeurcarteseconde,jeu(_,_,Listeposition,_),Idcasearrivee, Prochaincoureur, jeu(_,_,NouvelleListeposition,_)):-
+  coureurs(ListeCoureur),trouver_position(Nomcoureur,Listecoureur,Idcase),numero(Idcase,Numcase),(for((estdevantcase(Idcase,Idcasearrivee,Idcasearrivee),casevide(Nomcoureur,Listeposition,Idcase)),0,Valeurcarteseconde),miseajourpositioncoureur(Nomcoureur,Idcasearrivee,Listeposition,NouvelleListeposition)), defaussecarte(Nomjoueur, Valeurcarteseconde),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur)
 
 %
 %Avant la ligne arrivée
@@ -856,8 +898,11 @@ chute([Nomcoureur|Listecoureurs],Case1):- coureurs(Coureurs),jeu(_,_,Listecoureu
 %Pour chaque coureur présent sur le lieu de chute, il est ajouté à la liste des coureurs dans la chute et dans celles des coureurs passant leur tour
 
 miseajourpassetourinsert(Listepassetour,Coureur,Nouvlistepassetour):- insert(Listepassetour,Coureur,Nouvlistepassetour).
+
+miseajourpassetourdelete(Listepassetour,Coureur,Nouvlistepassetour):- delete(Listepassetour,Coureur,Nouvlistepassetour).
 %Ajoute les coureurs dans la largeur (sur même ligne) que lieu de chute à la liste des coureurs devant passer leur tour
-coureursentrainedanschute():- lieudechute(Listeidcaseschute),foreach(member(Casechute,Listeidcaseschute),(jeu(_,_,Listecoureur,_),jeu(_,Listepassetour,_,_),foreach(member(Nomcoureur,Listecoureur),(trouver_position(Nomcoureur,Listecoureur,Case),member(Case,Listeidcaseschute),miseajourpassetourinsert(Listepassetour,Nomcoureur,Nouvlistepassetour),Listepassetour is Nouvlistepassetour))).
+%--> mettre à jour avce trouver_position
+coureursentrainedanschute(Listeidcaseschute):- foreach(member(Casechute,Listeidcaseschute),(jeu(_,_,Listecoureur,_),jeu(_,Listepassetour,_,_),foreach(member(Nomcoureur,Listecoureur),(trouver_position(Nomcoureur,Listecoureur,Case),member(Case,Listeidcaseschute),miseajourpassetourinsert(Listepassetour,Nomcoureur,Nouvlistepassetour),Listepassetour is Nouvlistepassetour))).
 
 
 
@@ -888,7 +933,7 @@ miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,C
 %lieudechute([_|[]],listeidcases):- chute(coureurs,coureurs). 
 
 listechute([])
-lieudechute(Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),chute(Coureurs,Idcase),numero(Idcase,Numero1),listidcases(Listetoutescases),foreach(member(Case2, Listetoutescases), (numero(Case2,Numero2), Case1/==Case2, Numero1==Numero2,not(estcouloir(Case1)),not(estcouloir(Case2),insert(Case2,Listechute,Listeidcaseschute))).
+lieudechute(Idcase,Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),numero(Idcase,Numero1),listidcases(Listetoutescases),foreach(member(Case2, Listetoutescases), (numero(Case2,Numero2), Case1/==Case2, Numero1==Numero2,not(estcouloir(Case1)),not(estcouloir(Case2),insert(Case2,Listechute,Listeidcaseschute))).
 
 
 
@@ -897,7 +942,7 @@ lieudechute(Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),chute(
 caselibre([],Idcase2).
 caselibre([C|Casessuivantes],Idcase2):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),foreach(member(Coureur,Coureurs),(trouver_position(Coureur,Listecoureur,Idcase),Idcase/=C)),Idcase2 is C,caselibre(Casessuivantes,Idcase2).
 
-
+casevide(Coureur,Listecoureur,Idcase):-foreach(member(Coureur,Coureurs),(trouver_position(Coureur,Listecoureur,Idcase),Idcase/=C))
 
 %Etablir les cases suivantes (largeur) à partir d'id
 casessuivantesli([]).
@@ -915,7 +960,7 @@ ordrechute([Nomcoureur|Ordrephasedynamique],Ordrechuteli,Ordrechuteliste):- etat
 
 % Gros prédicat chute en série (autre(s) coureur(s) sur largeur impacté(s))
 
-%chuteenserie(Coureurs,Ordrephasedynamique,caseschute,ordrechuteli,joueurs,cartes,nouvcartessecondes,cartessecondesrestantes):- chute(coureurs,coureurs),ordrechute(ordrephasedynamique,caseschute,ordrechuteli,ordrechuteliste), passetour(ordrechuteliste),joueursentrainedanschute(ordrechuteliste,joueurs,joueurschute),foreach(member(nomjoueur,joueurschute),defausseXcarte(nomjoueur,cartes,nouvcartessecondes,cartessecondesrestantes)).
+chuteenserie(Coureurs,jeu(Deckcartes,Passetour,Listeposition,_)):- coureurs(Coureurs), chute(Coureurs,Casedebutchute), lieudechute(Casedebutchute,Listeidcaseouchute),coureursentrainedanschute(Listeidcaseschute),foreach(member(Nomjoueur,Listeidcaseschute),defaussecarte(Nomjoueur,Carte)).
 
 
  /*
@@ -950,43 +995,5 @@ gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tem
 */
 %Par rapport à la position de chaque coureur (ont-ils tous passé la ligne d'arrivée ?)
 % Si  oui, alors ce prédicat est vrai et la partie est finie (vérification gagnant et affichage écran fin)
-listecoureurarrive([])
-finjeu(Coureurs):- listecoureurarrive(Listearr),coureurs(Coureurs),foreach(member(C,Coureurs),(jeu(_,_,_,_,_,_,Listeposition),nth0(_, ListeCoureur,[Nomcoureur|Poscoureur]),apresarrivee(Poscoureur),insert(Listearr,Nomcoureur,Listetotal))),length(Listetotal,12)
 
-
-/*
------------------------------
------------------------------
-          ACTIONS
------------------------------
-*/
-%---------- Aspiration ----------------
-%Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
-
-coureursdevantli([]).
-estdevant(_,[],_,_).
-estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant):- jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1<Numero2,insert(C,Coureursdevantli,Coureursdevant),Coureursdevantli is Coureursdevant,estdevant(Coureur,Coureurs,Coureursdevantli,Coureursdevant).
-estdistancemaximale(Listedistances,Distancemax):- max_list(Listedistances,Distancemax).
-
-%Un coureur se trouve JUSTE DERRIERE un autre coureur et possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
-aspiration(Coureur,Valeurcartesec,Casearrivee):- %Verification exists autre coureur avec numero case = numero case +1, nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
-
-aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),jeu(_,_,[[Coureursuivant,Idcase]],_)
-
-
-%Cas où lettre y réfléchir
-%Un coureur se trouve JUSTE DERRIERE et possibilité d'arriver à côté un autre coureur en utilisant la valeur de la carte seconde +1 ,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
-aspiration(Coureur,Valeurcartesec,Casearrivee):-%Verification exists autre coureur avec numero case = numero case +1,
-
-aspiration(Coureur,Valeurcartesec,Casearrivee):-  coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,jeu(_,_,[[Coureursuivant,Idcase]],_)
-
-
-%Un coureur se trouve JUSTE à CÔté et possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
-aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
-
-aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(trouver_position(C,Listecoureur,Idcase2),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2), Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,trouver_coureur(Idcase,Listecoureur,Coureursuivant)
-
-%Un coureur se trouve JUSTE à CÔté  et possibilité d'arriver juste derrière un autre coureur en utilisant la valeur de la carte seconde +1
-aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
-
-aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(trouver_position(C,Listecoureur,Idcase2),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2),Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),trouver_coureur(Idcase,Listecoureur,Coureursuivant)
+finjeu(Coureurs):- jeu(_,_,Listeposition,_),coureurs(Coureurs),foreach(member(C,Coureurs),(trouver_position(C,Listeposition,Poscoureur)),apresarrivee(Poscoureur))).
