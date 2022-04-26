@@ -743,6 +743,35 @@ jeu(_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,a
 /*
 -----------------------------------
 -----------------------------------
+      Prédicats milieu de jeu (phase dynamique)
+-----------------------------------
+*/
+
+estdevantcase(Idcase1,Idcase2,Idcasedevant):-
+  numero(Idcase1,Num1),numero(Idcase2,Num2),Num2>Num1, Idcasedevant is Idcase2
+
+estdevantcase(Idcase1,Idcase2,Idcasedevant):-
+    numero(Idcase1,Num1),numero(Idcase2,Num2),Num1>Num2, Idcasedevant is Idcase1
+
+idcaselist([]).
+
+estdevantcase(Idcase1,Idcase2,Idcasedevant):-
+  numero(Idcase1,Num1),numero(Idcase2,Num2),Num1==Num2, idcaselist(Liste),insert(Idcase1,Liste,Nouvelleliste),insert(Idcase2,Nouvelleliste,Listefinale),random_permutation(Listefinale, Permutation),nth0(0,Permutation,Idcasedevant).
+  
+
+
+
+
+%ordre de la phase dynamique
+%Avant la ligne arrivée (personne ne l'a passé)
+ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee), Listeordredynamique):- not(Apasselignearrivee),
+   coureurs(Listecoureurs),foreach( member(Coureur,Listecoureurs),trouver_position(Coureur,Listeposition,Position)
+
+%Avant la ligne arrivée
+
+/*
+-----------------------------------
+-----------------------------------
       Prédicats chute
 -----------------------------------
 */
@@ -853,8 +882,8 @@ calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_
 %estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
 estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
 
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde==0,estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Listecoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde==0, ordrephasedynamiqu(),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Listecoureur,Idcase2),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Ordrephasedynamique,Prochaincoureur).
 
 
 
@@ -930,5 +959,3 @@ aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,List
 aspiration(Coureur,Valeurcartesec,Casearrivee):-%Vérification exists coureur avec même numéro mais position /== ou lettre/==,nôtre numero +valeurcartesec+1 tel que exists même numéro case occupée par autre coureur MAIS position /== ou lettre /==
 
 aspiration(Coureur,Valeurcartesec,Casearrivee):- coureurs(Coureurs),jeu(_,_,Listecoureur,_),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),foreach(member(C, Coureurs),(trouver_position(C,Listecoureur,Idcase2),C/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2),Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),trouver_coureur(Idcase,Listecoureur,Coureursuivant)
-
-

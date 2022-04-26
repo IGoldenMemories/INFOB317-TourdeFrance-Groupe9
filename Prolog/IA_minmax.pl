@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 % IA will read the gamelogic file
+=======
+%inclu tous les prédicats définis dans gamelogic.pl
+>>>>>>> Stashed changes
 :- consult(gamelogic).
 
 /* Différentes choses à implémenter/décider
@@ -53,7 +57,3 @@
 %----------------------------
 % MAX va choisir la branche qui maximise "son" utilité
 %max()
-
-%----------------------------
-% MIN va choisir la branche qui minimise l’utilité
-%min()
