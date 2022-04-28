@@ -800,6 +800,12 @@ coureurs(Listecoureurs),listenumerocoureur(Listeposition,Listenumeroatrier), mso
           ACTIONS
 -----------------------------
 */
+
+%----Case chance ----
+estsurcasechance(Nomcoureur,jeu(_,_,Listeposition,_)):- trouver_position(Nomcoureur,Listeposition,Idcase), casechance(Idcase)
+
+
+
 %---------- Aspiration ----------------
 %Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
 
@@ -870,8 +876,10 @@ calculdistance(Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):- jeu(_,_
 estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
 
 %--> défaussement de cartes se fait à la prise de commande
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde==0, ordrephasedynamiqu(),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
-depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),miseajourpositioncoureur(Nomcoureur,Idcase2,Listecoureur,Nouvellelistecoureur),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur,0):- Valeurcarteseconde==0, ordrephasedebut(Ordrephasedebut),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur,0):- Valeurcarteseconde==0, ordrephasedynamique(Ordrephasedynamique),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
+
+depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Prochaincoureur,Idcase2):- Valeurcarteseconde>0,jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Idcase1),caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Prochaincoureur).
 
 %--> à quel joueur est le coureur pour Nomjoueur ???
 mouvementlibre(Nomcoureur,Valeurcarteseconde,jeu(_,_,Listeposition,_),Idcasearrivee, Prochaincoureur, jeu(_,_,NouvelleListeposition,_)):-
@@ -976,7 +984,7 @@ chuteenserie(Coureurs,jeu(Deckcartes,Passetour,Listeposition,_)):- coureurs(Cour
 tempspartiel(Nomcoureur,Tempspartiel):-jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Case), numero(Case,Num), Tempspartiel is 95-%Num
 
 %Vérifie si un coureur a passé sa ligne d'arrivée --> utilisée pour le calcul du temps total +10 après chaque toour (dés qu'un coureur a passé la ligne d'arrivée)
-apasselignearrivee(Nomcoureur):-jeu(_,_,Listecoureur,_),trouver_position(Nomcoureur,Listecoureur,Case),numero(Case,Num),Num>=95 % Condition sur le numéro de case (??? ligne d'arrivée ==?)
+apasselignearrivee(Nomcoureur,Listeposition):-trouver_position(Nomcoureur,Listecoureur,Case),apresarrivee(Case) % Condition sur le numéro de case (??? ligne d'arrivée ==?)
 
 %Obtention du temps total d'un joueur
 tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartiel(C1,T1), Tempspartiel(C2,T2),Tempspartiel(C3,T3), Tempstotal is T1+T2+T3
