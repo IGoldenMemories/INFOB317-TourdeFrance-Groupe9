@@ -9,11 +9,44 @@
 
 %Pour chaque action 1-> vérification pas dans Passetour
     %                2-> vérification dans passe tour et exécution de  miseajourpassetourdelete(Listepassetour,Coureur,Nouvlistepassetour)
-transition(jeu(_,Passetour,Positions,Apasselignearrivee),jeu(),depassement(Nomcoureur,Coureurs,Valeurcarteseconde,Ordrephasedynamique,Ordrephasedynamique,_)):-
-  peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs)
+transition(jeu(_,Passetour,Positions,Faux),jeu(_,Passetour,Resultatction,Faux),ordrephasedebut(Ordrephasedebut),estletourde(Nomcoureur,Ordrephasedebut,_),depassement(Nomcoureur,Valeurcarteseconde,_,Nouvposition)):-
+  not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs), not(casechance(NouvPos)),miseajourpositioncoureur(Nomcoureur,Nouvposition,Positions,Resultatction),not(chuteenserie(Deckcartes,Passetour,Resultatction))
+
+transition(jeu(_,Passetour,Positions,Faux),jeu(_,Passetour,Resultatction,Vrai),ordrephasedebut(Ordrephasedebut),estletourde(Nomcoureur,Ordrephasedebut,_),depassement(Nomcoureur,Valeurcarteseconde,_,Nouvposition)):-
+    not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),not(casechance(NouvPos)),miseajourpositioncoureur(Nomcoureur,Nouvposition,Positions,Resultatction),apasselignearrivee(Nomcoureur,NouvPos),not(chuteenserie(Deckcartes,Passetour,Resultatction))
+
+transition(jeu(_,Passetour,Positions,Faux),jeu(_,Passetour,Resultatction,Faux),ordrephasedynamique(Ordrephasedynamique),estletourde(Nomcoureur,Ordrephasedynamique,_),depassement(Nomcoureur,Valeurcarteseconde,_,Nouvposition)):-
+    not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),not(casechance(NouvPos)),miseajourpositioncoureur(Nomcoureur,Nouvposition,Positions,Resultatction),not(chuteenserie(Deckcartes,Passetour,Resultatction))
+
+transition(jeu(_,Passetour,Positions,Faux),jeu(_,Passetour,Resultatction,Vrai),ordrephasedynamique(Ordrephasedynamique),estletourde(Nomcoureur,Ordrephasedynamique,_),depassement(Nomcoureur,Valeurcarteseconde,_,Nouvposition)):-
+    not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),not(casechance(NouvPos)),miseajourpositioncoureur(Nomcoureur,Nouvposition,Positions,Resultatction),apasselignearrivee(Nomcoureur,NouvPos),not(chuteenserie(Deckcartes,Passetour,Resultatction))
+
+transition(jeu(Deckcartes,Passetour,Positions,Faux),jeu(_,Passetour,Resultatction,Faux),ordrephasedebut(Ordrephasedebut),estletourde(Nomcoureur,Ordrephasedebut,_),depassement(Nomcoureur,Valeurcarteseconde,_,Nouvposition)):-
+    not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),not(chuteenserie(Deckcartes,Passetour,Resultatction))
+
+transition(jeu(_,Passetour,Positions,Faux),jeu(_,Passetour,Resultatction,Vrai),ordrephasedebut(Ordrephasedebut),estletourde(Nomcoureur,Ordrephasedebut,_),depassement(Nomcoureur,Valeurcarteseconde,_,Nouvposition)):-
+    not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),not(chuteenserie(Deckcartes,Passetour,Resultatction)),apasselignearrivee(Nomcoureur,Idnouvellecase)
+
+transition(jeu(_,Passetour,Positions,Faux),jeu(_,Passetour,Resultatction,Faux),ordrephasedynamique(Ordrephasedynamique),estletourde(Nomcoureur,Ordrephasedynamique,_),depassement(Nomcoureur,Valeurcarteseconde,_,Nouvposition)):-
+    not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),not(chuteenserie(Deckcartes,Passetour,Resultatction))
+
+
+transition(jeu(_,Passetour,Positions,Faux),jeu(_,Passetour,,Resultatction,Vrai),ordrephasedynamique(Ordrephasedynamique),estletourde(Nomcoureur,Ordrephasedynamique,_),depassement(Nomcoureur,Valeurcarteseconde,_,Nouvposition)):-
+  not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),not(chuteenserie(Deckcartes,Passetour,Resultatction)),apasselignearrivee(Nomcoureur,Idnouvellecase)
+
+
+
+%Cas où dans Passetour
+transition(jeu(_,Passetour,_,_),jeu(_,Nouvellepassetour,_,_),ordrephasedebut(Ordrephasedebut),estletourde(Nomcoureur,Ordrephasedebut,_),depassement(Nomcoureur,_,_,_)):-
+    member(Nomcoureur,Passetour),miseajourpassetourdelete(Passetour,Nomcoureur,Nouvellepassetour)
+
+transition(jeu(_,Passetour,_,_),jeu(_,Nouvellepassetour,_,_),ordrephasedynamique(Ordrephasedynamique),estletourde(Nomcoureur,Ordrephasedynamique,_),depassement(Nomcoureur,_,_,_)):-
+    member(Nomcoureur,Passetour),miseajourpassetourdelete(Passetour,Nomcoureur,Nouvellepassetour)
+
+
 %miseàjourposition
-transition(jeu(),jeu(),action(aspiration,Coureur))
-transition(jeu(),jeu(),action(casechance,Coureur))
+transition(jeu(),jeu(),action(aspiration,Coureur)):-
+
 transition(jeu(),jeu(),action(mouvementlibre,Coureur))
 
 
