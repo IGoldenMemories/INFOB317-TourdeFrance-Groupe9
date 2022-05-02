@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Board game</title>
+</head>
+<body>
+  <style>
+    .box{
+      width:  150px;
+      height:  150px;
+      border:  1px solid black;
+      display: inline-block;
+      margin: -2px; 
+    }
+
+    .black{
+      background-color:  black;
+    }
+
+    .grey{
+      background-color: #606060;
+    }
+
+    .green{
+      background-color: #096A09;
+    }
+
+    .orange{
+      background-color: #CC5500;
+    }
+
+    .blue{
+      background-color: #79F8F8;
+    }
+
+    .brown{
+      background-color: #5B3C11;
+    }
+
+    .sand{
+      background-color: #B67823;
+    }
+
+    .white{
+      background-color: white;
+    }
+
+    .finish{
+      background-color: #EF9B0F;
+    }
+
+    .sprint{
+      background-color: #18391E;
+    }
+
+    .red{
+      background-color: #A5260A;
+    }
+
+  </style>
+
+  <div>
+    <div>
+      <div class="box brown"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box sprint"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box brown"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box sprint"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div class="box sand"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box brown"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+   <div>
+    <div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div class="box sand"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box brown"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box finish"></div>
+      <div class="box finish"></div>
+      <div class="box finish"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div class="box white"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box finish"></div>
+      <div class="box finish"></div>
+      <div class="box finish"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  <div>
+    <div>
+      <div class="box white"></div>
+      <div class="box sprint"></div>
+      <div class="box sprint"></div>
+      <div class="box sprint"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box blue"></div>
+      <div class="box red"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div class="box blue"></div>
+      <div class="box red"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box blue"></div>
+      <div class="box red"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box brown"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div class="box white"></div>
+      <div class="box red"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box white"></div>
+      <div class="box red"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div class="box brown"></div>
+      <div class="box red"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey "></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box sprint"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box orange"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box red"></div>
+      <div class="box green"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box sprint"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box sand"></div>
+      <div class="box red"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box sprint"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box grey"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+    <div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box sand"></div>
+      <div class="box red"></div>
+      <div class="box red"></div>
+      <div class="box red"></div>
+      <div class="box red"></div>
+      <div class="box red"></div>
+      <div class="box red"></div>
+      <div class="box red"></div>
+      <div class="box sprint"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+      <div class="box green"></div>
+    </div>
+  </div>
+    <div>
+    <div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+      <div class="box sand"></div>
+    </div>
+    <div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+      <div class="box blue"></div>
+    </div>
+  </div>
+  
+</body>
+</html>
