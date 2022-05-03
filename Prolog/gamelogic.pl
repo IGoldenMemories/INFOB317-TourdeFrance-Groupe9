@@ -11,14 +11,20 @@ situation début/base de connaissance
 
 %joueur(nomjoueur, [valeurscartessecondes], [nomsjoueurs])
 
-joueur(italie,_, [italie_1,italie_2,italie_3])
+joueur(italie,_, [italie_1,italie_2,italie_3],)
 joueur(hollande,_, [hollande_1,hollande_2,hollande_3])
 joueur(belgique,_, [belgique_1,belgique_2,belgique_3])
 joueur(allemagne,_, [allemagne_1,allemagne_2,allemagne_3])
 
 %liste avec tous les noms de coureurs
 coureurs([italie_1,italie_2,italie_3,hollande_1,hollande_2,hollande_3,belgique_1,belgique_2,belgique_3,allemagne_1,allemagne_2,allemagne_3])
-listidcases([])
+listidcases([u,u2,u3,d,d2,d3,t,t2,t3,q,q2,q3,c,c2,c3,si,si2,si3,se,se2,se3,h,h2,h3,n,nb,nc,d0,d0b,d0c,o,o2,do,do2,tre,tre2,qua,qua2,qui,qui2,sei,sei2,d0se,d0se2,d0h,d0h2,d0n,d0n2,
+v,v2,v3,vu,vu2,vu3,vd,vd2,vd4,vt,vt2,vt4,vq,vq2,vq4,vc,vc2,vc4,vsi,vsib,vsid,vsic,vse,vseb,vsed,vsed,vh,vh2,vh4,vn,vn2,vn4,
+t0,t02,t04,tu,tu2,tu4,td,td2,td4,tt,tt2,tt4,tq,tq2,tq4,tc,tc2,tc4,tsi,tsi2,tse,tse2,th,th2,tn,tn2,q0,q02,qu,qu2,qd,qd2,qt,qt2,qq,qq2,qc,qc2,
+qsi,qsi2,qse,qse2,qh,qh2,qn,qn2,c0,c02,cu,cu2,cd,cd2,ct,ct2,cq,cq2,cc,cc2,csi,csi2,cse,cse2,ch,ch2,cn,cn2,s0,s02,su,su2,sd,sd2,sta,stc,stb, sqa,sqc,sqb,
+sc,sc2,ssi,ssi2,sse,sse2,sh,sh2,sn,sn2,se0,se02,seu,seu2,sed,sed2,set,seq,sec,sesi,sesi2,sese,sese2,seh,seh2,sen,sen2,qv0,qv02,qvu,qvu2,qvd,qvd2,qvt,qvt2,
+qvq,qvq3,qvc,qvc3,qvsi,qvsi3,qvse,qvse3,qvh,qvh3,qvna,qvnc,qvnb,n0a,n0c,n0b, nu,nu3,nd,nd3,nt,nt3,nq,nq3,nc,nc2,nc3,p,p2,p3,
+pu,pu2,pu3,pd,pd2,pd3,pt,pt2,pt3,pq,pq2,pq3,pc,pc2,pc3,psi,psi2,psi3,pse,pse2,pse3,ph,ph2,ph3,pn,pn2,pn3])
 
 %Predicat déclaration de toutes cases possibles
 %case sans lettre en largeur ou pas
@@ -146,10 +152,10 @@ numero(sei2,16)
 position(sei2,2)
 casechance(sei2)
 %d0s--> 17
-numero(d0s,17)
-position(d0s,1)
-numero(d0s2,17)
-position(d0s2,2)
+numero(d0se,17)
+position(d0se,1)
+numero(d0se2,17)
+position(d0se2,2)
 numero(d0h,18)
 position(d0h,1)
 numero(d0h2,18)
@@ -488,11 +494,6 @@ position(qvt,1)
 numero(qvt2,83)
 position(qvt2,2)
 
-numero(qvt,83)
-position(qvt,1)
-numero(qvt2,83)
-position(qvt2,2)
-
 numero(qvq,84)
 position(qvq,1)
 numero(qvq3,84)
@@ -541,7 +542,7 @@ numero(nd3,92)
 position(nd3,3)
 numero(nt,93)
 position(nt,1)
-numero(nt2,93)
+numero(nt3,93)
 position(nt3,3)
 numero(nq,94)
 position(nq,1)
@@ -1003,8 +1004,8 @@ apasselignearrivee(Nomcoureur,Case):-trouver_position(Nomcoureur,Listecoureur,Ca
 tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartiel(C1,T1), Tempspartiel(C2,T2),Tempspartiel(C3,T3), Tempstotal is T1+T2+T3
 
 % ------- Définition du gagnant de la partie --------
-gagnant(Gagnant):-
-  tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tempstotal(Perdant1, Temps1), tempstotal(Perdant2, Temps2), Tempsmin<Temps, Tempsmin<Temps1,Tempsmin<Temps2.
+gagnant(jeu(_,_,Listeposition,_),Gagnant):-
+  tempstotal(jeu(_,_,Listeposition,_),Gagnant, Tempsmin), tempstotal(jeu(_,_,Listeposition,_),Perdant, Temps), tempstotal(jeu(_,_,Listeposition,_),Perdant1, Temps1), tempstotal(jeu(_,_,Listeposition,_),Perdant2, Temps2), Tempsmin<Temps, Tempsmin<Temps1,Tempsmin<Temps2.
 
 
 occurrencede([] , _,0). %Cas de base liste vide
@@ -1019,7 +1020,7 @@ occurrencede([H|T] , H2,Count):-
 
 %2 gagnants (même temps total minimal)
 deuxgagnant(Gagnant1,Gagnant2):-
-  findall(Tempstotal, tempstotal(Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 2), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum).
+  findall(Tempstotal, tempstotal(jeu(_,_,_,_,_),Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 2), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum).
 
 %3 gagnants (même temps total minimal)
 troisgagnant(Gagnant1,Gagnant2,Gagnant3):-
@@ -1043,4 +1044,4 @@ quatregagnant(Gagnant1,Gagnant2,Gagnant3,Gagnant4):-
 %Par rapport à la position de chaque coureur (ont-ils tous passé la ligne d'arrivée ?)
 % Si  oui, alors ce prédicat est vrai et la partie est finie (vérification gagnant et affichage écran fin)
 
-finjeu(jeu(_,_,Listeposition,_)):- coureurs(Coureurs), foreach(member(C,Coureurs),(trouver_position(C,Listeposition,Poscoureur)),apresarrivee(Poscoureur))).
+finjeu(_,jeu(_,_,Listeposition,_)):- coureurs(Coureurs), foreach(member(C,Coureurs),(trouver_position(C,Listeposition,Poscoureur)),apresarrivee(Poscoureur))).
