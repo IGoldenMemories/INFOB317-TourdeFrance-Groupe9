@@ -1003,8 +1003,34 @@ apasselignearrivee(Nomcoureur,Case):-trouver_position(Nomcoureur,Listecoureur,Ca
 tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartiel(C1,T1), Tempspartiel(C2,T2),Tempspartiel(C3,T3), Tempstotal is T1+T2+T3
 
 % ------- Définition du gagnant de la partie --------
-gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tempstotal(Perdant1, Temps1), tempstotal(Perdant2, Temps2), Tempsmin<Temps, Tempsmin<Temps1,Tempsmin<Temps2
-%Comment gérer cas où deux ont même tempstotal (2 gagnants??)
+gagnant(Gagnant):-
+  tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tempstotal(Perdant1, Temps1), tempstotal(Perdant2, Temps2), Tempsmin<Temps, Tempsmin<Temps1,Tempsmin<Temps2.
+
+
+occurrencede([] , _,0). %Cas de base liste vide
+
+% Premier élément de la liste est celui dont on cherche le nombre d'occurrences
+occurrencede([H|T] , H,NewCount):-
+  occurrencede(T,H,OldCount), NewCount is OldCount +1.
+
+%Premier élément est différent de celui dont on veut compter l'occurrences
+occurrencede([H|T] , H2,Count):-
+   dif(H,H2), occurrencede(T,H2,Count).
+
+%2 gagnants (même temps total minimal)
+deuxgagnant(Gagnant1,Gagnant2):-
+  findall(Tempstotal, tempstotal(Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 2), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum).
+
+%3 gagnants (même temps total minimal)
+troisgagnant(Gagnant1,Gagnant2,Gagnant3):-
+    findall(Tempstotal, tempstotal(Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 3), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum),tempstotal(Gagnant3,Minimum).
+
+%4 gagnants (même temps total minimal)
+quatregagnant(Gagnant1,Gagnant2,Gagnant3,Gagnant4):-
+      findall(Tempstotal, tempstotal(Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 4), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum),tempstotal(Gagnant3,Minimum),tempstotal(Gagnant4,Minimum).
+
+
+
 
 /*
 -----------------------------
@@ -1017,4 +1043,4 @@ gagnant(Gagnant):-tempstotal(Gagnant, Tempsmin), tempstotal(Perdant, Temps), tem
 %Par rapport à la position de chaque coureur (ont-ils tous passé la ligne d'arrivée ?)
 % Si  oui, alors ce prédicat est vrai et la partie est finie (vérification gagnant et affichage écran fin)
 
-finjeu(Coureurs):- jeu(_,_,Listeposition,_),coureurs(Coureurs),foreach(member(C,Coureurs),(trouver_position(C,Listeposition,Poscoureur)),apresarrivee(Poscoureur))).
+finjeu(jeu(_,_,Listeposition,_)):- coureurs(Coureurs), foreach(member(C,Coureurs),(trouver_position(C,Listeposition,Poscoureur)),apresarrivee(Poscoureur))).
