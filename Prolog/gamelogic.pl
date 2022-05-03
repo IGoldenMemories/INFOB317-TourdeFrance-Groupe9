@@ -643,6 +643,38 @@ position(pn3,3)
 apresarrivee(pn3)
 
 
+coureurdejoueur(italie,[italie_1,italie_2,italie_3])
+coureurdejoueur(hollande,[hollande_1,hollande_2,hollande_3])
+coureurdejoueur(belgique,[belgique_1,belgique_2,belgique_3])
+coureurdejoueur(allemagne,[allemagne_1,allemagne_2,allemagne_3])
+
+
+/*
+-----------------------------------
+-----------------------------------
+    Définition d'un état de jeu
+-----------------------------------
+*/
+%jeu([Cartes secondes tas],[Listecoureurspasseleurtour],[[Coureur1,idcase1]])
+%représentation du tas de cartes (liste)
+%Liste des coureurs devant passé leur tour
+%Position de chaque coureur dans une liste de forme [[Nomcoureur, Idcase]]
+%un coureur a passé la ligne d'arrivée ? (pour le calcul du temps total)
+%Liste des tas de cartes secondes de chacun des joueurs de forme [[Nomjoueur, [Valeur des cartes secondes que possèdent le joueur]]]
+%autre chose (variable,...) succeptible d'être modifié par une action du joueur (une répercussion de celles-ci)
+
+%état initial
+jeu([1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,
+5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,
+10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12], [], [[italie_1,depart],[italie_2,depart],[italie_3,depart],[hollande_1,depart],[hollande_2,depart],[hollande_3,depart]
+,[belgique_1,depart],[belgique_2,depart],[belgique_3,depart],[allemagne_1,depart],[allemagne_2,depart],[allemagne_3,depart]], faux,[[italie,[]],[hollande,[]],[belgique,[]],[allemagne,[]]]).
+
+%état final
+jeu(_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,arrivee],[hollande_2,arrivee],[hollande_3,arrivee]
+,[belgique_1,arrivee],[belgique_2,arrivee],[belgique_3,arrivee],[allemagne_1,arrivee],[allemagne_2,arrivee],[allemagne_3,arrivee]], vrai,,[[italie,_],[hollande,_],[belgique,_],[allemagne,_]])
+
+
+
 %Prédicat pour pioche carte (début)--> mise à jour liste cartes secondes (joueur/globale)
 
 
@@ -652,61 +684,83 @@ apresarrivee(pn3)
 ----------------------
 */
 
+tasdecartejoueur(Nomjoueur, jeu(_,_,_,_,Listetasdecartes), Tascartejoueur):-
+  nth0(X, Sousliste, Listetasdecartes), nth0(1, Tascartejoueur, Sousliste).
+
 %Obtention de la plus haute valeur des cartes secondes pour chaque joueur
-maxchaquejoueur(Nomjoueur,Maxval):- joueur(Nomjoueur,Listjoueur,_),maxlist(Listjoueur,Maxval)
+maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Nomjoueur,Maxval):-
+  tasdecartejoueur(Nomjoueur, jeu(_,_,_,_,Listetasdecartes), Tascartejoueur),maxlist(Tascartejoueur,Maxval).
 
 %Obtention deuxième plus haute valeur with delete)
-secondmaxchaquejoueur(Nomjoueur, Plushauteval,Secondeplushauteval):- joueur(Nomjoueur,Listjoueur,_,_,_),delete(Listjoueur,Plushauteval,Nouvelleliste),maxlist(Nouvelleliste,Secondeplushauteval)
+secondmaxchaquejoueur(Nomjoueur, jeu(_,_,_,_,Listetasdecartes), Plushauteval,Secondeplushauteval):- tasdecartejoueur(Nomjoueur, jeu(_,_,_,_,Listetasdecartes), Tascartejoueur),delete(Tascartejoueur,Plushauteval,Nouvelleliste),maxlist(Nouvelleliste,Secondeplushauteval)
 
 %Permet de trouver le joueur la plus haute parmi ceux de la liste récursivement
 %(Quand leur carte la plus haute est la même, va chercher la seconde carte la plus haute et ainsi de suite)
 
 %à terminer
-maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-% if plushautevaluecom in liste joueur in list then --> search fornext highest value (prédicat secong highest with delete) compare those next value x >y
-maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-% if plushautevaluecom in liste joueur in list then --> search fornext highest value (prédicat secong highest with delete) compare those next value x==y
-maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-
-maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-
+%maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-% if plushautevaluecom in liste joueur in list then --> search fornext highest value (prédicat secong highest with delete) compare those next value x >y
+%maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-% if plushautevaluecom in liste joueur in list then --> search fornext highest value (prédicat secong highest with delete) compare those next value x==y
+%maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-
+%maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-
 
-maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
-maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
-maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
+%maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
+%maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
+%maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
 
-maxentrejoueurs([J1,J2], Plushautevalcommune, Maxj):-
-maxentrejoueurs([J1,J2], Plushautevalcommune, Maxj):-
+%maxentrejoueurs([J1,J2], Plushautevalcommune, Maxj):-
+%maxentrejoueurs([J1,J2], Plushautevalcommune, Maxj):-
 
 %-----Premier joueur -----
 %cas où un et un seul joueur a la plus haute carte
-maxtousjoueurs(Premierjoueur):- maxchaquejoueur(Premierjoueur,Plushauteval),maxchaquejoueur(Autrejoueur, Autreval),maxchaquejoueur(Autrejoueur1, Autreval1),maxchaquejoueur(Autrejoueur2, Autreval2), Plushauteval > Autreval, Plushauteval >  Autreval1, Plushauteval >  Autreval2
+maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur):-
+  maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur,Plushauteval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur, Autreval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1, Autreval1),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur2, Autreval2),
+   Plushauteval > Autreval, Plushauteval >  Autreval1, Plushauteval >  Autreval2.
 %cas où deux joueurs ont la plus haute carte en jeu
-maxtousjoueurs(Premierjoueur):- maxchaquejoueur(Joueurpotentiel,Potentielleval),maxchaquejoueur(Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(Autrejoueur1,Autreval1),maxchaquejoueur(Autrejoueur2,Aurteval2), Potentielleval == Potentielleval1, Joueurpotentiel \== Joueurpotentiel1,Potentielleval > Autreval1, Potentielleval > Autreval2, maxentrejoueurs([Joueurpotentiel, Joueurpotentiel1], Potentielleval, Premierjoueur)
+maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur):-
+   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1,Autreval1),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur2,Aurteval2),
+   Potentielleval == Potentielleval1, Joueurpotentiel \== Joueurpotentiel1,Potentielleval > Autreval1, Potentielleval > Autreval2, maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1], Potentielleval, Premierjoueur).
 %cas où trois joueurs ont la plus haute carte en jeu
-maxtousjoueurs(Premierjoueur):- maxchaquejoueur(Joueurpotentiel,Potentielleval),maxchaquejoueur(Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(Joueurpotentiel2,Potentielleval2),maxchaquejoueur(Autrejoueur1,Autreval1), Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Potentielleval > Autreval1, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2,  maxentrejoueurs([Joueurpotentiel, Joueurpotentiel1, Joueurpotentiel2],Potentielleval,Premierjoueur)
+maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur):-
+   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel2,Potentielleval2),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1,Autreval1),
+    Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Potentielleval > Autreval1, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2,  maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1, Joueurpotentiel2],Potentielleval,Premierjoueur).
 %cas où quatre joueurs ont la plus haute carte en jeu
-maxtousjoueurs(Premierjoueur):- maxchaquejoueur(Joueurpotentiel,Potentielleval),maxchaquejoueur(Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(Joueurpotentiel2,Potentielleval2),maxchaquejoueur(Joueurpotentiel3,Potentielleval3), Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Potentielleval == Potentielleval3, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2,   Joueurpotentiel \== Joueurpotentiel3, maxentrejoueurs([Joueurpotentiel, Joueurpotentiel1,Joueurpotentiel2, Joueurpotentiel3],Potentielleval,Premierjoueur)
+maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur):-
+   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel2,Potentielleval2),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel3,Potentielleval3),
+    Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Potentielleval == Potentielleval3, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2,   Joueurpotentiel \== Joueurpotentiel3, maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1,Joueurpotentiel2, Joueurpotentiel3],Potentielleval,Premierjoueur).
 
 %----Second joueur -------
 %cas où un et un seul joueur a la plus haute carte:
-secondplace(Secondjoueur):- maxchaquejoueur(Secondjoueur,Plushauteval),maxchaquejoueur(Autrejoueur, Autreval ),maxchaquejoueur(Autrejoueur1,Autreval1),maxtousjoueur(Premierjoueur), Secondjoueur \== Premierjoueur, Plushauteval > Autreval,  Plushauteval  > Autreval1
+secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur):-
+  maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Secondjoueur,Plushauteval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur, Autreval ),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1,Autreval1),maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur),
+   Secondjoueur \== Premierjoueur, Plushauteval > Autreval,  Plushauteval  > Autreval1.
 
 %cas où deux joueurs ont plus hautes cartes:
-secondplace(Secondjoueur):- maxchaquejoueur(Joueurpotentiel,Potentielleval),maxchaquejoueur(Joueurpotentiel1, Potentielleval1),maxchaquejoueur(Autrejoueur1,Autreval1),maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Premierjoueur\== Joueurpotentiel,  Premierjoueur\== Joueurpotentiel1, Joueurpotentiel \== Joueurpotentiel1,Potentielleval > Autreval1, Potentielleval1 > Autreval1, maxentrejoueurs([Joueurpotentiel, Joueurpotentiel1], Potentielleval,Secondjoueur)
+secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur):-
+   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1,Autreval1),maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur),
+   Potentielleval == Potentielleval1, Premierjoueur\== Joueurpotentiel,  Premierjoueur\== Joueurpotentiel1, Joueurpotentiel \== Joueurpotentiel1,Potentielleval > Autreval1, Potentielleval1 > Autreval1, maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1], Potentielleval,Secondjoueur).
 
 %cas où trois joueurs ont plus hautes cartes:
-secondplace(Secondjoueur):- maxchaquejoueur(Joueurpotentiel,Potentielleval),maxchaquejoueur(Joueurpotentiel1, Potentielleval1),maxchaquejoueur(Joueurpotentiel2, Potentielleval2),
-maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Premierjoueur\== Joueurpotentiel,  Premierjoueur\== Joueurpotentiel1,  Premierjoueur\== Joueurpotentiel2, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2, Joueurpotentiel1 \== Joueurpotentiel2,
- maxentrejoueurs([Joueurpotentiel, Joueurpotentiel1, Joueurpotentiel2], Potentielleval,Secondjoueur)
+secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur):-
+   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel2, Potentielleval2),
+maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Premierjoueur\== Joueurpotentiel,  Premierjoueur\== Joueurpotentiel1,  Premierjoueur\== Joueurpotentiel2, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2, Joueurpotentiel1 \== Joueurpotentiel2,
+ maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1, Joueurpotentiel2], Potentielleval,Secondjoueur).
 
 
  %----Troisieme joueur -------
 % cas où un et un seul joueur a la plus haute carte:
- troisiemeplace(Troisiemejoueur):- maxeachjoueur(Troisiemejoueur,Plushauteval),maxeachjoueur(Autreplayer, Autreval ),maxtousjoueur(Premierjoueur), secondplace(Secondjoueur), Troisiemejoueur \== Premierjoueur, Troisiemejoueur \== Secondjoueur, Plushauteval > Autreval
+ troisiemeplace(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur):-
+    maxeachjoueur(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur,Plushauteval),maxeachjoueur(jeu(_,_,_,_,Listetasdecartes),Autreplayer, Autreval ),maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur), secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur),
+     Troisiemejoueur \== Premierjoueur, Troisiemejoueur \== Secondjoueur, Plushauteval > Autreval.
 
  %cas où les deux joueurs restants ont la même plus haute carte:
- troisiemeplace(Troisiemejoueur):- maxeachjoueur(Joueurpotentiel,Potentielleval),maxeachjoueur(Joueurpotentiel1, Potentielleval1),maxtousjoueur(Premierjoueur), secondplace(Secondjoueur), Potentielleval == Potentielleval1 ,Joueurpotentiel \== Premierjoueur,  Joueurpotentiel \==  Secondjoueur,  Joueurpotentiel \==  Joueurpotentiel1, maxentrejoueurs([Joueurpotentiel, Joueurpotentiel1], Potentielleval,Troisiemejoueur)
+ troisiemeplace(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur):-
+    maxeachjoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxeachjoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1),maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur), secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur),
+    Potentielleval == Potentielleval1 ,Joueurpotentiel \== Premierjoueur,  Joueurpotentiel \==  Secondjoueur,  Joueurpotentiel \==  Joueurpotentiel1, maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1], Potentielleval,Troisiemejoueur).
 
  %----Quatrieme joueur-------
  %joueur restant (pas premier , deuxième ni troisième):
- quatriemeplace(Quatriemejoueur):- joueur(Quatriemejoueur, _, _,_,_), maxtousjoueurs(Premierjoueur), secondplace(Secondjoueur),troisiemeplace(Troisiemejoueur), Quatriemejoueur \== Premierjoueur, Quatriemejoueur \== Secondjoueur, Quatriemejoueur \== Troisiemejoueur
+ quatriemeplace(jeu(_,_,_,_,Listetasdecartes),Quatriemejoueur):- maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur), secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur),troisiemeplace(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur),
+  Quatriemejoueur \== Premierjoueur, Quatriemejoueur \== Secondjoueur, Quatriemejoueur \== Troisiemejoueur.
 
  %----Ordre début ---------
 % C1,C5,C9->  coureurs du premier joueur de la phase de début
@@ -714,31 +768,9 @@ maxtousjoueur(Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval
 % C3,C7,C11-> coureurs du troisième joueur de la phase de début
 % C4,C8,C12-> coureurs du quatrième joueur de la phase de début
 
- ordreddebut([C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12]):- maxtousjoueurs(Premierjoueur), secondplace(Secondjoueur),troisiemeplace(Troisiemejoueur), quatriemeplace(Quatriemejoueur),
- joueur(Premierjoueur,_,[C1,C5,C9],_,_),joueur(Secondjoueur,_,[C2,C6,C10],_,_),joueur(Troisiemejoueur,_,[C3,C7,C11],_,_),joueur(Quatriemejoueur,_,[C4,C8,C12],_,_)
-
- /*
- -----------------------------------
- -----------------------------------
-     Définition d'un état de jeu
- -----------------------------------
- */
-%jeu([Cartes secondes tas],[Listecoureurspasseleurtour],[[Coureur1,idcase1]])
-%représentation du tas de cartes (liste)
-%Liste des coureurs devant passé leur tour
-%Position de chaque coureur
-%un coureur a passé la ligne d'arrivée ? (pour le calcul du temps total)
-%autre chose (variable,...) succeptible d'être modifié par une action du joueur (une répercussion de celles-ci)
-
-%état initial
-jeu([1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,
-5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,
-10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12], [], [[italie_1,depart],[italie_2,depart],[italie_3,depart],[hollande_1,depart],[hollande_2,depart],[hollande_3,depart]
-,[belgique_1,depart],[belgique_2,depart],[belgique_3,depart],[allemagne_1,depart],[allemagne_2,depart],[allemagne_3,depart]], faux)
-
-%état final
-jeu(_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,arrivee],[hollande_2,arrivee],[hollande_3,arrivee]
-,[belgique_1,arrivee],[belgique_2,arrivee],[belgique_3,arrivee],[allemagne_1,arrivee],[allemagne_2,arrivee],[allemagne_3,arrivee]], vrai)
+ordreddebut(jeu(_,_,_,_,Listetasdecartes),[C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12]):-
+    maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur), secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur),troisiemeplace(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur), quatriemeplace(jeu(_,_,_,_,Listetasdecartes),Quatriemejoueur),
+ coureurdejoueur(italie,[C1,C5,C9]), coureurdejoueur(hollande,[C2,C6,C10]), coureurdejoueur(belgique,[C3,C7,C11]), coureurdejoueur(allemagne,[C4,C8,C12]).
 
 
 
