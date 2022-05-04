@@ -1,6 +1,21 @@
 %inclu tous les prédicats définis dans gamelogic.pl
 :- consult(gamelogic).
 
+%utilisé par trouvermeilleureval pour la position dans le vecteur d'évaluation par rapport au coureur devant le choix
+trouveridcoureur(italie_1,0)
+trouveridcoureur(italie_2,1)
+trouveridcoureur(italie_3,2)
+trouveridcoureur(hollande_1,3)
+trouveridcoureur(hollande_2,4)
+trouveridcoureur(hollande_3,5)
+trouveridcoureur(belgique_1,6)
+trouveridcoureur(belgique_2,7)
+trouveridcoureur(belgique_3,8)
+trouveridcoureur(allemagne_1,9)
+trouveridcoureur(allemagne_2,10)
+trouveridcoureur(allemagne_3,11)
+
+
 %Une fonction de transition
 %-------
 %☞ Trans : S × A → S
@@ -88,6 +103,10 @@ transition(jeu(_,_,),jeu(_,_,),action(mouvementlibre,Coureur))
 %   - de minimiser la distance entre le coureur (de qui c'est le tour) et la ligne d'arrivée)
 %ou si état est final (calcul de son utilité)
 %---------------------------------------------------------------------
+trouveeval(jeu(_,_,Positions,_,_,_,_), Listeeval):-
+  findall(Valeureval, (coureurs(Coureurs), member(Nomcoureur,Coureurs), trouver_position(Nomcoureur,Positions, Idcase), numero(Idcase, Numcase), Valeureval is 95- Numcase), Listeeval).
+
+
 
 
 %Un ensemble Act d’actions
@@ -96,8 +115,13 @@ transition(jeu(_,_,),jeu(_,_,),action(mouvementlibre,Coureur))
 %et des configurations(repris dans état)
 %☞ Actions : S × P → Act (où P ici signifie les Joueurs et Coureurs) --> sous-états?
 
-actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Listaction):-
-  findall([jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),Actionposs, Vectoreval], (transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),estletourde(Nomcoureur, Ordre, _),Actionposs), findeval(jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre), Vectoreval)).
+actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Listeaction):-
+  findall([jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),Actionposs, Vectoreval], (transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),estletourde(Nomcoureur, Ordre, _),Actionposs), trouveeval(jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre), Vectoreval)).
+
+% Sélection de l'action minimisant la valeur d'évaluation pour Nomcoureur dans les vecteurs d'évaluations de toutes ses actions possibles 
+trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif):-
+  trouveridcoureur(Nomcoureur, Idcoureur), findall(Valposs, (member(X, Listaction), nth0(2, Vector, X), nth0(Idcoureur, Valposs, Vector)), Listvalposs), min_list(Listvalposs,Minimum),
+   nth0(Y,Sousliste, Listeaction), nth0(2, Vectoraverif, Sousliste), nth0(Idcoureur, Minimum, Vectoraverif), nth0(1, Actionchoisie, Sousliste).
 
 
 
