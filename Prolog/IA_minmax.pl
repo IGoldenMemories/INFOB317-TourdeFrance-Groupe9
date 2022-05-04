@@ -118,7 +118,7 @@ trouveeval(jeu(_,_,Positions,_,_,_,_), Listeeval):-
 actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Listeaction):-
   findall([jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),Actionposs, Vectoreval], (transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),estletourde(Nomcoureur, Ordre, _),Actionposs), trouveeval(jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre), Vectoreval)).
 
-% Sélection de l'action minimisant la valeur d'évaluation pour Nomcoureur dans les vecteurs d'évaluations de toutes ses actions possibles 
+% Sélection de l'action minimisant la valeur d'évaluation pour Nomcoureur dans les vecteurs d'évaluations de toutes ses actions possibles
 trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif):-
   trouveridcoureur(Nomcoureur, Idcoureur), findall(Valposs, (member(X, Listaction), nth0(2, Vector, X), nth0(Idcoureur, Valposs, Vector)), Listvalposs), min_list(Listvalposs,Minimum),
    nth0(Y,Sousliste, Listeaction), nth0(2, Vectoraverif, Sousliste), nth0(Idcoureur, Minimum, Vectoraverif), nth0(1, Actionchoisie, Sousliste).
@@ -165,6 +165,8 @@ trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif):-
 %  trouver le min parmi les MiniMax(Trans(s, a), non p) (p=MIN)  --> trouver le min selon Valeurutil dans util() recursif
 %}
 
-%----------------------------
-% MAX va choisir la branche qui maximise "son" utilité
-%max()
+minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie, Profondeur):-
+  minimax( Nomprochaincoureur, Etatactuel,esttourde(Nomprochaincoureur,Ordre, Nomprochainprochaincoureurcoureur), Actionchoisie, Nouvprofondeur), Nouvprofondeur is Profondeur +1.
+
+minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie,3):-
+  actionposs(Nomcoureur,Etatactuel,Listeaction), trouveeval(Etatactuel, Listeeval), trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif)

@@ -632,17 +632,17 @@ coureurdejoueur(allemagne,[allemagne_1,allemagne_2,allemagne_3])
 %Liste des tas de cartes secondes de chacun des joueurs de forme [[Nomjoueur, [Valeur des cartes secondes que possèdent le joueur]]]
 % Variable numérique allant de 1 à 12
 %(initialisée à 1 (état initial)), (incrémentée de 1 à la fin du tour de chaque coureur) , (quand vaut 12 alors recalcul de l'ordre)
-% Listeordre représentant l'ordre actuel des coureurs durant CE tour 
+% Listeordre représentant l'ordre actuel des coureurs durant CE tour
 
 %état initial
 jeu([1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,
 5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,
 10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12], [], [[italie_1,depart],[italie_2,depart],[italie_3,depart],[hollande_1,depart],[hollande_2,depart],[hollande_3,depart]
-,[belgique_1,depart],[belgique_2,depart],[belgique_3,depart],[allemagne_1,depart],[allemagne_2,depart],[allemagne_3,depart]], faux,[[italie,[]],[hollande,[]],[belgique,[]],[allemagne,[]]],1).
+,[belgique_1,depart],[belgique_2,depart],[belgique_3,depart],[allemagne_1,depart],[allemagne_2,depart],[allemagne_3,depart]], faux,[[italie,[]],[hollande,[]],[belgique,[]],[allemagne,[]]],1,[]).
 
 %état final
 jeu(_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,arrivee],[hollande_2,arrivee],[hollande_3,arrivee]
-,[belgique_1,arrivee],[belgique_2,arrivee],[belgique_3,arrivee],[allemagne_1,arrivee],[allemagne_2,arrivee],[allemagne_3,arrivee]], vrai,[[italie,_],[hollande,_],[belgique,_],[allemagne,_]],_).
+,[belgique_1,arrivee],[belgique_2,arrivee],[belgique_3,arrivee],[allemagne_1,arrivee],[allemagne_2,arrivee],[allemagne_3,arrivee]], vrai,[[italie,_],[hollande,_],[belgique,_],[allemagne,_]],_,_).
 
 
 
@@ -921,7 +921,7 @@ estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur):-
 lidis([]).
 coureursderriereli([]).
 %Peut dépasser si la distance entre le coureur et celui derrière qui est le plus proche est supérieure à 4
-peutdepasser(Nomcoureur,jeu(_,_,Listecoureur,_,Listetas,_)Valeurcarteseconde,Coureurs):-
+peutdepasser(Nomcoureur,jeu(_,_,Listecoureur,_,Listetas,_),Valeurcarteseconde,Coureurs):-
   coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), lidis(Lidis),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,Cartessecondes),estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
 
 
@@ -949,12 +949,12 @@ trouver_position(Nomcoureur,Listecoureur,Idcase1),trouver_position(C,Listecoureu
 estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
 
 %--> défaussement de cartes se fait à la prise de commande
-depassement(Nomcoureur,jeu(_,_,Listecoureur,_,_,_),Valeurcarteseconde,Prochaincoureur,0):-
-  Valeurcarteseconde==0, ordrephasedebut(Ordrephasedebut),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
-depassement(Nomcoureur,jeu(_,_,Listecoureur,_,_,_),Valeurcarteseconde,Prochaincoureur,0):-
-   Valeurcarteseconde==0, ordrephasedynamique(Ordrephasedynamique),estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur).
+depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,0):-
+  Valeurcarteseconde==0.
+depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,0):-
+   Valeurcarteseconde==0
 
-depassement(Nomcoureur,jeu(_,_,Listecoureur,_,_,_),Valeurcarteseconde,Prochaincoureur,Idcase2):-
+depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Prochaincoureur,Idcase2):-
    Valeurcarteseconde>0,trouver_position(Nomcoureur,Listecoureur,Idcase1), coureurs(Coureurs), caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Prochaincoureur).
 
 
@@ -975,9 +975,9 @@ mouvementlibre(Nomcoureur,Valeurcarteseconde,jeu(_,_,Listeposition,_,_,_),Idcase
 
 %Vérification chute grâce aux positions des coureurs
 
-chute(,jeu(_,_,Listecoureur,_,_,_),[],_).
-chute(,jeu(_,_,Listecoureur,_,_,_),[Nomcoureur|Listecoureurs],Case1):-
-  coureurs(Coureurs),trouver_position(Nomcoureur,Listecoureur,Case1), foreach(member(Coureur, Coureurs),trouver_position(Coureur,Listecoureur,Case2),Nomcoureur/==Coureur, Case1==Case2,not(estcouloir(Case1)),not(estcouloir(Case2)))),chute(,jeu(_,_,Listecoureur,_,_,_),Listecoureurs,Coureurs).
+chute(Listecoureur,[],_).
+chute(Listecoureur,[Nomcoureur|Listecoureurs],Case1):-
+  coureurs(Coureurs),trouver_position(Nomcoureur,Listecoureur,Case1), foreach(member(Coureur, Coureurs),trouver_position(Coureur,Listecoureur,Case2),Nomcoureur/==Coureur, Case1==Case2,not(estcouloir(Case1)),not(estcouloir(Case2)))),chute(Listecoureur,Listecoureurs,Coureurs).
 
 
 %Pour chaque coureur présent sur le lieu de chute, il est ajouté à la liste des coureurs dans la chute et dans celles des coureurs passant leur tour
@@ -1039,7 +1039,8 @@ caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2):- numero(Idcase1,Numero
 
 
 
-miseajourpositioncoureur(Nomcoureur,Nouvposition,[[Nomcoureur,Pos]|Listepositionscoureurs],[[Nomcoureur,NPos]|Listepositionscoureurs]):- NPos is Nouvposition.
+miseajourpositioncoureur(Nomcoureur,Nouvposition,[[Nomcoureur,Pos]|Listepositionscoureurs],[[Nomcoureur,NPos]|Listepositionscoureurs]):-
+   NPos is Nouvposition.
 
 % Ordre chute
 %Flou à éclaircir
