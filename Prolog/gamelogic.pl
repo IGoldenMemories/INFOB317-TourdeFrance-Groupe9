@@ -885,8 +885,8 @@ traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase):-
 coureursdevantli([]).
 
 estdevant(_,[],_,_).
-estdevant(Coureur, jeu(_,_,Listecoureur,_,_,_),[C|Coureurs],Coureursdevantli,Coureursdevant):-
-  trouver_position(Coureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1<Numero2,insert(C,Coureursdevantli,Coureursdevant),Coureursdevantli is Coureursdevant,estdevant( jeu(_,_,Listecoureur,_,_,_),Coureur,Coureurs,Coureursdevantli,Coureursdevant).
+estdevant(Coureur,Listecoureur,[C|Coureurs],Coureursdevantli,Coureursdevant):-
+  trouver_position(Coureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1<Numero2,insert(C,Coureursdevantli,Coureursdevant),Coureursdevantli is Coureursdevant,estdevant(Coureur,Listecoureur,Coureurs,Coureursdevantli,Coureursdevant).
 
 estdistancemaximale(Listedistances,Distancemax):-
   max_list(Listedistances,Distancemax).
@@ -895,7 +895,7 @@ estdistancemaximale(Listedistances,Distancemax):-
 %aspiration(Coureur,Valeurcartesec,Casearrivee):- %Verification exists autre coureur avec numero case = numero case +1, nôtre numero +valeurcartesec+1 tel que joueur exists numero valant nôtre numero +valeurcartesec+2
 
 aspiration(Coureur,jeu(_,_,Listecoureur,_,_,_),Valeurcartesec,Casearrivee):-
-   coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant( jeu(_,_,Listecoureur,_,_,_),Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1
+   coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur,Listecoureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1
 ,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee+1,numero(Idcase,Numcaseapres),trouver_coureur(Idcase,Listecoureur,Coureursuivant).
 
 
@@ -904,7 +904,7 @@ aspiration(Coureur,jeu(_,_,Listecoureur,_,_,_),Valeurcartesec,Casearrivee):-
 %aspiration(Coureur,Valeurcartesec,Casearrivee):-%Verification exists autre coureur avec numero case = numero case +1,
 %--> défaussement de cartes se fait à la prise de commande
 aspiration(Coureur,  jeu(_,_,Listecoureur,_,_,_),Valeurcartesec,Casearrivee):-
-  coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant( jeu(_,_,Listecoureur,_,_,_),Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1
+  coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),estdevant(Coureur, Listecoureur,Coureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax==-1,Arrivee is Numero1+Valeurcartesec+1
 ,numero(Casearrivee,Arrivee),Numcaseapres is Arrivee,numero(Idcase,Numcaseapres),Idcase/==Casearrivee,trouver_coureur(Idcase,Listecoureur,Coureursuivant).
 
 %--> défaussement de cartes se fait à la prise de commande
@@ -963,7 +963,8 @@ estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,D
 
 %--> défaussement de cartes se fait à la prise de commande
 depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,0):-
-  Valeurcarteseconde==0.
+  trouver_position(Nomcoureur, Listecoureur, Idcasecoureur),estdevant(Coureur,Listecoureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax == 1,
+
 depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,0):-
    Valeurcarteseconde==0
 

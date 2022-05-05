@@ -2,18 +2,7 @@
 :- consult(gamelogic).
 
 %utilisé par trouvermeilleureval pour la position dans le vecteur d'évaluation par rapport au coureur devant le choix
-trouveridcoureur(italie_1,0)
-trouveridcoureur(italie_2,1)
-trouveridcoureur(italie_3,2)
-trouveridcoureur(hollande_1,3)
-trouveridcoureur(hollande_2,4)
-trouveridcoureur(hollande_3,5)
-trouveridcoureur(belgique_1,6)
-trouveridcoureur(belgique_2,7)
-trouveridcoureur(belgique_3,8)
-trouveridcoureur(allemagne_1,9)
-trouveridcoureur(allemagne_2,10)
-trouveridcoureur(allemagne_3,11)
+
 
 
 %Une fonction de transition
@@ -165,8 +154,14 @@ trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif):-
 %  trouver le min parmi les MiniMax(Trans(s, a), non p) (p=MIN)  --> trouver le min selon Valeurutil dans util() recursif
 %}
 
-minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie, Profondeur):-
-  minimax( Nomprochaincoureur, Etatactuel,esttourde(Nomprochaincoureur,Ordre, Nomprochainprochaincoureurcoureur), Actionchoisie, Nouvprofondeur), Nouvprofondeur is Profondeur +1.
 
-minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie,3):-
-  actionposs(Nomcoureur,Etatactuel,Listeaction), trouveeval(Etatactuel, Listeeval), trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif)
+
+minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie, 3):-
+  coureurdejoueur(hollande,Listecoureur), member(Nomcoureur, Listecoureur), actionposs(Nomcoureur, Etatactuel,Listeaction), length(Listeaction, Taille) , Taille > 0, minimax( Nomprochaincoureur, Etatactuel,esttourde(Nomprochaincoureur,Ordre, Nomprochainprochaincoureurcoureur), Actionchoisie, Nouvprofondeur), Nouvprofondeur is 2.
+
+minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie, Prof):-
+     actionposs(Nomcoureur, Etatactuel,Listeaction), length(Listeaction, Taille) , Taille > 0, minimax( Nomprochaincoureur, Etatactuel,esttourde(Nomprochaincoureur,Ordre, Nomprochainprochaincoureurcoureur), Actionchoisie, Nouvprofondeur), Nouvprofondeur is Prof-1.
+
+
+minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie,0):-
+  trouveeval(Etatactuel,Vecteureval)
