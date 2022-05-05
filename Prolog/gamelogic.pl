@@ -12,6 +12,7 @@ situation début/base de connaissance
 
 %liste avec tous les noms de coureurs
 coureurs([italie_1,italie_2,italie_3,hollande_1,hollande_2,hollande_3,belgique_1,belgique_2,belgique_3,allemagne_1,allemagne_2,allemagne_3])
+
 listidcases([u,u2,u3,d,d2,d3,t,t2,t3,q,q2,q3,c,c2,c3,si,si2,si3,se,se2,se3,h,h2,h3,n,nb,nc,d0,d0b,d0c,o,o2,do,do2,tre,tre2,qua,qua2,qui,qui2,sei,sei2,d0se,d0se2,d0h,d0h2,d0n,d0n2,
 v,v2,v3,vu,vu2,vu3,vd,vd2,vd4,vt,vt2,vt4,vq,vq2,vq4,vc,vc2,vc4,vsi,vsib,vsid,vsic,vse,vseb,vsed,vsed,vh,vh2,vh4,vn,vn2,vn4,
 t0,t02,t04,tu,tu2,tu4,td,td2,td4,tt,tt2,tt4,tq,tq2,tq4,tc,tc2,tc4,tsi,tsi2,tse,tse2,th,th2,tn,tn2,q0,q02,qu,qu2,qd,qd2,qt,qt2,qq,qq2,qc,qc2,
@@ -20,6 +21,18 @@ sc,sc2,ssi,ssi2,sse,sse2,sh,sh2,sn,sn2,se0,se02,seu,seu2,sed,sed2,set,seq,sec,se
 qvq,qvq3,qvc,qvc3,qvsi,qvsi3,qvse,qvse3,qvh,qvh3,qvna,qvnc,qvnb,n0a,n0c,n0b, nu,nu3,nd,nd3,nt,nt3,nq,nq3,nc,nc2,nc3,p,p2,p3,
 pu,pu2,pu3,pd,pd2,pd3,pt,pt2,pt3,pq,pq2,pq3,pc,pc2,pc3,psi,psi2,psi3,pse,pse2,pse3,ph,ph2,ph3,pn,pn2,pn3])
 
+trouveridcoureur(italie_1,0)
+trouveridcoureur(italie_2,1)
+trouveridcoureur(italie_3,2)
+trouveridcoureur(hollande_1,3)
+trouveridcoureur(hollande_2,4)
+trouveridcoureur(hollande_3,5)
+trouveridcoureur(belgique_1,6)
+trouveridcoureur(belgique_2,7)
+trouveridcoureur(belgique_3,8)
+trouveridcoureur(allemagne_1,9)
+trouveridcoureur(allemagne_2,10)
+trouveridcoureur(allemagne_3,11)
 %1ère ligne après ligne départ
 %numero(U-->1èrecase)
 %position(U-->1èrecase,1-->le plus à gauche)
@@ -1016,20 +1029,20 @@ insert(X, [Y | Liste1], [Y | liste2]) :- insert(X, liste1, liste2).
 
 
 repiocher5cartes(Joueur1, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Nouvtas1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
-   tasdecartejoueur(Joueur1,Tascartes,Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
+   tasdecartejoueur(Joueur1,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
    random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas1, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas1, Cartechoisie5)
 
 repiocher5cartes(Joueur2, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Nouvtas2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
-  tasdecartejoueur(Joueur2,Tascartes,Tasjoueur2), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas2, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas2, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas2, Cartechoisie3),
+  tasdecartejoueur(Joueur2,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur2), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas2, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas2, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas2, Cartechoisie3),
   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas2, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas2, Cartechoisie5)
 
-repiocher5cartes(Nomjoueur, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
-  tasdecartejoueur(Joueur1,Tascartes,Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
-  random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas1, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas1, Cartechoisie5)
+repiocher5cartes(Joueur3, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Nouvtas3],[Joueur4,Tasjoueur4]],_,_)):-
+  tasdecartejoueur(Joueur3,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur3), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas3, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas3, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas3, Cartechoisie3),
+  random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas3, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas3, Cartechoisie5)
 
-repiocher5cartes(Nomjoueur, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
-  tasdecartejoueur(Joueur1,Tascartes,Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
-  random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas1, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas1, Cartechoisie5)
+repiocher5cartes(Joueur4, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Nouvtas4]],_,_)):-
+  tasdecartejoueur(Joueur4,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas4, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas4, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas4, Cartechoisie3),
+  random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas4, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas4, Cartechoisie5)
 
 
 
@@ -1062,10 +1075,25 @@ casevide(Coureur,Listecoureur,Idcase):-foreach(member(Coureur,Coureurs),(trouver
 casessuivantesli([]).
 caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2):- numero(Idcase1,Numero1),Numcaseapres,numero(Idcase,Numcaseapres),insert(Idcase,Casesuivantesli,Casessuivantes),length(Casessuivantes,L),L>1,caselibre(Casessuivantes,Coureurs,Idcase2),Numcaseapres is Numero+1.
 
+%
+% replace a single cell in a list-of-lists
+% - the source list-of-lists is L
+% - The cell to be replaced is indicated with a row offset (X)
+%   and a column offset within the row (Y)
+% - The replacement value is Z
+% - the transformed list-of-lists (result) is R
+%
+replace( L , X , Y , Z , R ) :-
+  append(RowPfx,[Row|RowSfx],L),     % decompose the list-of-lists into a prefix, a list and a suffix
+  length(RowPfx,X) ,                 % check the prefix length: do we have the desired list?
+  append(ColPfx,[_|ColSfx],Row) ,    % decompose that row into a prefix, a column and a suffix
+  length(ColPfx,Y) ,                 % check the prefix length: do we have the desired column?
+  append(ColPfx,[Z|ColSfx],RowNew) , % if so, replace the column with its new value
+  append(RowPfx,[RowNew|RowSfx],R)   % and assemble the transformed list-of-lists
+  .
 
-
-miseajourpositioncoureur(Nomcoureur,Nouvposition,[[Nomcoureur,Pos]|Listepositionscoureurs],[[Nomcoureur,NPos]|Listepositionscoureurs]):-
-   NPos is Nouvposition.
+miseajourpositioncoureur(Nomcoureur,Nouvposition,Listepositions,Novlistepositions):-
+  trouveridcoureur(Nomcoureur,Idcoureur), replace(Listepositions,Idcoureur, 1,Nouvposition,Novlistepositions).
 
 % Ordre chute
 %Flou à éclaircir
