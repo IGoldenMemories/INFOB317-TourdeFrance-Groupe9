@@ -997,16 +997,16 @@ coureursentrainedanschute(Listeidcaseschute, Positions, Passetour,Listepassetour
 %Vérifie que la carte seconde dont  le joueur souhaite se défausser est dans sa liste de carte seconde
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 % A R2VISER !!!!!!!!
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_),Joueur1,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,NouvTascarte1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_))):-
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),Joueur1,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,NouvTascarte1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_))):-
   tasdecartejoueur(Joueur1,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), member(Carte,Tasjoueur1), delete(Tasjoueur1,Carte,NouvTascarte1),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_),Joueur2,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,NouvTascarte2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_))):-
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),Joueur2,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,NouvTascarte2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_))):-
   tasdecartejoueur(Joueur2,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur2), member(Carte,Tasjoueur2), delete(Tasjoueur2,Carte,NouvTascarte2),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_),Joueur3,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,NouvTascarte3],[Joueur4,Tasjoueur4]],_))):-
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),Joueur3,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,NouvTascarte3],[Joueur4,Tasjoueur4]],_,_))):-
     tasdecartejoueur(Joueur3,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur3), member(Carte,Tasjoueur3), delete(Tasjoueur3,Carte,NouvTascarte3),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_),Joueur4,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]],_))):-
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),Joueur4,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]],_,_))):-
       tasdecartejoueur(Joueur4,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur4), member(Carte,Tasjoueur4), delete(Tasjoueur4,Carte,NouvTascarte4),insert(Deckcartes,Carte,Cartessecondesrestantes)
 
 
@@ -1014,14 +1014,31 @@ insert(X, [], [X]).
 insert(X, [Y | Listeelements], [X,Y | listeelements]) :- X @< Y, !.
 insert(X, [Y | Liste1], [Y | liste2]) :- insert(X, liste1, liste2).
 
-repiocher5cartes(Nomjoueur, jeu(Deckcartes,_,_,_,Tascartes,_),[]).
-repiocher5cartes(Nomjoueur, jeu(Deckcartes,_,_,_,Tascartes,_),[Carte|Carteschoisies]):- tasdecartejoueur(Nomjoueur,Tascartes,Cartessecondes),  member(Carte,Deckcartes), delete(Deckcartes,Carte,Cartessecondesrestantes), Deckcartes is Cartessecondesrestantes, insert(Cartessecondes,Carte,Nouvcartessecondes),miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes),repiocher5cartes(Nomjoueur,Carteschoisies).
+
+repiocher5cartes(Joueur1, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Nouvtas1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
+   tasdecartejoueur(Joueur1,Tascartes,Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
+   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas1, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas1, Cartechoisie5)
+
+repiocher5cartes(Joueur2, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Nouvtas2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
+  tasdecartejoueur(Joueur2,Tascartes,Tasjoueur2), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas2, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas2, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas2, Cartechoisie3),
+  random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas2, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas2, Cartechoisie5)
+
+repiocher5cartes(Nomjoueur, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
+  tasdecartejoueur(Joueur1,Tascartes,Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
+  random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas1, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas1, Cartechoisie5)
+
+repiocher5cartes(Nomjoueur, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
+  tasdecartejoueur(Joueur1,Tascartes,Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
+  random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas1, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas1, Cartechoisie5)
+
+
+
 
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 %miseajourcartessecondesliste(Cartessecondesrestantes):- jeu(Cartessecondesrestantes,_,_,_).
 
-miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Cartessecondes,_,_,_),Cartessecondes is Nouvcartessecondes,length(Cartessecondes,L), L>0.
-miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Cartessecondes,_,_,_),Cartessecondes is Nouvcartessecondes, length(Cartessecondes,L), L==0, repiocher5cartes(Nomjoueur,Carteschoisies).
+%miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Cartessecondes,_,_,_),Cartessecondes is Nouvcartessecondes,length(Cartessecondes,L), L>0.
+%miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Cartessecondes,_,_,_),Cartessecondes is Nouvcartessecondes, length(Cartessecondes,L), L==0, repiocher5cartes(Nomjoueur,Carteschoisies).
 
 
 
