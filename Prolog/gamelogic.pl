@@ -997,9 +997,17 @@ coureursentrainedanschute(Listeidcaseschute, Positions, Passetour,Listepassetour
 %Vérifie que la carte seconde dont  le joueur souhaite se défausser est dans sa liste de carte seconde
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 % A R2VISER !!!!!!!!
-defaussecarte(jeu(Deck,_,_,_,Listecartejoueur,_),Nomjoueur,Carte,jeu(Cartessecondesrestantes,_,_,_,Nouvlistecartesjoueur,_))):-
-  tasdecartejoueur(Nomjoueur,Listecartejoueur,Tascartejoueur), member(Carte,Tascartejoueur), delete(Tascartejoueur,Carte,NouvTascarte),insert(Deckcartes,Carte,Cartessecondesrestantes),Deckcartes is Cartessecondesrestantes, nth0(X, Sousliste,Nouvlistecartesjoueur ),nth0(0,Nomjoueur, Sousliste), nth0(1,NouvTascarte,Sousliste)
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_),Joueur1,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,NouvTascarte1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_))):-
+  tasdecartejoueur(Joueur1,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), member(Carte,Tasjoueur1), delete(Tasjoueur1,Carte,NouvTascarte1),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_),Joueur2,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,NouvTascarte2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_))):-
+  tasdecartejoueur(Joueur2,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur2), member(Carte,Tasjoueur2), delete(Tasjoueur2,Carte,NouvTascarte2),insert(Deckcartes,Carte,Cartessecondesrestantes).
+
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_),Joueur3,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,NouvTascarte3],[Joueur4,Tasjoueur4]],_))):-
+    tasdecartejoueur(Joueur3,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur3), member(Carte,Tasjoueur3), delete(Tasjoueur3,Carte,NouvTascarte3),insert(Deckcartes,Carte,Cartessecondesrestantes).
+
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_),Joueur4,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]],_))):-
+      tasdecartejoueur(Joueur4,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur4), member(Carte,Tasjoueur4), delete(Tasjoueur4,Carte,NouvTascarte4),insert(Deckcartes,Carte,Cartessecondesrestantes)
 
 
 insert(X, [], [X]).
