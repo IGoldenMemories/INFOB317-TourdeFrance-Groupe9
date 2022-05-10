@@ -1012,7 +1012,7 @@ calculdistance(Listecoureur,Nomcoureur, Coureurs,Listedistances):-
 estdistanceminimale(Listedistances,Distanceminimale, Nomcoureurleplusprochederriere):-
   findall(Distances, (member(Sousliste, Listedistances), nth0(1, Distance,Sousliste)),Listedistaverif),min_list(Listedistaverif,Distanceminimale), nth0(X, Souslisteoucoureur, Listedistances), nth0(0,Nomcoureurleplusprochederriere,Distanceminimale).
 
-
+%------------------------------------------------------
 %Prédicats retournant la valeur de la case d'arrivée
 %selon la carte seconde (Valeurcarteseconde) jouée et la position des autres coureurs
 
@@ -1021,7 +1021,7 @@ depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Idcasearrivee):-
    Valeurcarteseconde ===2,trouver_position(Nomcoureur, Listecoureur, Idcasecoureur),trouver_coureur(Idcasedevant,Listecoureur,Nomcoureurdevant), estjustedevantcase(Idcasecoureur, Idcasedevant), estjustedevantcase( Idcasedevant, Idcasearrivee).
 
 %Cas où carte seconde vaut plus de  2 (Case arrivee == Case devant coureur situé "juste devant"+Valeurcarteseconde-2)
-depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Prochaincoureur,Casearrivee):-
+depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Casearrivee):-
    Valeurcarteseconde>2,trouver_position(Nomcoureur,Listecoureur,Idcasecoureur), trouver_coureur(Idcasedevant,Listecoureur,Nomcoureurdevant), estjustedevantcase(Idcasecoureur, Idcasedevant), estjustedevantcase( Idcasedevant, Idcasedevantautrecoureur),
     numero(Idcasedevantautrecoureur,Num), Valeurrestante is Valeurcarteseconde-2,Numarrivee is Num + Valeurrestante, numero(Casearrivee,Numarrivee), estdevantcase(Idcasedevantautrecoureur,Casearrivee,Casearrivee).
 
