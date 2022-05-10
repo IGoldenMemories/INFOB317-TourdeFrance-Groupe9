@@ -108,8 +108,7 @@ trouveeval(jeu(_,_,Positions,_,_,_,_), Vecteurresultateval):-
 %☞ Actions : S × P → Act (où P ici signifie les Joueurs et Coureurs) --> sous-états?
 
 actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Listeaction):-
-  findall([jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),Actionposs, Vectoreval],
-  (transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),estletourde(Nomcoureur, Ordre,Numordre, _),Actionposs), trouveeval(jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre), Vectoreval)).
+  findall(Actionposs,(transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),estletourde(Nomcoureur, Ordre,Numordre, _),Actionposs)),Listeaction).
 
 
 /* Différentes choses à implémenter/décider
@@ -173,10 +172,10 @@ minimax(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Actio
 %minimax(+Profondeur, +Etatactuel, +Coureurdontcestletour, -Meilleurvecteur, -Meilleuraction)
 %Cas "le plus profond récursivement" calcul du vecteur d'évaluation où d'utilité si l'état actuel est terminal
 minimax(0, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Nomcoureur,Vecteureval ,_):-
-  esttourde(Nomcoureur,Indextour, Ordre,Prochaincoureur),trouveeval(Etatactuel,Vecteureval).
+  esttourde(Nomcoureur,Numordre, Ordre,Prochaincoureur),trouveeval(Etatactuel,Vecteureval).
 %Cas récursif
 minimax(Profondeur,jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Nomcoureur,Vecteur, Actionchoisie):-
-  Profondeur>0, Profondeur1 is Profondeur - 1,​esttourde(Nomcoureur,Indextour, Ordre,Prochaincoureur),actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Listeaction), length(Listeaction, Taille) , Taille > 0,
+  Profondeur>0, Profondeur1 is Profondeur - 1,​esttourde(Nomcoureur,Numordre, Ordre,Prochaincoureur),actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Listeaction), length(Listeaction, Taille) , Taille > 0,
    minimax(Listeaction, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre), Profondeur1, Nomcoureur, [95,95,95,95,95,95,95,95,95,95,95,95], nil,Vecteur, Actionchoisie).​
 
 /* minimax(+Actions,+Etatactuel,+Profondeur,+Coureurdontcestletour,+Vecteur0,+Action0,-Meilleurvecteur,-Meilleuraction)​
