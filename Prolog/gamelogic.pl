@@ -1175,9 +1175,10 @@ miseajourpositioncoureur(Nomcoureur,Nouvposition,Listepositions,Novlisteposition
   trouveridcoureur(Nomcoureur,Idcoureur), replace(Listepositions,Idcoureur, 1,Nouvposition,Novlistepositions).
 
 % Ordre chute
-%Flou à éclaircir
-ordrechuteli([]).
-ordrechute([Nomcoureur|Ordrephasedynamique],Ordrechuteli,Ordrechuteliste):- etat(_,_,ListeCoureur,_), nth0(_,ListeCoureur,[Nomcoureur,Case]),insert(Nomcoureur,Ordrechuteli,Ordrechuteliste),ordrechute(Ordrephasedynamique,Ordrechuteliste,Ordrechutelist).
+%Ordre chute n'a pas pu être implémenter par manque de temps
+% (l'ordre n'a pas d'influence dans la liste Passetour, on garde l'ordre actuel selon la phase courante (début ou dynamique))
+%ordrechuteli([]).
+%ordrechute(ListeCoureur,Ordre,Ordrechuteli,Ordrechuteliste):- nth0(_,ListeCoureur,[Nomcoureur,Case]),insert(Nomcoureur,Ordrechuteli,Ordrechuteliste),ordrechute(Ordrephasedynamique,Ordrechuteliste,Ordrechutelist).
 
 
 % Gros prédicat chute en série (autre(s) coureur(s) sur largeur impacté(s))
@@ -1230,8 +1231,6 @@ troisgagnant(Gagnant1,Gagnant2,Gagnant3):-
 %4 gagnants (même temps total minimal)
 quatregagnant(Gagnant1,Gagnant2,Gagnant3,Gagnant4):-
       findall(Tempstotal, tempstotal(Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 4), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum),tempstotal(Gagnant3,Minimum),tempstotal(Gagnant4,Minimum).
-
-
 
 
 /*
