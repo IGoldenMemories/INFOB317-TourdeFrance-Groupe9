@@ -91,17 +91,18 @@ position(h3,3)
 numero(n,9)
 lettre(n,a)
 casechance(n)
-numero(nb,9)
-lettre(nb,b)
 numero(nc,9)
 lettre(nc,c)
+numero(nb,9)
+lettre(nb,b)
 numero(d0,10)
 lettre(d0,a)
 casechance(d0)
-numero(d0b,10)
-lettre(d0b,b)
 numero(d0c,10)
 lettre(d0c,c)
+numero(d0b,10)
+lettre(d0b,b)
+
 
 numero(o,11)
 position(o,1)
@@ -790,18 +791,76 @@ ordreddebut(jeu(_,_,_,_,Listetasdecartes),[C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C1
  -----------------------------------
  */
 
+%Idcase2 est juste devant Idcase1
  estdevantcase(Idcase1,Idcase2,Idcasedevant):-
-   numero(Idcase1,Num1),numero(Idcase2,Num2),Num2>Num1, Idcasedevant is Idcase2
+   estjustedevantcase(Idcase1,Idcase2), Idcasedevant is Idcase2.
+%Idcase1 est juste devant Idcase2
+estdevantcase(Idcase1,Idcase2,Idcasedevant):-
+  estjustedevantcase(Idcase2,Idcase1), Idcasedevant is Idcase1.
 
+%Idcase2 est devant Idcase1 (calcul récursif)
+estdevantcase(Idcase1,Idcase2,Idcasedevant):-
+  estjustedevantcase(Idcase1,Idcaseintermediaire), estjustedevantcase(Idcaseintermediaire,Idcase2,Idcase2),Idcasedevant is Idcase2.
+
+%Idcase1 est devant Idcase2 (calcul récursif)
+estdevantcase(Idcase1,Idcase2,Idcasedevant):-
+  estjustedevantcase(Idcase2,Idcaseintermediaire), estjustedevantcase(Idcaseintermediaire,Idcase1,Idcase1),Idcasedevant is Idcase1.
+
+%Idcase1 et Idcase2 sont situées parallèlement (dans la même largeur)(les cas concernant les lettres étant traités dans estjustedevantcase)
  estdevantcase(Idcase1,Idcase2,Idcasedevant):-
-     numero(Idcase1,Num1),numero(Idcase2,Num2),Num1>Num2, Idcasedevant is Idcase1
-
- idcaselist([]).
-
- estdevantcase(Idcase1,Idcase2,Idcasedevant):-
-   numero(Idcase1,Num1),numero(Idcase2,Num2),Num1==Num2, idcaselist(Liste),insert(Idcase1,Liste,Nouvelleliste),insert(Idcase2,Nouvelleliste,Listefinale),random_permutation(Listefinale, Permutation),nth0(0,Permutation,Idcasedevant).
+   numero(Idcase1,Num1),numero(Idcase2,Num2),Num1==Num2,position(Idcase1,Pos1), position(Idcase2, Pos2), Pos1\== Pos2, random_permutation([Idcase1,Idcase2], Permutation),nth0(0,Permutation,Idcasedevant).
 
 
+%Base de connaissance (exceptions de estjustedevantcase)
+estjustedevant(h3, nc).
+estjustedevant(vu3, vd4).
+estjustedevant(vc,vsia).
+estjustedevant(vc2,vsib).
+estjustedevant(vsia,vsea).
+estjustedevant(vsib,vseb).
+estjustedevant(vsic,vsed).
+estjustedevant(tc, tsi1).
+estjustedevant(tc2, tsi1).
+estjustedevant(tc4, tsi2).
+estjustedevant(sed2, set).
+estjustedevant(qvt2, qvq3).
+estjustedevant(qvt2, qvq3).
+%tous les cas de base (en fonction de la position dans la largeur)
+estjustedevantcase(Idcase1,Idcase2):-
+  numero(Idcase1,Num1), position(Idcase1,Position), position(Idcase2,Position), numero(Idcase2,Num2),Num2 is 1+Num1.
+
+%   numero position2-> numero+1 lettre c
+estjustedevantcase(Idcase1,Idcase2):-
+   numero(Idcase1,Num1), position(Idcase1,2),lettre(Idcase2,c), not(estcouloir(Idcase2)), numero(Idcase2,Num2),Num2 is 1+Num1.
+
+%   numero lettreb -> numero+1 position2
+estjustedevantcase(Idcase1,Idcase2):-
+   numero(Idcase1,Num1),lettre(Idcase1,b),position(Idcase2,2), numero(Idcase2,Num2),Num2 is 1+Num1.
+
+%   numero lettre a  -> numero +1  position 1
+estjustedevantcase(Idcase1,Idcase2):-
+   numero(Idcase1,Num1), lettre(Idcase1,a), position(Idcase2,1), numero(Idcase2,Num2),Num2 is 1+Num1.
+
+%   numero lettre b couloir -> numero +1 position 4
+estjustedevantcase(Idcase1,Idcase2):-
+   numero(Idcase1,Num1),lettre(Idcase1,b), estcouloir(Idcase1), position(Idcase2,4), numero(Idcase2,Num2),Num2 is 1+Num1.
+
+%numero lettre b couloir -> numero +1 position 3
+estjustedevantcase(Idcase1,Idcase2):-
+   numero(Idcase1,Num1),lettre(Idcase1,b), estcouloir(Idcase1), position(Idcase2,3), numero(Idcase2,Num2),Num2 is 1+Num1.
+
+%numero position 3-> numero +1 lettre c couloir
+estjustedevantcase(Idcase1,Idcase2):-
+   numero(Idcase1,Num1),position(Idcase1,3), lettre(Idcase2,c), estcouloir(Idcase2),numero(Idcase2,Num2),Num2 is 1+Num1.
+
+
+%cas où lettre C avant B (hors couloir)
+estjustedevantcase(Idcase1,Idcase2):-
+  numero(Idcase1,Num),lettre(Idcase1,c), not(estcouloir(Idcase1)), lettre(Idcase2,b), numero(Idcase2,Num).
+
+%cas où lettre D avant C dans couloir
+estjustedevantcase(Idcase1,Idcase2):-
+  numero(Idcase1,Num),lettre(Idcase1,d), estcouloir(Idcase2), lettre(Idcase2,c), numero(Idcase2,Num).
 
 
 
