@@ -6,7 +6,6 @@ calculsommevecteur(Vecteur,Somme):-
   sum_list(Vecteur, Somme).
 
 
-
 /* alphabeta(+Listeactionsposs,+Etatactuel,+Profondeur,+Coureurdontcestletour,+Vecteurcourant,+Actioncourante,-Meilleurvecteur,-Meilleuraction)
       Choisis la meilleure action depuis la liste Listeactionposs par rapport à l'état de jeu actuel
       en utilisant l'algorithme d'élagage alpha-beta

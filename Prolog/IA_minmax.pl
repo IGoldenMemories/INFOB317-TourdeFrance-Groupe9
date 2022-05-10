@@ -1,6 +1,6 @@
 %inclu tous les prédicats définis dans gamelogic.pl
 :- consult(gamelogic).
-
+:- use_module(library(lists)).
 %utilisé par trouvermeilleureval pour la position dans le vecteur d'évaluation par rapport au coureur devant le choix
 
 
@@ -92,8 +92,11 @@ transition(jeu(_,_,),jeu(_,_,),action(mouvementlibre,Coureur))
 %   - de minimiser la distance entre le coureur (de qui c'est le tour) et la ligne d'arrivée)
 %ou si état est final (calcul de son utilité)
 %---------------------------------------------------------------------
-trouveeval(jeu(_,_,Positions,_,_,_,_), Listeeval):-
-  findall(Valeureval, (coureurs(Coureurs), member(Nomcoureur,Coureurs), trouver_position(Nomcoureur,Positions, Idcase), numero(Idcase, Numcase), Valeureval is 95- Numcase), Listeeval).
+trouveeval(Etatactuel), Vecteurresultateval):-
+  finjeu(Etatactuel), util(Etatactuel, Vecteurresultateval).
+
+trouveeval(jeu(_,_,Positions,_,_,_,_), Vecteurresultateval):-
+  findall(Valeureval, (coureurs(Coureurs), member(Nomcoureur,Coureurs), trouver_position(Nomcoureur,Positions, Idcase), numero(Idcase, Numcase), Valeureval is 95- Numcase), Listeeval), append(Listeeval,[eval],Vecteurresultateval).
 
 
 
@@ -138,7 +141,7 @@ trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif):-
 
 %Util([Valeurutiljoueur1,Valeurutiljoueur2,Valeurutiljoueur3,Valeurutiljoueur4])
 %gagnant(italie)
-util( jeu(),[10,0,0,0]):-gagnant(Etats,italie)
+util( jeu(),[10,10,10,0,0,0,0,0,0,0,0,0,util]):-gagnant(Etats,italie)
 util( jeu(),[0,10,0,0])%hollande
 util( jeu(),[0,0,10,0])%Belgique
 util( jeu(),[0,0,0,10])%allemagne
@@ -165,29 +168,27 @@ util(jeu(),[1,1,1,1]):-
 %gagnant(Nomautrejoueur)--> Nomjoueur /== Nomautrejoueur Util(Nomjoueur,0)
 %autre cas +5,+2,+1
 
-%--> Relire le choix fait aux branches min max cas où plusieurs joueurs (dans slides)
-
-%Définition de la profondeur maximale de recherche
-
 
 %Calcul du coup optimal.
-%minimax(Etat, P)  p-->Min ou Max:
-%{ util(Etat, VAleurutil) si Etat est final --> finjeu(_,_,Coureurs)
-%  trouver le max  parmi les MiniMax(Trans(s, a), non p) possible (p=MAX)  --> trouver le max selon Valeurutil dans util() recursif
-%  trouver le min parmi les MiniMax(Trans(s, a), non p) (p=MIN)  --> trouver le min selon Valeurutil dans util() recursif
-%}
+%minimax(Etat, Actionchoisie, Profondeur)
 
+minimax(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Actionchoisie,Profondeur):-
+  esttourde(Nomcoureur,Numordre, Ordre,_), coureurdejoueur(hollande,Listecoureurhollande), member(Nomcoureur,Listecoureurhollande),minimax(Profondeur,jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Nomcoureur, _, Actionchoisie).
 
+%Définition de l'algorithme minimax (récursif)
+%minimax(+Profondeur, +Etatactuel, +Coureurdontcestletour, -Meilleurvecteur, -Meilleuraction)
+%Cas "le plus profond récursivement" calcul du vecteur d'évaluation où d'utilité si l'état actuel est terminal
+minimax(0, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Nomcoureur,Vecteureval ,_):-
+  esttourde(Nomcoureur,Indextour, Ordre,Prochaincoureur),trouveeval(Etatactuel,Vecteureval).
+%Cas récursif
+minimax(Profondeur,jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Nomcoureur,Vecteur, Actionchoisie):-
+  Profondeur>0, Profondeur1 is Profondeur - 1,​esttourde(Nomcoureur,Indextour, Ordre,Prochaincoureur),actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Listeaction), length(Listeaction, Taille) , Taille > 0,
+   minimax(Listeaction, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre), Profondeur1, Nomcoureur, [95,95,95,95,95,95,95,95,95,95,95,95], nil,Vecteur, Actionchoisie).​
 
-minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie, 3):-
-  coureurdejoueur(hollande,Listecoureur), member(Nomcoureur, Listecoureur), actionposs(Nomcoureur, Etatactuel,Listeaction), length(Listeaction, Taille) , Taille > 0, minimax( Nomprochaincoureur, Etatactuel,esttourde(Nomprochaincoureur,Ordre, Nomprochainprochaincoureurcoureur), Actionchoisie, Nouvprofondeur), Nouvprofondeur is 2.
+/* minimax(+Actions,+Etatactuel,+Profondeur,+Coureurdontcestletour,+Vecteur0,+Action0,-Meilleurvecteur,-Meilleuraction)​
 
-minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie, Prof):-
+  Choisit le meilleur mouvement de la liste Actions de l'état actuel​
+  Action0 enregistre la meilleur action trouvée jusqu'à maintenant et son vecteur correspondant 
+   */
+minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Indextour, Ordre,Prochaincoureur), Actionchoisie, Prof):-
      actionposs(Nomcoureur, Etatactuel,Listeaction), length(Listeaction, Taille) , Taille > 0, minimax( Nomprochaincoureur, Etatactuel,esttourde(Nomprochaincoureur,Ordre, Nomprochainprochaincoureurcoureur), Actionchoisie, Nouvprofondeur), Nouvprofondeur is Prof-1.
-
-
-minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie,0):-
-  trouveeval(Etatactuel,Vecteureval).
-
-minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie,0):-
-  finjeu(Etatactuel),util(Etatactuel,Vecteureval).
