@@ -983,35 +983,29 @@ aspiration(Coureur,Listecoureur,Valeurcartesec,Casearrivee):-
 
 %---------- Dépassement ----------------
 
+
 %Selon l'ordre (de phase début ou dynamique) et l'index de tour retourne le coureur dont c'est le tour et le prochain
 estletourde(Nomcoureur,Indextour, Ordre,Prochaincoureur):-
-   nth0(Indextour,Ordrephasedebut,Nomcoureur),I is Indextour+1,nth0(I,Ordrephasedebut,Prochaincoureur).
+   nth1(Indextour,Ordrephasedebut,Nomcoureur),I is Indextour+1,nth1(I,Ordrephasedebut,Prochaincoureur).
 
 lidis([]).
 coureursderriereli([]).
 %Peut dépasser si la distance entre le coureur et celui derrière qui est le plus proche est supérieure à 4
-peutdepasser(Nomcoureur,jeu(_,_,Listecoureur,_,Listetas,_),Valeurcarteseconde,Coureurs):-
+peutdepasser(Nomcoureur,Listecoureur,Listetas,Valeurcarteseconde,Coureurs):-
   coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), lidis(Lidis),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,Cartessecondes),estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
 
 
-%pluspreesderriere(Nomcoureur,Nomcoureurderriere):- aller chercher toutes les positions des coureurs et calculer distance minimale
-%calculdistance(Nomcoureur, Nomcoureurderrierepotentiel, Distanceentrecesdeuxcoureurs):- position valeur numero (différence) ou cas avec lettre à préciser
-%estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
+%Liste de tous les coureurs derrière Nomcoureur
+
+estderriere(Nomcoureur,Listecoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):-
+  trouver_position(Nomcoureur,Listecoureur,Case1),findall(Nomcoureur,(trouver_position(Nomcoureur, Listecoureur,Idcaseautrecoureur),estdevantcase(Idcaseautrecoureur,Case1,Case1)),Coureursderriere).
 
 
-%Liste de tous les coureurs derrière
-
-estderriere(_,jeu(_,_,Listecoureur,_,_,_),[],_,_).
-estderriere(Nomcoureur,jeu(_,_,Listecoureur,_,_,_),[C|Coureurs],Coureursderriereli,Coureursderriere):-
-  trouver_position(Nomcoureur,Listecoureur,Case1),trouver_position(C,Listecoureur,Case2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Numero1>Numero2,insert(C,Coureursderriereli,Coureursderriere), Coureurderriereli is Coureursderriere, estderriere(Nomcoureur,jeu(_,_,Listecoureur,_,_,_),Coureurs,Coureursderriereli,Coureursderriere).
-
-
-%Distance avec chaque coureur derrière
-%calculdistance(Nomcoureur, [C|Coureursderriere],lidis, Listedistances):- position valeur numero (différence) ou cas avec lettre à préciser
-
-calculdistance(Listecoureur,_, [],_,_).
-calculdistance(Listecoureur,Nomcoureur, [C|Coureursderriere],Lidis, Listedistances):-
-trouver_position(Nomcoureur,Listecoureur,Idcase1),trouver_position(C,Listecoureur,Idcase2),numero(Idcase1,Numero1),numero(Idcase2,Numero2),Distance is Numero1-Numero2,insert(Distance,Lidis,Listedistances),Lidis is Listedistances,calculdistance(Listecoureur,Nomcoureur,Coureursderriere,Lidis, Listedistances).
+%Distance approximative
+%(pas de prise en compte des cas avec les lettres considérées comme des cases à part entières ici)
+%avec chaque coureur derrière
+calculdistance(Listecoureur,Nomcoureur, Coureurs,Listedistances):-
+  trouver_position(Nomcoureur,Listecoureur,Idcase1), numero(Idcase1,Numero1),findall([C,Distance],(member(C,Coureurs),trouver_position(C,Listecoureur,Idcase2),numero(Idcase2,Numero2),Distance is Numero1-Numero2),Listedistances).
 
 
 %estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
