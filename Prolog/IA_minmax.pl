@@ -135,8 +135,30 @@ trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif):-
 %   - +1 (égalité  en temps total le plus petit (avec 3 joueurs)) (gagné)?
 %   - +0 (temps total plus petit qu'un autre (perdu))
 
-%PAS VALEUR UNIQUE RETOURNée --> SOUS PREDICATS utiljoueur(Nomjoueur,ValeurUtilpouretatfinal)
+
 %Util([Valeurutiljoueur1,Valeurutiljoueur2,Valeurutiljoueur3,Valeurutiljoueur4])
+%gagnant(italie)
+util( jeu(),[10,0,0,0]):-gagnant(Etats,italie)
+util( jeu(),[0,10,0,0])%hollande
+util( jeu(),[0,0,10,0])%Belgique
+util( jeu(),[0,0,0,10])%allemagne
+%joueur 2 et 1 with smallest time (revoir predicat dans gamelogic )
+util( jeu(),[5,5,0,0]):-deuxgagnant(Etats,italie,hollande)
+util( jeu(),[5,0,5,0])
+util( jeu(),[5,0,0,5])
+util( jeu(),[0,5,5,0])
+util( jeu(),[0,5,0,5])
+%joueur 1 2 3 with smallest time
+util(jeu(),[2,2,2,0]):-troisgagnant(Etats,italie,hollande,belgique)
+util(jeu(),[2,0,2,2])
+util(jeu(),[2,2,0,2])
+util(jeu(),[2,0,2,2])
+util(jeu(),[0,2,2,2])
+
+% joueurs 1 2 3 4 avec même temps total (match nul)
+util(jeu(),[1,1,1,1]):-
+  quatregagnant(Etats,italie,hollande,belgique,allemagne)
+
 %tempstotal(Nomjoueur,Tempstotal) --> gagnant(cas où un seul gagnant)
 %--> todo gagnant2, gagnant3 gagnant4
 %gagnant(Nomjoueur)--> Nomjoueur Util(Nomjoueur,10)
@@ -166,3 +188,6 @@ minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur),
 
 minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie,0):-
   trouveeval(Etatactuel,Vecteureval).
+
+minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie,0):-
+  finjeu(Etatactuel),util(Etatactuel,Vecteureval).

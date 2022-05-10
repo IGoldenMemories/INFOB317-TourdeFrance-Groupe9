@@ -1196,7 +1196,7 @@ chuteenserie(Deckcartes,Passetour,Listeposition):- coureurs(Coureurs), chute(Cou
 %------- Calcul du temps de chacun des coureurs ---------
 % tempspartiel(Nomcoureur, Tempspartiel
 %BESOIN DE PRECISER POSITION APRES LIGNE ARRIVEE
-tempspartiel(Nomcoureur,Tempspartiel):-jeu(_,_,Listecoureur,_,_,_),trouver_position(Nomcoureur,Listecoureur,Case), numero(Case,Num), Tempspartiel is 95-%Num
+tempspartiel(Nomcoureur,Tempspartiel):-trouver_position(Nomcoureur,Listecoureur,Case), numero(Case,Num), Tempspartiel is 95-%Num
 
 %Vérifie si un coureur a passé sa ligne d'arrivée --> utilisée pour le calcul du temps total +10 après chaque toour (dés qu'un coureur a passé la ligne d'arrivée)
 apasselignearrivee(Nomcoureur,Case):-trouver_position(Nomcoureur,Listecoureur,Case),apresarrivee(Case) % Condition sur le numéro de case (??? ligne d'arrivée ==?)
