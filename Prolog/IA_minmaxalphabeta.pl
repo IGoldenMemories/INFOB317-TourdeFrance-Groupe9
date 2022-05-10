@@ -15,8 +15,7 @@ alph_bet(Etatactuel, Actionchoisie, Profondeur) :-
           en utilisant l'algorithme alpha beta en recherche en profondeur limitée ​
           0-> borne inférieure/ tous les coureurs ont atteint la ligne d'arrivée
           1140 --> borne supérieure/ tous les coureurs se trouvent sur la ligne de départ
-
-  */​
+*/​
 
 %Cas profondeur maximale calcul du vecteur d'évaluation ou d'utilité si état terminal
 alph_bet(0, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Nomcoureur, _, _, Vecteureval, _) :- ​
@@ -35,10 +34,10 @@ alph_bet(Profondeur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre
 
       ​
 /* alphabeta(+Listeactionsposs,+Etatactuel,+Profondeur,+Coureurdontcestletour,+Vecteurcourant,+Actioncourante,-Meilleurvecteur,-Meilleuraction)
-      Choisis la meilleure action depuis la liste Listeactionposs par rapport à l'état de jeu actuel
-      en utilisant l'algorithme d'élagage alpha-beta en profondeur limitée
-      Coureurdontcestletour indique le coureur dont c'est le tour (celui qui sélectionne le vecteur maximisant son utilité/évaluation (ici mininmisant voir Fonction d'évaluation))
-      Actioncourante correspond à la "meilleure" action trouvée pour l'instant (dont le vecteur correspondant est Vecteurcourant) .*/
+  Choisis la meilleure action depuis la liste Listeactionposs par rapport à l'état de jeu actuel
+  en utilisant l'algorithme d'élagage alpha-beta en profondeur limitée
+  Coureurdontcestletour indique le coureur dont c'est le tour (celui qui sélectionne le vecteur maximisant son utilité/évaluation (ici mininmisant voir Fonction d'évaluation))
+  Actioncourante correspond à la "meilleure" action trouvée pour l'instant (dont le vecteur correspondant est Vecteurcourant) .*/
 
 alphabeta([], _, _, _, Meilleurvecteur, Meilleuraction,  Meilleurvecteur, Meilleuraction).
 

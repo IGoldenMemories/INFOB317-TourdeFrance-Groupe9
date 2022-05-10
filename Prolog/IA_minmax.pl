@@ -183,6 +183,7 @@ minimax(Profondeur,jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,O
   Choisit le meilleur mouvement de la liste Actions de l'état actuel​
   Action0 enregistre la meilleur action trouvée jusqu'à maintenant et son vecteur correspondant
    */
+   
 minimax([], _, _, _, Vecteur, Meilleuraction,  Vecteur, Meilleuraction).
 minimax([Actionposs|Actionsposs],jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Profondeur,Coureur, Vecteur0,Action0,Meilleurvecteur,Meilleuraction):-​
 
