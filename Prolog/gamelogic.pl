@@ -944,9 +944,28 @@ traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase):-
 
 
 %---------- Aspiration ----------------
-%Condition pour qu'un coureur puisse utiliser le phénomène d'Aspiration
+%CONDITION pour qu'un coureur puisse utiliser le phénomène d'Aspiration
+
+%si la carte seconde jouée appartient au joueur du coureur dont c'est le tour
+%si Un coureur se trouve JUSTE DERRIERE un autre coureur
+%si la distance entre le coureur et celui derrière après le déplacement avec aspiration est supérieure à 4
+aspirationok(Coureur,Listetas,Listecoureur,Valeurcartesec):-
+  coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), member(Valeurcarteseconde,Cartessecondes),
+  coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),trouver_position(Coureurdevant,Listecoureur,Idcase2), Coureurdevant \== Coureur,estjustedevantcase(Idcase1,Idcase2),
+  aspiration(Coureur,Listecoureur,Valeurcartesec,Casearrivee),regledesquatresec(Nomcoureur,Casearrivee,Listeposition).
+%si la carte seconde jouée appartient au joueur du coureur dont c'est le tour
+%si Un coureur se trouve JUSTE à côté d' un autre coureur
+%si la distance entre le coureur et celui derrière après le déplacement avec aspiration est supérieure à 4
+aspirationok(Coureur,Listetas,Listecoureur,Valeurcartesec):-
+  coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), member(Valeurcarteseconde,Cartessecondes),
+  coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),trouver_position(Coureuracote,Listecoureur,Idcase2),Coureuracote/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2),
+  aspiration(Coureur,Listecoureur,Valeurcartesec,Casearrivee),regledesquatresec(Nomcoureur,Casearrivee,Listeposition).
 
 
+
+%Calcul de la Case d'arrivée d'un coureur Selon
+%La situation actuelle (position des autres coureurs)
+%La valeur de la carte seconde jouée
 %Un coureur se trouve JUSTE DERRIERE un autre coureur
 %et
 %Possibilité d'arriver DERRIERE un autre coureur en utilisant la valeur de la carte seconde +1
@@ -954,6 +973,9 @@ aspiration(Coureur,Listecoureur,Valeurcartesec,Casearrivee):-
    coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),trouver_position(Coureurdevant,Listecoureur,Idcase2), Coureurdevant \== Coureur,estjustedevantcase(Idcase1,Idcase2),Arrivee is Numero1+Valeurcartesec+1
 ,numero(Casearrivee,Arrivee),estjustedevantcase(Casearrivee,Casecoureurapres),trouver_coureur(Casecoureurapres,Listecoureur,Coureursuivant).
 
+%Calcul de la Case d'arrivée d'un coureur Selon
+%La situation actuelle (position des autres coureurs)
+%La valeur de la carte seconde jouée
 %Un coureur se trouve JUSTE DERRIERE
 % et
 %Possibilité d'arriver à côté un autre coureur en utilisant la valeur de la carte seconde +1
@@ -962,7 +984,9 @@ aspiration(Coureur,Listecoureur,Valeurcartesec,Casearrivee):-
   coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),trouver_position(Coureurdevant,Listecoureur,Idcase2), Coureurdevant \== Coureur,estjustedevantcase(Idcase1,Idcase2),Arrivee is Numero1+Valeurcartesec+1
 ,numero(Casearrivee,Arrivee),numero(Idcase,Numcaseapres),Idcase/==Casearrivee,trouver_coureur(Idcase,Listecoureur,Coureursuivant).
 
-
+%Calcul de la Case d'arrivée d'un coureur Selon
+%La situation actuelle (position des autres coureurs)
+%La valeur de la carte seconde jouée
 %Un coureur se trouve JUSTE à CÔté
 %et
 %Possibilité d'arriver à CÔté d'un autre coureur en utilisant la valeur de la carte seconde +1
@@ -972,7 +996,9 @@ aspiration(Coureur,Listecoureur,Valeurcartesec,Casearrivee):-
 , Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee),numero(Idcase,Arrivee),Idcase/==Casearrivee,trouver_coureur(Idcase,Listecoureur,Coureursuivant).
 
 
-
+%Calcul de la Case d'arrivée d'un coureur Selon
+%La situation actuelle (position des autres coureurs)
+%La valeur de la carte seconde jouée
 %Un coureur se trouve JUSTE à CÔté
 %et
 %Possibilité d'arriver juste derrière un autre coureur en utilisant la valeur de la carte seconde +1
