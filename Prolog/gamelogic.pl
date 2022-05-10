@@ -988,29 +988,35 @@ aspiration(Coureur,Listecoureur,Valeurcartesec,Casearrivee):-
 estletourde(Nomcoureur,Indextour, Ordre,Prochaincoureur):-
    nth1(Indextour,Ordrephasedebut,Nomcoureur),I is Indextour+1,nth1(I,Ordrephasedebut,Prochaincoureur).
 
-lidis([]).
-coureursderriereli([]).
-%Peut dépasser si la distance entre le coureur et celui derrière qui est le plus proche est supérieure à 4
-peutdepasser(Nomcoureur,Listecoureur,Listetas,Valeurcarteseconde,Coureurs):-
-  coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), lidis(Lidis),member(Nomcoureur,Listecoureur), member(Valeurcarteseconde,Cartessecondes),estderriere(Nomcoureur,Coureurs,Coureursderriereli,Coureursderriere),calculdistance(Nomcoureur,Coureursderriere,Lidis, Listedistances),estdistanceminimale(Listedistances,Distanceminimale),Distanceminimale >= 4.
 
 
 %Liste de tous les coureurs derrière Nomcoureur
 
-estderriere(Nomcoureur,Listecoureur,[C|Coureurs],Coureursderriereli,Coureursderriere):-
-  trouver_position(Nomcoureur,Listecoureur,Case1),findall(Nomcoureur,(trouver_position(Nomcoureur, Listecoureur,Idcaseautrecoureur),estdevantcase(Idcaseautrecoureur,Case1,Case1)),Coureursderriere).
+estderriere(Idcaseoucoureur,Listecoureur,Coureurs,Coureursderriere):-
+  findall(C,(member(C,Coureurs),trouver_position(C, Listecoureur,Idcaseautrecoureur),estdevantcase(Idcaseautrecoureur,Idcaseoucoureur,Idcaseoucoureur)),Coureursderriere).
 
 
 %Distance approximative
 %(pas de prise en compte des cas avec les lettres considérées comme des cases à part entières ici)
 %avec chaque coureur derrière
-calculdistance(Listecoureur,Nomcoureur, Coureurs,Listedistances):-
-  trouver_position(Nomcoureur,Listecoureur,Idcase1), numero(Idcase1,Numero1),findall([C,Distance],(member(C,Coureurs),trouver_position(C,Listecoureur,Idcase2),numero(Idcase2,Numero2),Distance is Numero1-Numero2),Listedistances).
+calculdistance(Listecoureur,Nomcoureur, Coureursderriere,Listedistances):-
+  trouver_position(Nomcoureur,Listecoureur,Idcase1), numero(Idcase1,Numero1),findall([C,Distance],(member(C,Coureursderriere),trouver_position(C,Listecoureur,Idcase2),numero(Idcase2,Numero2),Distance is Numero1-Numero2),Listedistances).
 
 
 %Permet de trouver le couple Nomcoureurleplusprochederriere , Distance par rapport au Nomcoureur
 estdistanceminimale(Listedistances,Distanceminimale, Nomcoureurleplusprochederriere):-
   findall(Distances, (member(Sousliste, Listedistances), nth0(1, Distance,Sousliste)),Listedistaverif),min_list(Listedistaverif,Distanceminimale), nth0(X, Souslisteoucoureur, Listedistances), nth0(0,Nomcoureurleplusprochederriere,Distanceminimale).
+
+%Peut dépasser
+%si la carte seconde jouée appartient au joueur dont c'est le tour
+%si la distance entre le coureur et celui derrière après le dépassement est supérieure à 4
+
+peutdepasser(Nomcoureur,Listecoureur,Listetas,Valeurcarteseconde,Coureurs):-
+  coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), member(Valeurcarteseconde,Cartessecondes),depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Casearrivee),regledesquatresec(Nomcoureur,Casearrivee,Listeposition).
+
+%Implémentation de la règle indiquant qu'un coureur doit laisser le coureur derrière lui pouvoir utiliser une carte seconde de valeur supérieure ou égale à 4.
+regledesquatresec(Nomcoureur,Idcaseoucoureur,Listeposition):-
+  coureurs(Coureurs), estderriere(Idcaseoucoureur,Listecoureur,Coureurs,Coureursderriere),calculdistance(Listecoureur,Nomcoureur,Coureursderriere,Listedistances),estdistanceminimale(Listedistances,Distanceminimale, Nomcoureurleplusprochederriere),Distanceminimale >= 4.
 
 %------------------------------------------------------
 %Prédicats retournant la valeur de la case d'arrivée
@@ -1026,11 +1032,13 @@ depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Casearrivee):-
     numero(Idcasedevantautrecoureur,Num), Valeurrestante is Valeurcarteseconde-2,Numarrivee is Num + Valeurrestante, numero(Casearrivee,Numarrivee), estdevantcase(Idcasedevantautrecoureur,Casearrivee,Casearrivee).
 
 
-%--> à quel joueur est le coureur pour Nomjoueur ???
-mouvementlibre(Nomcoureur,Valeurcarteseconde,jeu(_,_,Listeposition,_,_,_),Idcasearrivee, Prochaincoureur, jeu(_,_,NouvelleListeposition,_,_,_)):-
-  coureurs(ListeCoureur),trouver_position(Nomcoureur,Listecoureur,Idcase),numero(Idcase,Numcase),(for((estdevantcase(Idcase,Idcasearrivee,Idcasearrivee),casevide(Nomcoureur,Listeposition,Idcase)),0,Valeurcarteseconde)
-%
-%Avant la ligne arrivée
+
+%---------- Mouvement libre ----------------
+%Mouvement libre représente le cas où il n'y pas d'aspiration( ou le joueur n'en a pas voulu) et pas de dépassement possible
+%Le coureur est alors déplacé le plus ("loin possible"/ le plus proche possible de la ligne d'arrivée)
+mouvementlibre(Nomcoureur,Valeurcarteseconde,Listeposition,Idcasearrivee):-
+  trouver_position(Nomcoureur,Listecoureur,Idcase),numero(Idcase,Numcase),(for((estdevantcase(Idcase,Idcasearrivee,Idcasearrivee),casevide(Nomcoureur,Listeposition,Idcase)),0,Valeurcarteseconde)
+
 
 /*
 -----------------------------------
