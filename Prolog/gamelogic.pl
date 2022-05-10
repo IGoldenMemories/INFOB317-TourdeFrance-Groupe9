@@ -1008,18 +1008,22 @@ calculdistance(Listecoureur,Nomcoureur, Coureurs,Listedistances):-
   trouver_position(Nomcoureur,Listecoureur,Idcase1), numero(Idcase1,Numero1),findall([C,Distance],(member(C,Coureurs),trouver_position(C,Listecoureur,Idcase2),numero(Idcase2,Numero2),Distance is Numero1-Numero2),Listedistances).
 
 
-%estdistanceminimale(Distanceminimale):- Distanceminimale telle que n' existe pas de plus petit selon predicat précédent
-estdistanceminimale(Listedistances,Distanceminimale):- min_list(Listedistances,Distanceminimale).
+%Permet de trouver le couple Nomcoureurleplusprochederriere , Distance par rapport au Nomcoureur
+estdistanceminimale(Listedistances,Distanceminimale, Nomcoureurleplusprochederriere):-
+  findall(Distances, (member(Sousliste, Listedistances), nth0(1, Distance,Sousliste)),Listedistaverif),min_list(Listedistaverif,Distanceminimale), nth0(X, Souslisteoucoureur, Listedistances), nth0(0,Nomcoureurleplusprochederriere,Distanceminimale).
 
-%--> défaussement de cartes se fait à la prise de commande
-depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,0):-
-  trouver_position(Nomcoureur, Listecoureur, Idcasecoureur),estdevant(Coureur,Listecoureur,[C|Coureurs],Coureursdevantli,Coureursdevant),calculdistance(Coureur,Coureursdevant,Lidis, Listedistances),estdistancemaximale(Listedistances,Distancemax),Distancemax == 1,
 
-depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,0):-
-   Valeurcarteseconde==0
+%Prédicats retournant la valeur de la case d'arrivée
+%selon la carte seconde (Valeurcarteseconde) jouée et la position des autres coureurs
 
-depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Prochaincoureur,Idcase2):-
-   Valeurcarteseconde>0,trouver_position(Nomcoureur,Listecoureur,Idcase1), coureurs(Coureurs), caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2), peutdepasser(Nomcoureur,Valeurcarteseconde,Coureurs),Valcartesec is Valeurcarteseconde-1,depassement(Nomcoureur,Valcartesec,Prochaincoureur).
+%Cas où carte seconde vaut 2 (Case arrivee == juste devant coureur situé "juste devant")
+depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Idcasearrivee):-
+   Valeurcarteseconde ===2,trouver_position(Nomcoureur, Listecoureur, Idcasecoureur),trouver_coureur(Idcasedevant,Listecoureur,Nomcoureurdevant), estjustedevantcase(Idcasecoureur, Idcasedevant), estjustedevantcase( Idcasedevant, Idcasearrivee).
+
+%Cas où carte seconde vaut plus de  2 (Case arrivee == Case devant coureur situé "juste devant"+Valeurcarteseconde-2)
+depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Prochaincoureur,Casearrivee):-
+   Valeurcarteseconde>2,trouver_position(Nomcoureur,Listecoureur,Idcasecoureur), trouver_coureur(Idcasedevant,Listecoureur,Nomcoureurdevant), estjustedevantcase(Idcasecoureur, Idcasedevant), estjustedevantcase( Idcasedevant, Idcasedevantautrecoureur),
+    numero(Idcasedevantautrecoureur,Num), Valeurrestante is Valeurcarteseconde-2,Numarrivee is Num + Valeurrestante, numero(Casearrivee,Numarrivee), estdevantcase(Idcasedevantautrecoureur,Casearrivee,Casearrivee).
 
 
 %--> à quel joueur est le coureur pour Nomjoueur ???
