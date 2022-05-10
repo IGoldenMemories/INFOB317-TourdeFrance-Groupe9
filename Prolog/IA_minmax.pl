@@ -111,12 +111,6 @@ actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numord
   findall([jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),Actionposs, Vectoreval],
   (transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),estletourde(Nomcoureur, Ordre,Numordre, _),Actionposs), trouveeval(jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre), Vectoreval)).
 
-% Sélection de l'action minimisant la valeur d'évaluation pour Nomcoureur dans les vecteurs d'évaluations de toutes ses actions possibles
-trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif):-
-  trouveridcoureur(Nomcoureur, Idcoureur), findall(Valposs, (member(X, Listaction), nth0(2, Vector, X), nth0(Idcoureur, Valposs, Vector)), Listvalposs), min_list(Listvalposs,Minimum),
-   nth0(Y,Sousliste, Listeaction), nth0(2, Vectoraverif, Sousliste), nth0(Idcoureur, Minimum, Vectoraverif), nth0(1, Actionchoisie, Sousliste).
-
-
 
 /* Différentes choses à implémenter/décider
 
@@ -188,7 +182,21 @@ minimax(Profondeur,jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,O
 /* minimax(+Actions,+Etatactuel,+Profondeur,+Coureurdontcestletour,+Vecteur0,+Action0,-Meilleurvecteur,-Meilleuraction)​
 
   Choisit le meilleur mouvement de la liste Actions de l'état actuel​
-  Action0 enregistre la meilleur action trouvée jusqu'à maintenant et son vecteur correspondant 
+  Action0 enregistre la meilleur action trouvée jusqu'à maintenant et son vecteur correspondant
    */
-minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Indextour, Ordre,Prochaincoureur), Actionchoisie, Prof):-
-     actionposs(Nomcoureur, Etatactuel,Listeaction), length(Listeaction, Taille) , Taille > 0, minimax( Nomprochaincoureur, Etatactuel,esttourde(Nomprochaincoureur,Ordre, Nomprochainprochaincoureurcoureur), Actionchoisie, Nouvprofondeur), Nouvprofondeur is Prof-1.
+minimax([], _, _, _, Vecteur, Meilleuraction,  Vecteur, Meilleuraction).
+minimax([Actionposs|Actionsposs],jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Profondeur,Coureur, Vecteur0,Action0,Meilleurvecteur,Meilleuraction):-​
+
+      transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Etatarrivee,estletourde(Nomcoureur,Ordre,Valtour,Prochaincoureur),Actionposs), ​
+
+
+      minimax(Profondeur, Etatarrivee, Prochaincoureur,Vecteurprochaincoureur,Actionprochaincoureur), ​
+
+      trouveridcoureur(Nomcoureur, Idcoureur), nth0(Idcoureur,Valeur1,Vecteurprochaincoureur), nth0(Idcoureur,Valeur2,Vecteur0),
+      ( Valeur1< Valeur2 ->        ​
+
+        minimax(Actionsposs,jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Profondeur,Nomcoureur, Vecteur ,Action ,Meilleurvecteur,Meilleuraction).​
+
+      ; minimax(Actionsposs,jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Profondeur,Nomcoureur, Vecteur0,Action0,Meilleurvecteur,Meilleuraction).​
+
+      ). ​
