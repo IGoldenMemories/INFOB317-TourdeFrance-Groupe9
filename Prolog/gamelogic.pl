@@ -981,13 +981,11 @@ aspiration(Coureur,Listecoureur,Valeurcartesec,Casearrivee):-
    coureurs(Coureurs),trouver_position(Coureur,Listecoureur,Idcase1),not(estcouloir(Idcase1)),numero(Idcase1,Numero1),trouver_position(Coureuracote,Listecoureur,Idcase2),Coureuracote/==Coureur,numero(Idcase2,Numero2),Idcase1/==Idcase2,Numero1==Numero2)
 ,Arrivee is Numero1+Valeurcartesec+1,numero(Casearrivee,Arrivee), estjustedevantcase(Casearrivee, Casecoureurapres),trouver_coureur(Casecoureurapres,Listecoureur,Coureursuivant).
 
-% Dépassement
+%---------- Dépassement ----------------
 
-estletourde(Nomcoureur,Ordrephasedebut,Prochaincoureur):-
-   nth0(Index,Ordrephasedebut,Nomcoureur),I is Index+1,nth0(I,Ordrephasedebut,Prochaincoureur).
-
-estletourde(Nomcoureur,Ordrephasedynamique,Prochaincoureur):-
-  nth0(Index,Ordrephasedynamique,Nomcoureur),I is Index+1,nth0(I,Ordrephasedynamique,Prochaincoureur).
+%Selon l'ordre (de phase début ou dynamique) et l'index de tour retourne le coureur dont c'est le tour et le prochain
+estletourde(Nomcoureur,Indextour, Ordre,Prochaincoureur):-
+   nth0(Indextour,Ordrephasedebut,Nomcoureur),I is Indextour+1,nth0(I,Ordrephasedebut,Prochaincoureur).
 
 lidis([]).
 coureursderriereli([]).
