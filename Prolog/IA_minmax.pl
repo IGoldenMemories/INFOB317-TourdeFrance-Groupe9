@@ -105,7 +105,8 @@ trouveeval(jeu(_,_,Positions,_,_,_,_), Listeeval):-
 %☞ Actions : S × P → Act (où P ici signifie les Joueurs et Coureurs) --> sous-états?
 
 actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Listeaction):-
-  findall([jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),Actionposs, Vectoreval], (transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),estletourde(Nomcoureur, Ordre, _),Actionposs), trouveeval(jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre), Vectoreval)).
+  findall([jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),Actionposs, Vectoreval],
+  (transition(jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre),estletourde(Nomcoureur, Ordre,Numordre, _),Actionposs), trouveeval(jeu(Nouvdeck,Nouvpassetour,Nouvpositions,Nouvapasseligne,Nouvtascartes,Nouvnumordre,Nouvordre), Vectoreval)).
 
 % Sélection de l'action minimisant la valeur d'évaluation pour Nomcoureur dans les vecteurs d'évaluations de toutes ses actions possibles
 trouvermeilleureeval(Nomcoureur,Listeaction, Actionchoisie ,Vectoraverif):-
@@ -164,4 +165,4 @@ minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur),
 
 
 minimax(Nomcoureur, Etatactuel, esttourde(Nomcoureur,Ordre, Nomprochaincoureur), Actionchoisie,0):-
-  trouveeval(Etatactuel,Vecteureval)
+  trouveeval(Etatactuel,Vecteureval).

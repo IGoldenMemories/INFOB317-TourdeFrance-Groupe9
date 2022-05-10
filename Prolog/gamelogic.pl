@@ -1065,6 +1065,12 @@ depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Casearrivee):-
 mouvementlibre(Nomcoureur,Valeurcarteseconde,Listeposition,Idcasearrivee):-
   trouver_position(Nomcoureur,Listecoureur,Idcase),numero(Idcase,Numcase),(for((estdevantcase(Idcase,Idcasearrivee,Idcasearrivee),casevide(Nomcoureur,Listeposition,Idcase)),0,Valeurcarteseconde)
 
+% Mouvement libre ok
+%si la carte seconde jouée appartient au joueur dont c'est le tour
+%si la distance entre le coureur et celui le plus proche derrière après le déplacement est supérieure à 4
+
+mouvementlibreok(Nomcoureur,Listecoureur,Listetas,Valeurcarteseconde,Coureurs):-
+  coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), member(Valeurcarteseconde,Cartessecondes),mouvementlibre(Nomcoureur,Listecoureur,Valeurcarteseconde,Casearrivee),regledesquatresec(Nomcoureur,Casearrivee,Listeposition).
 
 /*
 -----------------------------------
@@ -1134,25 +1140,9 @@ repiocher5cartes(Joueur4, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Ta
   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas4, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas4, Cartechoisie5)
 
 
-
-
-%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-%miseajourcartessecondesliste(Cartessecondesrestantes):- jeu(Cartessecondesrestantes,_,_,_).
-
-%miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Cartessecondes,_,_,_),Cartessecondes is Nouvcartessecondes,length(Cartessecondes,L), L>0.
-%miseajourcartessecondesjoueur(Nomjoueur,Nouvcartessecondes):- joueur(Nomjoueur,Cartessecondes,_,_,_),Cartessecondes is Nouvcartessecondes, length(Cartessecondes,L), L==0, repiocher5cartes(Nomjoueur,Carteschoisies).
-
-
-
-
-% lieudechute([case1,case2|caseschute]):- chute(coureurs,coureurs), case(case1,numero1), case(case2,numero2), numero1==numero2, lieudechute(caseschute). 
-%lieudechute([_|[]],listeidcases):- chute(coureurs,coureurs). 
-
-listechute([])
-lieudechute(Idcase,Listeidcaseschute):-listechute(Listechute),coureurs(Coureurs),numero(Idcase,Numero1),listidcases(Listetoutescases),foreach(member(Case2, Listetoutescases), (numero(Case2,Numero2), Case1/==Case2, Numero1==Numero2,not(estcouloir(Case1)),not(estcouloir(Case2),insert(Case2,Listechute,Listeidcaseschute))).
-
-
-
+%Trouve à partir de la case départ de la chute en série la liste des identifiants de toutes les autres case impactées
+lieudechute(Idcase,Listeidcaseschute):-
+  numero(Idcase,Numero1),not(estcouloir(Case1)),listidcases(Listetoutescases),findall(Casechute, (member(Casechute, Listetoutescases), numero(Casechute,Numero2), Case1/==Casechute, Numero1==Numero2,not(estcouloir(Casechute))),Listeidcaseschute).
 
 %Si case libre dans la largeur suivante, elle est renvoyée dans le prédicat de dépassement, et le coureur pourra y aller
 caselibre(jeu(_,_,Listecoureur,_,_,_),[],Idcase2).
