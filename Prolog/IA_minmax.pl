@@ -41,7 +41,7 @@ transition(jeu(Deck,Passetour,Positions,faux,Listetas,Valtour,Ordre,_),jeu(Nouvd
     ,coureurdejoueur(Nomjoueur,Listecoureur), member(Nomcoureur,Listecoureur),defaussecarte(Deck,Listetas,Nomjoueur,Valeurcarteseconde,Nouvdeck,NouvListetas), Nouvvaltour is Valtour +1.
 
 %Pas dans Passetour,Position dans tour == 12 (remise à 1 et recalcul ordre), arrivée sur un case chance , pas de chute, personne n'a passé la ligne d'arrivée et avec l'action le coureur dont c'est le tour ne l'a pas non plus passée
-transition(jeu(Deck,Passetour,Positions,faux,,Listetas,12,Ordre,_),jeu(Nouvdeck,Passetour,Resultatction,faux,NouvListetas,1,Nouvvaltour,Nouvordre,_),estletourde(Nomcoureur,Ordre,Valtour,_),depassement(Nomcoureur,Positions, Valeurcarteseconde,Nouvposition)):-
+transition(jeu(Deck,Passetour,Positions,faux,Listetas,12,Ordre,_),jeu(Nouvdeck,Passetour,Resultatction,faux,NouvListetas,1,Nouvvaltour,Nouvordre,_),estletourde(Nomcoureur,Ordre,Valtour,_),depassement(Nomcoureur,Positions, Valeurcarteseconde,Nouvposition)):-
   not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Positions,Listetas,Valeurcarteseconde,NouvPos),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),coureurs(Coureurs),not(chute(Coureurs,Idnouvellecase)),
   coureurdejoueur(Nomjoueur,Listecoureur), member(Nomcoureur,Listecoureur),defaussecarte(Deck,Listetas,Nomjoueur,Valeurcarteseconde,Nouvdeck,NouvListetas),ordre(Resultatction,NouvListetas,Phase, Nouvordre).
 
