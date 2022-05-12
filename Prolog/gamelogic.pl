@@ -1209,6 +1209,9 @@ apasselignearrivee(Nomcoureur,Case):-trouver_position(Nomcoureur,Listecoureur,Ca
 tempspartiellignearrivee(Listetemps,Nomcoureur,Casearrivee,Nouvlistetemps):-
   coureurdejoueur(Nomjoueur,Listecoureur),nth0(Y,Nomcoureur,Listecoureur),idjoueur(Nomjoueur,Idjoueur),nth0(Idjoueur,Sousliste,Listetemps), nth0(Idjoueur,Valeurcourante, Sousliste),numero(Casearrivee,Numcase),Decomptearrivee is 95-Numcase, Nouval is Decomptearrivee+ Valeurcourante,replace( Listetemps , Idjoueur , Y , Nouval , Nouvlistetemps ).
 
+tempspartielplusdix(Listetemps,Nomcoureur,Nouvlistetemps):-
+  coureurdejoueur(Nomjoueur,Listecoureur),nth0(Y,Nomcoureur,Listecoureur),idjoueur(Nomjoueur,Idjoueur),nth0(Idjoueur,Sousliste,Listetemps), nth0(Idjoueur,Valeurcourante, Sousliste),Nouval is 10+ Valeurcourante,replace( Listetemps , Idjoueur , Y , Nouval , Nouvlistetemps ).
+
 
 %Obtention du temps total d'un joueur
 tempstotal(Listetemps,Nomjoueur, Tempstotal):-
