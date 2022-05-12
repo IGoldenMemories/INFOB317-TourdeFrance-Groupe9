@@ -167,14 +167,10 @@ util(jeu(_,_,_,_,_,_,_,Listetemps),[2,2,2,2,2,2,0,0,0,2,2,2,util]):-
 
 
 % joueurs 1 2 3 4 avec même temps total (match nul)
-util(jeu(_,_,_,_,_,_,_,Listetemps),[1,1,1,1]):-
-  quatregagnant(Etats,italie,hollande,belgique,allemagne)
+util(jeu(_,_,_,_,_,_,_,Listetemps),[1,1,1,1,1,1,1,1,1,1,1,1,util]):-
+  quatregagnant(Listetemps,italie,hollande,belgique,allemagne).
 
-%tempstotal(Nomjoueur,Tempstotal) --> gagnant(cas où un seul gagnant)
-%--> todo gagnant2, gagnant3 gagnant4
-%gagnant(Nomjoueur)--> Nomjoueur Util(Nomjoueur,10)
-%gagnant(Nomautrejoueur)--> Nomjoueur /== Nomautrejoueur Util(Nomjoueur,0)
-%autre cas +5,+2,+1
+
 
 
 %Calcul du coup optimal.
