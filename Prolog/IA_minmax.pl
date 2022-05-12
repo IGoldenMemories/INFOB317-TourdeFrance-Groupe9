@@ -294,6 +294,30 @@ trouveeval(jeu(_,_,Positions,_,_,_,_,Listetemps), Vecteurresultateval):-
 
 
 
+trouvermeilleurdestination(Coureur,Positions,Valeurcartesec, Casearrivee):-
+  trouver_position(Nomcoureur, Positions, Casecoureur),findall(Cases, genererdestinationpossible(Coureur, Positions,Casecoureur,Valeurcartesec,Cases), Listescases), findall(Distance,(member(Case,Listescases), numero(Case,Numcase),Distance is 95-Numcase),Listedistance), min_list(Listedistance,Minimum), nth0(X, Minimum, Listedistance), nth0(X, Casearrivee, Listescases).
+
+genererdestinationpossible(Coureur, Positions,Casecoureur,Valeurcartesec,Case):-
+  numero(Casecoureur,Numcasecoureur), Nouveaunumerocase is Numcasecoureur + Valeurcartesec,  numero(Case,Nouveaunumerocase),generateurchemin(Coureur,Positions,Casecoureur,Numcasecoureur,Case,Nouveaunumerocase,Chemin).
+
+generateurchemin(Coureur,Positions,Casea,Numa,Caseb,Numb,Chemin):-
+  Distance is Numb-Numa,
+  Distance > 0,
+  estdevantcase(Casea,Prochainecase,Prochainecase),
+  numero(Prochainecase,Prochainnum),
+  casevide(Coureur,Positions,Prochainecase)
+  append(Chemin,[Prochaincase],Nouvchemin),
+  generateurchemin(Prochainecase,Prochainnum,Caseb,Numb,Nouvchemin).
+
+%Permet de trouver la meilleur carte seconde à jouer selon le contexte actuel de la partie pour un coureur donné
+trouvermeilleurecartesec(Nomcoureur, Ordre, Positions, Listetasdecartes,Cartechoisie):-
+  coureursdejoueur(Nomjoueur,Listecoureurs), esttourde(Nomcoureur,Ordre,_),member(Nomcoureur,Listecoureurs),
+  tasdecartejoueur(Nomjoueur, Listetasdecartes, Tascartejoueur),
+  findall(Destinationseloncarte, (member(Carte,Tasdecartejoueur), trouvermeilleurdestination(Nomcoureur,Positions,Carte, Destinationseloncarte)), Listedestination),
+  findall(Distancedestination, (member(Dest,Listedestination), numero(Dest,Num), Distancedestination is 95-Num), Listedist),
+  min_list(Listedist, Minimum), nth0(X, Minimum, Listedist), nth0(X, Cartechoisie, Tasdecartejoueur). 
+
+%tant qu'on est sur case arrivée --> vérification case vide et case libre ensuite
 
 %Un ensemble Act d’actions
 %-----------
