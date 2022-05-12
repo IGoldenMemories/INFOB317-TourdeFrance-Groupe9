@@ -906,10 +906,10 @@ estjustedevantcase(Idcase1,Idcase2):-
  % not(Apasselignearrivee), --> a regarder plus tard
 
 
-ordre(jeu(_,_,Listeposition,_,_,_,_),dynamique, Ordrephasedynamique):-
+ordre(Listeposition,_,dynamique, Ordrephasedynamique):-
   not(nth0(X,Sublist,Listeposition), nth0(Y,Position, Sublist), Position is depart),ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee,_,_,_,_), Ordrephasedynamique).
 
-ordre(jeu(_,_,_,_,Listetasdecartes,_,_,_),debut,Ordredebut):-
+ordre(_,Listetasdecartes,debut,Ordredebut):-
   ordreddebut(jeu(_,_,_,_,Listetasdecartes,_,_,_),Ordredebut).
 
 
@@ -1204,6 +1204,11 @@ chuteenserie(Deckcartes,Passetour,Listeposition):- coureurs(Coureurs), chute(Cou
 
 %Vérifie si un coureur a passé sa ligne d'arrivée --> utilisée pour le calcul du temps total +10 après chaque toour (dés qu'un coureur a passé la ligne d'arrivée)
 apasselignearrivee(Nomcoureur,Case):-trouver_position(Nomcoureur,Listecoureur,Case),apresarrivee(Case) % Condition sur le numéro de case (??? ligne d'arrivée ==?)
+
+%Met à jour le temps partiel d'un coureur lorsqu'il franchi la ligne d'arrivée selon la case sur laquelle il arrive
+tempspartiellignearrivee(Listetemps,Nomcoureur,Casearrivee,Nouvlistetemps):-
+  coureurdejoueur(Nomjoueur,Listecoureur),nth0(Y,Nomcoureur,Listecoureur),idjoueur(Nomjoueur,Idjoueur),nth0(Idjoueur,Sousliste,Listetemps), nth0(Idjoueur,Valeurcourante, Sousliste),numero(Casearrivee,Numcase),Decomptearrivee is 95-Numcase, Nouval is Decomptearrivee+ Valeurcourante,replace( Listetemps , Idjoueur , Y , Nouval , Nouvlistetemps ).
+
 
 %Obtention du temps total d'un joueur
 tempstotal(Listetemps,Nomjoueur, Tempstotal):-
