@@ -124,7 +124,7 @@ actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numord
 %Utiliser la fonction terminale (selon que tous les coureurs aient passé la ligne d'arrivée)
 
 
-%Valeur utilité (si état est terminal) : A ECLAIRCIR
+%Valeur utilité (si état est terminal) :
 %   - +10 (temps total plus petit que celui de tous les autres) (gagné)
 %   - +5 (égalité en temps total le plus petit (avec 1 joueur)) (gagné)?
 %   - +2 (égalité  en temps total le plus petit (avec 2 joueurs)) (gagné)?
@@ -132,27 +132,38 @@ actionposs(Nomcoureur, jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numord
 %   - +0 (temps total plus petit qu'un autre (perdu))
 
 
-%Util([Valeurutiljoueur1,Valeurutiljoueur2,Valeurutiljoueur3,Valeurutiljoueur4])
-%gagnant(italie)
-util( jeu(),[10,10,10,0,0,0,0,0,0,0,0,0,util]):-gagnant(Etats,italie)
-util( jeu(),[0,10,0,0])%hollande
-util( jeu(),[0,0,10,0])%Belgique
-util( jeu(),[0,0,0,10])%allemagne
+%Util(Etat+,[Valeurutiljoueur1,Valeurutiljoueur2,Valeurutiljoueur3,Valeurutiljoueur4])
+
+util( jeu(_,_,_,_,_,_,_,Listetemps),[10,10,10,0,0,0,0,0,0,0,0,0,util]):-
+  gagnant(Listetemps,italie).
+util(jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,10,10,10,0,0,0,0,0,0,util]):-
+  gagnant(Listetemps,hollande).
+util(jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,0,0,0,10,10,10,0,0,0,util]):-
+  gagnant(Listetemps,belgique).
+util(jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,0,0,0,0,0,0,10,10,10,util]):-
+  gagnant(Listetemps,allemagne).
 %joueur 2 et 1 with smallest time (revoir predicat dans gamelogic )
-util( jeu(),[5,5,0,0]):-deuxgagnant(Etats,italie,hollande)
-util( jeu(),[5,0,5,0])
-util( jeu(),[5,0,0,5])
-util( jeu(),[0,5,5,0])
-util( jeu(),[0,5,0,5])
+util( jeu(_,_,_,_,_,_,_,Listetemps),[5,5,5,5,5,5,0,0,0,0,0,0,util]):-
+  deuxgagnant(Listetemps,italie,hollande).
+util( jeu(_,_,_,_,_,_,_,Listetemps),[5,5,5,0,0,0,5,5,5,0,0,0,util]):-
+  deuxgagnant(Listetemps,italie,belgique).
+util(jeu(_,_,_,_,_,_,_,Listetemps),[5,5,5,0,0,0,0,0,0,5,5,5,util]):-
+  deuxgagnant(Listetemps,italie,allemagne).
+util(jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,5,5,5,5,5,5,0,0,0,util]):-
+  deuxgagnant(Listetemps,hollande,belgique).
+util( jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,0,0,0,5,5,5,5,5,5,util]):-
+  deuxgagnant(Listetemps,belgique,allemagne).
+util( jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,5,5,5,0,0,0,5,5,5,util]):-
+    deuxgagnant(Listetemps,hollande,allemagne)
 %joueur 1 2 3 with smallest time
-util(jeu(),[2,2,2,0]):-troisgagnant(Etats,italie,hollande,belgique)
-util(jeu(),[2,0,2,2])
-util(jeu(),[2,2,0,2])
-util(jeu(),[2,0,2,2])
-util(jeu(),[0,2,2,2])
+util(jeu(_,_,_,_,_,_,_,Listetemps),[2,2,2,0]):-troisgagnant(Etats,italie,hollande,belgique)
+util(jeu(_,_,_,_,_,_,_,Listetemps),[2,0,2,2])
+util(jeu(_,_,_,_,_,_,_,Listetemps),[2,2,0,2])
+util(jeu(_,_,_,_,_,_,_,Listetemps),[2,0,2,2])
+util(jeu(_,_,_,_,_,_,_,Listetemps),[0,2,2,2])
 
 % joueurs 1 2 3 4 avec même temps total (match nul)
-util(jeu(),[1,1,1,1]):-
+util(jeu(_,_,_,_,_,_,_,Listetemps),[1,1,1,1]):-
   quatregagnant(Etats,italie,hollande,belgique,allemagne)
 
 %tempstotal(Nomjoueur,Tempstotal) --> gagnant(cas où un seul gagnant)
@@ -183,7 +194,7 @@ minimax(Profondeur,jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,O
   Choisit le meilleur mouvement de la liste Actions de l'état actuel​
   Action0 enregistre la meilleur action trouvée jusqu'à maintenant et son vecteur correspondant
    */
-   
+
 minimax([], _, _, _, Vecteur, Meilleuraction,  Vecteur, Meilleuraction).
 minimax([Actionposs|Actionsposs],jeu(Deck,Passetour,Positions,Apasseligne,Tascartes,Numordre,Ordre),Profondeur,Coureur, Vecteur0,Action0,Meilleurvecteur,Meilleuraction):-​
 

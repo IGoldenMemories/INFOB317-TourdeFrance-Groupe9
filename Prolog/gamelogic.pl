@@ -647,6 +647,12 @@ coureurdejoueur(hollande,[hollande_1,hollande_2,hollande_3])
 coureurdejoueur(belgique,[belgique_1,belgique_2,belgique_3])
 coureurdejoueur(allemagne,[allemagne_1,allemagne_2,allemagne_3])
 
+idjoueur(italie,0).
+idjoueur(hollande,1).
+idjoueur(belgique,2).
+idjoueur(allemagne,3).
+
+
 
 /*
 -----------------------------------
@@ -900,8 +906,8 @@ estjustedevantcase(Idcase1,Idcase2):-
  % not(Apasselignearrivee), --> a regarder plus tard
 
 
-ordre(jeu(_,_,Listeposition,_,_,_),dynamique, Ordrephasedynamique):-
-  not(nth0(X,Sublist,Listeposition), nth0(Y,Position, Sublist), Position is depart),ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee,_,_,_), Ordrephasedynamique).
+ordre(jeu(_,_,Listeposition,_,_,_,_),dynamique, Ordrephasedynamique):-
+  not(nth0(X,Sublist,Listeposition), nth0(Y,Position, Sublist), Position is depart),ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee,_,_,_,_), Ordrephasedynamique).
 
 ordre(jeu(_,_,_,_,Listetasdecartes,_,_,_),debut,Ordredebut):-
   ordreddebut(jeu(_,_,_,_,Listetasdecartes,_,_,_),Ordredebut).
@@ -1146,8 +1152,8 @@ lieudechute(Idcase,Listeidcaseschute):-
   numero(Idcase,Numero1),not(estcouloir(Case1)),listidcases(Listetoutescases),findall(Casechute, (member(Casechute, Listetoutescases), numero(Casechute,Numero2), Case1/==Casechute, Numero1==Numero2,not(estcouloir(Casechute))),Listeidcaseschute).
 
 %Si case libre dans la largeur suivante, elle est renvoyée dans le prédicat de dépassement, et le coureur pourra y aller
-caselibre(jeu(_,_,Listecoureur,_,_,_,_),[],Idcase2).
-caselibre(jeu(_,_,Listecoureur,_,_,_,_),[C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),(trouver_position(Coureur,Listecoureur,Idcase),Idcase/=C)),Idcase2 is C,caselibre(Casessuivantes,Idcase2).
+caselibre(jeu(_,_,Listecoureur,_,_,_,_,_),[],Idcase2).
+caselibre(jeu(_,_,Listecoureur,_,_,_,_,_),[C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),(trouver_position(Coureur,Listecoureur,Idcase),Idcase/=C)),Idcase2 is C,caselibre(Casessuivantes,Idcase2).
 
 casevide(Coureur,Listecoureur,Idcase):-foreach(member(Coureur,Coureurs),(trouver_position(Coureur,Listecoureur,Idcase),Idcase/=C))
 
@@ -1169,7 +1175,7 @@ replace( L , X , Y , Z , R ) :-
   append(ColPfx,[_|ColSfx],Row) ,    % décompose cette sous-liste en un préfixe un élément à part et un suffixe
   length(ColPfx,Y) ,                 % vérifie ce préfixe pour voir s'il contient l'élément voulu
   append(ColPfx,[Z|ColSfx],RowNew) , % si oui le remplace
-  append(RowPfx,[RowNew|RowSfx],R)   % et réassemble la nouvelle liste de listes 
+  append(RowPfx,[RowNew|RowSfx],R)   % et réassemble la nouvelle liste de listes
   .
 
 miseajourpositioncoureur(Nomcoureur,Nouvposition,Listepositions,Novlistepositions):-
@@ -1194,20 +1200,19 @@ chuteenserie(Deckcartes,Passetour,Listeposition):- coureurs(Coureurs), chute(Cou
  -----------------------------
  */
 
+
 %------- Calcul du temps de chacun des coureurs ---------
-% tempspartiel(Nomcoureur, Tempspartiel
-%BESOIN DE PRECISER POSITION APRES LIGNE ARRIVEE
-tempspartiel(Nomcoureur,Tempspartiel):-trouver_position(Nomcoureur,Listecoureur,Case), numero(Case,Num), Tempspartiel is 95-%Num
 
 %Vérifie si un coureur a passé sa ligne d'arrivée --> utilisée pour le calcul du temps total +10 après chaque toour (dés qu'un coureur a passé la ligne d'arrivée)
 apasselignearrivee(Nomcoureur,Case):-trouver_position(Nomcoureur,Listecoureur,Case),apresarrivee(Case) % Condition sur le numéro de case (??? ligne d'arrivée ==?)
 
 %Obtention du temps total d'un joueur
-tempstotal(Nomjoueur, Tempstotal):-joueur(Nomjoueur, _, [C1,C2,C3]), Tempspartiel(C1,T1), Tempspartiel(C2,T2),Tempspartiel(C3,T3), Tempstotal is T1+T2+T3
+tempstotal(Listetemps,Nomjoueur, Tempstotal):-
+   idjoueur(Nomjoueur,Idjoueur),nth0(Idjoueur, Listetempsjoueur,Listetemps), sum_list(Listetempsjoueur,Tempstotal).
 
 % ------- Définition du gagnant de la partie --------
-gagnant(jeu(_,_,Listeposition,_,_,_),Gagnant):-
-  tempstotal(jeu(_,_,Listeposition,_,_,_),Gagnant, Tempsmin), tempstotal(jeu(_,_,Listeposition,_,_,_),Perdant, Temps), tempstotal(jeu(_,_,Listeposition,_,_,_),Perdant1, Temps1), tempstotal(jeu(_,_,Listeposition,_,_,_),Perdant2, Temps2),
+gagnant(Listetemps,Gagnant):-
+  tempstotal(Listetemps,Gagnant, Tempsmin), tempstotal(Listetemps,Perdant, Temps), tempstotal(Listetemps,Perdant1, Temps1), tempstotal(Listetemps,Perdant2, Temps2),
   Tempsmin<Temps, Tempsmin<Temps1,Tempsmin<Temps2.
 
 
