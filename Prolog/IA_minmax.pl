@@ -156,11 +156,15 @@ util( jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,0,0,0,5,5,5,5,5,5,util]):-
 util( jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,5,5,5,0,0,0,5,5,5,util]):-
     deuxgagnant(Listetemps,hollande,allemagne)
 %joueur 1 2 3 with smallest time
-util(jeu(_,_,_,_,_,_,_,Listetemps),[2,2,2,0]):-troisgagnant(Etats,italie,hollande,belgique)
-util(jeu(_,_,_,_,_,_,_,Listetemps),[2,0,2,2])
-util(jeu(_,_,_,_,_,_,_,Listetemps),[2,2,0,2])
-util(jeu(_,_,_,_,_,_,_,Listetemps),[2,0,2,2])
-util(jeu(_,_,_,_,_,_,_,Listetemps),[0,2,2,2])
+util(jeu(_,_,_,_,_,_,_,Listetemps),[2,2,2,2,2,2,2,2,2,0,0,0,util]):-
+  troisgagnant(Listetemps,italie,hollande,belgique).
+util(jeu(_,_,_,_,_,_,_,Listetemps),[2,2,2,0,0,0,2,2,2,2,2,2,util]):-
+  troisgagnant(Listetemps,italie,belgique,allemagne).
+util(jeu(_,_,_,_,_,_,_,Listetemps),[0,0,0,2,2,2,2,2,2,2,2,2,util]):-
+  troisgagnant(Listetemps,hollande,belgique,allemagne).
+util(jeu(_,_,_,_,_,_,_,Listetemps),[2,2,2,2,2,2,0,0,0,2,2,2,util]):-
+  troisgagnant(Listetemps,italie,hollande,allemagne).
+
 
 % joueurs 1 2 3 4 avec même temps total (match nul)
 util(jeu(_,_,_,_,_,_,_,Listetemps),[1,1,1,1]):-
