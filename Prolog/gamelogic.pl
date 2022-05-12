@@ -663,16 +663,17 @@ coureurdejoueur(allemagne,[allemagne_1,allemagne_2,allemagne_3])
 % Variable numérique allant de 1 à 12
 %(initialisée à 1 (état initial)), (incrémentée de 1 à la fin du tour de chaque coureur) , (quand vaut 12 alors recalcul de l'ordre)
 % Listeordre représentant l'ordre actuel des coureurs durant CE tour
+%Liste de liste des Temps partiels pour chaque coureur d'un joueur de forme [[Tempscoureur1italie,Tempscoureur2italie,Tempscoureur3italie],...]
 
 %état initial
 jeu([1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,
 5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,
 10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12], [], [[italie_1,depart],[italie_2,depart],[italie_3,depart],[hollande_1,depart],[hollande_2,depart],[hollande_3,depart]
-,[belgique_1,depart],[belgique_2,depart],[belgique_3,depart],[allemagne_1,depart],[allemagne_2,depart],[allemagne_3,depart]], faux,[[italie,[]],[hollande,[]],[belgique,[]],[allemagne,[]]],1,[]).
+,[belgique_1,depart],[belgique_2,depart],[belgique_3,depart],[allemagne_1,depart],[allemagne_2,depart],[allemagne_3,depart]], faux,[[italie,[]],[hollande,[]],[belgique,[]],[allemagne,[]]],1,[],[[0,0,0],[0,0,0],[0,0,0],[0,0,0]]).
 
 %état final
 jeu(_,_, [[italie_1,arrivee],[italie_2,arrivee],[italie_3,arrivee],[hollande_1,arrivee],[hollande_2,arrivee],[hollande_3,arrivee]
-,[belgique_1,arrivee],[belgique_2,arrivee],[belgique_3,arrivee],[allemagne_1,arrivee],[allemagne_2,arrivee],[allemagne_3,arrivee]], vrai,[[italie,_],[hollande,_],[belgique,_],[allemagne,_]],_,_).
+,[belgique_1,arrivee],[belgique_2,arrivee],[belgique_3,arrivee],[allemagne_1,arrivee],[allemagne_2,arrivee],[allemagne_3,arrivee]], vrai,[[italie,_],[hollande,_],[belgique,_],[allemagne,_]],_,_,_).
 
 
 
@@ -715,11 +716,11 @@ tasdecartejoueur(Nomjoueur, Listetasdecartes, Tascartejoueur):-
   nth0(X, Sousliste, Listetasdecartes), nth0(1, Tascartejoueur, Sousliste).
 
 %Obtention de la plus haute valeur des cartes secondes pour chaque joueur
-maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Nomjoueur,Maxval):-
+maxchaquejoueur(Listetasdecartes,Nomjoueur,Maxval):-
   tasdecartejoueur(Nomjoueur, Listetasdecartes, Tascartejoueur),maxlist(Tascartejoueur,Maxval).
 
 %Obtention deuxième plus haute valeur with delete)
-secondmaxchaquejoueur(Nomjoueur, jeu(_,_,_,_,Listetasdecartes), Plushauteval,Secondeplushauteval):- tasdecartejoueur(Nomjoueur, Listetasdecartes, Tascartejoueur),delete(Tascartejoueur,Plushauteval,Nouvelleliste),maxlist(Nouvelleliste,Secondeplushauteval)
+secondmaxchaquejoueur(Nomjoueur, Listetasdecartes, Plushauteval,Secondeplushauteval):- tasdecartejoueur(Nomjoueur, Listetasdecartes, Tascartejoueur),delete(Tascartejoueur,Plushauteval,Nouvelleliste),maxlist(Nouvelleliste,Secondeplushauteval)
 
 %Permet de trouver le joueur la plus haute parmi ceux de la liste récursivement
 %(Quand leur carte la plus haute est la même, va chercher la seconde carte la plus haute et ainsi de suite)
@@ -739,54 +740,54 @@ secondmaxchaquejoueur(Nomjoueur, jeu(_,_,_,_,Listetasdecartes), Plushauteval,Sec
 
 %-----Premier joueur -----
 %cas où un et un seul joueur a la plus haute carte
-maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur):-
-  maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur,Plushauteval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur, Autreval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1, Autreval1),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur2, Autreval2),
+maxtousjoueurs(Listetasdecartes,Premierjoueur):-
+  maxchaquejoueur(Listetasdecartes,Premierjoueur,Plushauteval),maxchaquejoueur(Listetasdecartes,Autrejoueur, Autreval),maxchaquejoueur(Listetasdecartes,Autrejoueur1, Autreval1),maxchaquejoueur(Listetasdecartes,Autrejoueur2, Autreval2),
    Plushauteval > Autreval, Plushauteval >  Autreval1, Plushauteval >  Autreval2.
 %cas où deux joueurs ont la plus haute carte en jeu
-maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur):-
-   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1,Autreval1),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur2,Aurteval2),
-   Potentielleval == Potentielleval1, Joueurpotentiel \== Joueurpotentiel1,Potentielleval > Autreval1, Potentielleval > Autreval2, maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1], Potentielleval, Premierjoueur).
+maxtousjoueurs(Listetasdecartes,Premierjoueur):-
+   maxchaquejoueur(Listetasdecartes,Joueurpotentiel,Potentielleval),maxchaquejoueur(Listetasdecartes,Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(Listetasdecartes,Autrejoueur1,Autreval1),maxchaquejoueur(Listetasdecartes,Autrejoueur2,Aurteval2),
+   Potentielleval == Potentielleval1, Joueurpotentiel \== Joueurpotentiel1,Potentielleval > Autreval1, Potentielleval > Autreval2, maxentrejoueurs(Listetasdecartes,[Joueurpotentiel, Joueurpotentiel1], Potentielleval, Premierjoueur).
 %cas où trois joueurs ont la plus haute carte en jeu
-maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur):-
-   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel2,Potentielleval2),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1,Autreval1),
-    Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Potentielleval > Autreval1, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2,  maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1, Joueurpotentiel2],Potentielleval,Premierjoueur).
+maxtousjoueurs(Listetasdecartes,Premierjoueur):-
+   maxchaquejoueur(Listetasdecartes,Joueurpotentiel,Potentielleval),maxchaquejoueur(Listetasdecartes,Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(Listetasdecartes,Joueurpotentiel2,Potentielleval2),maxchaquejoueur(Listetasdecartes,Autrejoueur1,Autreval1),
+    Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Potentielleval > Autreval1, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2,  maxentrejoueurs(Listetasdecartes,[Joueurpotentiel, Joueurpotentiel1, Joueurpotentiel2],Potentielleval,Premierjoueur).
 %cas où quatre joueurs ont la plus haute carte en jeu
-maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur):-
-   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel2,Potentielleval2),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel3,Potentielleval3),
-    Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Potentielleval == Potentielleval3, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2,   Joueurpotentiel \== Joueurpotentiel3, maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1,Joueurpotentiel2, Joueurpotentiel3],Potentielleval,Premierjoueur).
+maxtousjoueurs(Listetasdecartes,Premierjoueur):-
+   maxchaquejoueur(Listetasdecartes,Joueurpotentiel,Potentielleval),maxchaquejoueur(Listetasdecartes,Joueurpotentiel1, Potentielleval1 ),maxchaquejoueur(Listetasdecartes,Joueurpotentiel2,Potentielleval2),maxchaquejoueur(Listetasdecartes,Joueurpotentiel3,Potentielleval3),
+    Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Potentielleval == Potentielleval3, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2,   Joueurpotentiel \== Joueurpotentiel3, maxentrejoueurs(Listetasdecartes,[Joueurpotentiel, Joueurpotentiel1,Joueurpotentiel2, Joueurpotentiel3],Potentielleval,Premierjoueur).
 
 %----Second joueur -------
 %cas où un et un seul joueur a la plus haute carte:
-secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur):-
-  maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Secondjoueur,Plushauteval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur, Autreval ),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1,Autreval1),maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur),
+secondplace(Listetasdecartes,Secondjoueur):-
+  maxchaquejoueur(Listetasdecartes,Secondjoueur,Plushauteval),maxchaquejoueur(Listetasdecartes,Autrejoueur, Autreval ),maxchaquejoueur(Listetasdecartes,Autrejoueur1,Autreval1),maxtousjoueur(Listetasdecartes,Premierjoueur),
    Secondjoueur \== Premierjoueur, Plushauteval > Autreval,  Plushauteval  > Autreval1.
 
 %cas où deux joueurs ont plus hautes cartes:
-secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur):-
-   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Autrejoueur1,Autreval1),maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur),
-   Potentielleval == Potentielleval1, Premierjoueur\== Joueurpotentiel,  Premierjoueur\== Joueurpotentiel1, Joueurpotentiel \== Joueurpotentiel1,Potentielleval > Autreval1, Potentielleval1 > Autreval1, maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1], Potentielleval,Secondjoueur).
+secondplace(Listetasdecartes,Secondjoueur):-
+   maxchaquejoueur(Listetasdecartes,Joueurpotentiel,Potentielleval),maxchaquejoueur(Listetasdecartes,Joueurpotentiel1, Potentielleval1),maxchaquejoueur(Listetasdecartes,Autrejoueur1,Autreval1),maxtousjoueur(Listetasdecartes,Premierjoueur),
+   Potentielleval == Potentielleval1, Premierjoueur\== Joueurpotentiel,  Premierjoueur\== Joueurpotentiel1, Joueurpotentiel \== Joueurpotentiel1,Potentielleval > Autreval1, Potentielleval1 > Autreval1, maxentrejoueurs(Listetasdecartes,[Joueurpotentiel, Joueurpotentiel1], Potentielleval,Secondjoueur).
 
 %cas où trois joueurs ont plus hautes cartes:
-secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur):-
-   maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1),maxchaquejoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel2, Potentielleval2),
-maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Premierjoueur\== Joueurpotentiel,  Premierjoueur\== Joueurpotentiel1,  Premierjoueur\== Joueurpotentiel2, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2, Joueurpotentiel1 \== Joueurpotentiel2,
- maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1, Joueurpotentiel2], Potentielleval,Secondjoueur).
+secondplace(Listetasdecartes,Secondjoueur):-
+   maxchaquejoueur(Listetasdecartes,Joueurpotentiel,Potentielleval),maxchaquejoueur(Listetasdecartes,Joueurpotentiel1, Potentielleval1),maxchaquejoueur(Listetasdecartes,Joueurpotentiel2, Potentielleval2),
+maxtousjoueur(Listetasdecartes,Premierjoueur),  Potentielleval == Potentielleval1, Potentielleval == Potentielleval2, Premierjoueur\== Joueurpotentiel,  Premierjoueur\== Joueurpotentiel1,  Premierjoueur\== Joueurpotentiel2, Joueurpotentiel \== Joueurpotentiel1,  Joueurpotentiel \== Joueurpotentiel2, Joueurpotentiel1 \== Joueurpotentiel2,
+ maxentrejoueurs(Listetasdecartes,[Joueurpotentiel, Joueurpotentiel1, Joueurpotentiel2], Potentielleval,Secondjoueur).
 
 
  %----Troisieme joueur -------
 % cas où un et un seul joueur a la plus haute carte:
- troisiemeplace(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur):-
-    maxeachjoueur(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur,Plushauteval),maxeachjoueur(jeu(_,_,_,_,Listetasdecartes),Autreplayer, Autreval ),maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur), secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur),
+ troisiemeplace(Listetasdecartes,Troisiemejoueur):-
+    maxeachjoueur(Listetasdecartes,Troisiemejoueur,Plushauteval),maxeachjoueur(Listetasdecartes,Autreplayer, Autreval ),maxtousjoueur(Listetasdecartes,Premierjoueur), secondplace(Listetasdecartes,Secondjoueur),
      Troisiemejoueur \== Premierjoueur, Troisiemejoueur \== Secondjoueur, Plushauteval > Autreval.
 
  %cas où les deux joueurs restants ont la même plus haute carte:
- troisiemeplace(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur):-
-    maxeachjoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel,Potentielleval),maxeachjoueur(jeu(_,_,_,_,Listetasdecartes),Joueurpotentiel1, Potentielleval1),maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur), secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur),
-    Potentielleval == Potentielleval1 ,Joueurpotentiel \== Premierjoueur,  Joueurpotentiel \==  Secondjoueur,  Joueurpotentiel \==  Joueurpotentiel1, maxentrejoueurs(jeu(_,_,_,_,Listetasdecartes),[Joueurpotentiel, Joueurpotentiel1], Potentielleval,Troisiemejoueur).
+ troisiemeplace(Listetasdecartes,Troisiemejoueur):-
+    maxeachjoueur(Listetasdecartes,Joueurpotentiel,Potentielleval),maxeachjoueur(Listetasdecartes,Joueurpotentiel1, Potentielleval1),maxtousjoueur(Listetasdecartes,Premierjoueur), secondplace(Listetasdecartes,Secondjoueur),
+    Potentielleval == Potentielleval1 ,Joueurpotentiel \== Premierjoueur,  Joueurpotentiel \==  Secondjoueur,  Joueurpotentiel \==  Joueurpotentiel1, maxentrejoueurs(Listetasdecartes,[Joueurpotentiel, Joueurpotentiel1], Potentielleval,Troisiemejoueur).
 
  %----Quatrieme joueur-------
  %joueur restant (pas premier , deuxième ni troisième):
- quatriemeplace(jeu(_,_,_,_,Listetasdecartes),Quatriemejoueur):- maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur), secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur),troisiemeplace(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur),
+ quatriemeplace(Listetasdecartes,Quatriemejoueur):- maxtousjoueurs(Listetasdecartes,Premierjoueur), secondplace(Listetasdecartes,Secondjoueur),troisiemeplace(Listetasdecartes,Troisiemejoueur),
   Quatriemejoueur \== Premierjoueur, Quatriemejoueur \== Secondjoueur, Quatriemejoueur \== Troisiemejoueur.
 
  %----Ordre début ---------
@@ -795,8 +796,8 @@ maxtousjoueur(jeu(_,_,_,_,Listetasdecartes),Premierjoueur),  Potentielleval == P
 % C3,C7,C11-> coureurs du troisième joueur de la phase de début
 % C4,C8,C12-> coureurs du quatrième joueur de la phase de début
 
-ordreddebut(jeu(_,_,_,_,Listetasdecartes),[C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12]):-
-    maxtousjoueurs(jeu(_,_,_,_,Listetasdecartes),Premierjoueur), secondplace(jeu(_,_,_,_,Listetasdecartes),Secondjoueur),troisiemeplace(jeu(_,_,_,_,Listetasdecartes),Troisiemejoueur), quatriemeplace(jeu(_,_,_,_,Listetasdecartes),Quatriemejoueur),
+ordreddebut(Listetasdecartes,[C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12]):-
+    maxtousjoueurs(Listetasdecartes,Premierjoueur), secondplace(Listetasdecartes,Secondjoueur),troisiemeplace(Listetasdecartes,Troisiemejoueur), quatriemeplace(Listetasdecartes,Quatriemejoueur),
  coureurdejoueur(italie,[C1,C5,C9]), coureurdejoueur(hollande,[C2,C6,C10]), coureurdejoueur(belgique,[C3,C7,C11]), coureurdejoueur(allemagne,[C4,C8,C12]).
 
  /*
@@ -894,16 +895,16 @@ estjustedevantcase(Idcase1,Idcase2):-
 
 
 
- ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee,_,_), Listeordredynamique):- not(Apasselignearrivee),
+ ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee,_,_,_), Listeordredynamique):- not(Apasselignearrivee),
  coureurs(Listecoureurs),listenumerocoureur(Listeposition,Listenumeroatrier), msort(Listenumeroatrier,Listetriee),fabriqueordredynamique(Listetriee,Listeposition,Listeordredynamique).
  % not(Apasselignearrivee), --> a regarder plus tard
 
 
-ordre(jeu(_,_,Listeposition,_,_),dynamique, Ordrephasedynamique):-
-  not(nth0(X,Sublist,Listeposition), nth0(Y,Position, Sublist), Position is depart),ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee,_,_), Ordrephasedynamique).
+ordre(jeu(_,_,Listeposition,_,_,_),dynamique, Ordrephasedynamique):-
+  not(nth0(X,Sublist,Listeposition), nth0(Y,Position, Sublist), Position is depart),ordrephasedynamique(jeu(_,_,Listeposition,Apasselignearrivee,_,_,_), Ordrephasedynamique).
 
-ordre(jeu(_,_,_,_,Listetasdecartes),debut,Ordredebut):-
-  ordreddebut(jeu(_,_,_,_,Listetasdecartes),Ordredebut).
+ordre(jeu(_,_,_,_,Listetasdecartes,_,_,_),debut,Ordredebut):-
+  ordreddebut(jeu(_,_,_,_,Listetasdecartes,_,_,_),Ordredebut).
 
 
 
@@ -1105,16 +1106,16 @@ coureursentrainedanschute(Listeidcaseschute, Positions, Passetour,Listepassetour
 %Vérifie que la carte seconde dont  le joueur souhaite se défausser est dans sa liste de carte seconde
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 % A R2VISER !!!!!!!!
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),Joueur1,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,NouvTascarte1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_))):-
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),Joueur1,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,NouvTascarte1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_))):-
   tasdecartejoueur(Joueur1,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), member(Carte,Tasjoueur1), delete(Tasjoueur1,Carte,NouvTascarte1),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),Joueur2,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,NouvTascarte2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_))):-
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),Joueur2,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,NouvTascarte2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_))):-
   tasdecartejoueur(Joueur2,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur2), member(Carte,Tasjoueur2), delete(Tasjoueur2,Carte,NouvTascarte2),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),Joueur3,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,NouvTascarte3],[Joueur4,Tasjoueur4]],_,_))):-
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),Joueur3,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,NouvTascarte3],[Joueur4,Tasjoueur4]],_,_,_))):-
     tasdecartejoueur(Joueur3,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur3), member(Carte,Tasjoueur3), delete(Tasjoueur3,Carte,NouvTascarte3),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),Joueur4,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]],_,_))):-
+defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),Joueur4,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]],_,_,_))):-
       tasdecartejoueur(Joueur4,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur4), member(Carte,Tasjoueur4), delete(Tasjoueur4,Carte,NouvTascarte4),insert(Deckcartes,Carte,Cartessecondesrestantes)
 
 
@@ -1123,19 +1124,19 @@ insert(X, [Y | Listeelements], [X,Y | listeelements]) :- X @< Y, !.
 insert(X, [Y | Liste1], [Y | liste2]) :- insert(X, liste1, liste2).
 
 
-repiocher5cartes(Joueur1, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Nouvtas1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
+repiocher5cartes(Joueur1, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Nouvtas1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_)):-
    tasdecartejoueur(Joueur1,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
    random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas1, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas1, Cartechoisie5)
 
-repiocher5cartes(Joueur2, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Nouvtas2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_)):-
+repiocher5cartes(Joueur2, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Nouvtas2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_)):-
   tasdecartejoueur(Joueur2,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur2), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas2, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas2, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas2, Cartechoisie3),
   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas2, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas2, Cartechoisie5)
 
-repiocher5cartes(Joueur3, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Nouvtas3],[Joueur4,Tasjoueur4]],_,_)):-
+repiocher5cartes(Joueur3, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Nouvtas3],[Joueur4,Tasjoueur4]],_,_,_)):-
   tasdecartejoueur(Joueur3,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur3), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas3, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas3, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas3, Cartechoisie3),
   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas3, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas3, Cartechoisie5)
 
-repiocher5cartes(Joueur4, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Nouvtas4]],_,_)):-
+repiocher5cartes(Joueur4, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Nouvtas4]],_,_,_)):-
   tasdecartejoueur(Joueur4,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas4, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas4, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas4, Cartechoisie3),
   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas4, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas4, Cartechoisie5)
 
@@ -1145,8 +1146,8 @@ lieudechute(Idcase,Listeidcaseschute):-
   numero(Idcase,Numero1),not(estcouloir(Case1)),listidcases(Listetoutescases),findall(Casechute, (member(Casechute, Listetoutescases), numero(Casechute,Numero2), Case1/==Casechute, Numero1==Numero2,not(estcouloir(Casechute))),Listeidcaseschute).
 
 %Si case libre dans la largeur suivante, elle est renvoyée dans le prédicat de dépassement, et le coureur pourra y aller
-caselibre(jeu(_,_,Listecoureur,_,_,_),[],Idcase2).
-caselibre(jeu(_,_,Listecoureur,_,_,_),[C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),(trouver_position(Coureur,Listecoureur,Idcase),Idcase/=C)),Idcase2 is C,caselibre(Casessuivantes,Idcase2).
+caselibre(jeu(_,_,Listecoureur,_,_,_,_),[],Idcase2).
+caselibre(jeu(_,_,Listecoureur,_,_,_,_),[C|Casessuivantes],Idcase2):- coureurs(Coureurs),foreach(member(Coureur,Coureurs),(trouver_position(Coureur,Listecoureur,Idcase),Idcase/=C)),Idcase2 is C,caselibre(Casessuivantes,Idcase2).
 
 casevide(Coureur,Listecoureur,Idcase):-foreach(member(Coureur,Coureurs),(trouver_position(Coureur,Listecoureur,Idcase),Idcase/=C))
 
@@ -1155,20 +1156,20 @@ casessuivantesli([]).
 caselibreapres(Idcase1,Coureurs,Casesuivantesli,Idcase2):- numero(Idcase1,Numero1),Numcaseapres,numero(Idcase,Numcaseapres),insert(Idcase,Casesuivantesli,Casessuivantes),length(Casessuivantes,L),L>1,caselibre(Casessuivantes,Coureurs,Idcase2),Numcaseapres is Numero+1.
 
 %
-% replace a single cell in a list-of-lists
-% - the source list-of-lists is L
-% - The cell to be replaced is indicated with a row offset (X)
-%   and a column offset within the row (Y)
-% - The replacement value is Z
-% - the transformed list-of-lists (result) is R
+% remplace un seul élément d'une liste de listes
+% - La liste de listes  L
+% - L'indice de la sous-liste où se trouve l'élément que l'on veut remplacer (X)
+%   L'indice à l'intérieur de la sous-liste de l'élément que l'on veut remplacer (Y)
+% - La valeur de remplacement Z
+% - La liste de listes où l'élément voulu a été remplacé par Z
 %
 replace( L , X , Y , Z , R ) :-
-  append(RowPfx,[Row|RowSfx],L),     % decompose the list-of-lists into a prefix, a list and a suffix
-  length(RowPfx,X) ,                 % check the prefix length: do we have the desired list?
-  append(ColPfx,[_|ColSfx],Row) ,    % decompose that row into a prefix, a column and a suffix
-  length(ColPfx,Y) ,                 % check the prefix length: do we have the desired column?
-  append(ColPfx,[Z|ColSfx],RowNew) , % if so, replace the column with its new value
-  append(RowPfx,[RowNew|RowSfx],R)   % and assemble the transformed list-of-lists
+  append(RowPfx,[Row|RowSfx],L),     % décompose la liste de listes en un  préfixe, une liste et un suffixe
+  length(RowPfx,X) ,                 % vérifie si l'élément se trouve dans le suffixe
+  append(ColPfx,[_|ColSfx],Row) ,    % décompose cette sous-liste en un préfixe un élément à part et un suffixe
+  length(ColPfx,Y) ,                 % vérifie ce préfixe pour voir s'il contient l'élément voulu
+  append(ColPfx,[Z|ColSfx],RowNew) , % si oui le remplace
+  append(RowPfx,[RowNew|RowSfx],R)   % et réassemble la nouvelle liste de listes 
   .
 
 miseajourpositioncoureur(Nomcoureur,Nouvposition,Listepositions,Novlistepositions):-
