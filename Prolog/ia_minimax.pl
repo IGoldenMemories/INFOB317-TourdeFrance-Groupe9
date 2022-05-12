@@ -293,7 +293,6 @@ trouveeval(jeu(_,_,Positions,_,_,_,_,Listetemps), Vecteurresultateval):-
   findall(Valeureval, (coureurs(Coureurs), member(Nomcoureur,Coureurs), trouver_position(Nomcoureur,Positions, Idcase), numero(Idcase, Numcase), Valeureval is 95- Numcase), Listeeval), append(Listeeval,[eval],Vecteurresultateval).
 
 
-
 trouvermeilleurdestination(Coureur,Positions,Valeurcartesec, Casearrivee):-
   trouver_position(Nomcoureur, Positions, Casecoureur),findall(Cases, genererdestinationpossible(Coureur, Positions,Casecoureur,Valeurcartesec,Cases), Listescases), findall(Distance,(member(Case,Listescases), numero(Case,Numcase),Distance is 95-Numcase),Listedistance), min_list(Listedistance,Minimum), nth0(X, Minimum, Listedistance), nth0(X, Casearrivee, Listescases).
 
@@ -315,7 +314,7 @@ trouvermeilleurecartesec(Nomcoureur, Ordre, Positions, Listetasdecartes,Cartecho
   tasdecartejoueur(Nomjoueur, Listetasdecartes, Tascartejoueur),
   findall(Destinationseloncarte, (member(Carte,Tasdecartejoueur), trouvermeilleurdestination(Nomcoureur,Positions,Carte, Destinationseloncarte)), Listedestination),
   findall(Distancedestination, (member(Dest,Listedestination), numero(Dest,Num), Distancedestination is 95-Num), Listedist),
-  min_list(Listedist, Minimum), nth0(X, Minimum, Listedist), nth0(X, Cartechoisie, Tasdecartejoueur). 
+  min_list(Listedist, Minimum), nth0(X, Minimum, Listedist), nth0(X, Cartechoisie, Tasdecartejoueur).
 
 %tant qu'on est sur case arrivée --> vérification case vide et case libre ensuite
 
