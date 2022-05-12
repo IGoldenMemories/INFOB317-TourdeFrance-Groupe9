@@ -92,10 +92,10 @@ transition(jeu(_,_,),jeu(_,_,),action(mouvementlibre,Coureur))
 %   - de minimiser la distance entre le coureur (de qui c'est le tour) et la ligne d'arrivée)
 %ou si état est final (calcul de son utilité)
 %---------------------------------------------------------------------
-trouveeval(Etatactuel), Vecteurresultateval):-
-  finjeu(Etatactuel), util(Etatactuel, Vecteurresultateval).
+trouveeval(jeu(_,_,Positions,_,_,_,_,Listetemps), Vecteurresultateval):-
+  finjeu(Positions), util(Listetemps, Vecteurresultateval).
 
-trouveeval(jeu(_,_,Positions,_,_,_,_), Vecteurresultateval):-
+trouveeval(jeu(_,_,Positions,_,_,_,_,Listetemps), Vecteurresultateval):-
   findall(Valeureval, (coureurs(Coureurs), member(Nomcoureur,Coureurs), trouver_position(Nomcoureur,Positions, Idcase), numero(Idcase, Numcase), Valeureval is 95- Numcase), Listeeval), append(Listeeval,[eval],Vecteurresultateval).
 
 

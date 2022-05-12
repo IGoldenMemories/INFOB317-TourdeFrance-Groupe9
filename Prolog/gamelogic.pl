@@ -1250,4 +1250,4 @@ quatregagnant(Listetemps,Gagnant1,Gagnant2,Gagnant3,Gagnant4):-
 %Par rapport à la position de chaque coureur (ont-ils tous passé la ligne d'arrivée ?)
 % Si  oui, alors ce prédicat est vrai et la partie est finie (vérification gagnant et affichage écran fin)
 
-finjeu(jeu(_,_,Listeposition,_,_,_)):- coureurs(Coureurs), foreach(member(C,Coureurs),(trouver_position(C,Listeposition,Poscoureur)),apresarrivee(Poscoureur))).
+finjeu(Listeposition):- coureurs(Coureurs), foreach(member(C,Coureurs),(trouver_position(C,Listeposition,Poscoureur)),apresarrivee(Poscoureur))).
