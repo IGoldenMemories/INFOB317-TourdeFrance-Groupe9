@@ -1044,7 +1044,7 @@ estdistanceminimale(Listedistances,Distanceminimale, Nomcoureurleplusprochederri
 %si la carte seconde jouée appartient au joueur dont c'est le tour
 %si la distance entre le coureur et celui derrière après le dépassement est supérieure à 4
 
-peutdepasser(Nomcoureur,Listecoureur,Listetas,Valeurcarteseconde,Coureurs):-
+peutdepasser(Nomcoureur,Listeposition,Listetas,Valeurcarteseconde,Casearrivee):-
   coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), member(Valeurcarteseconde,Cartessecondes),depassement(Nomcoureur,Listecoureur,Valeurcarteseconde,Casearrivee),regledesquatresec(Nomcoureur,Casearrivee,Listeposition).
 
 %Implémentation de la règle indiquant qu'un coureur doit laisser le coureur derrière lui pouvoir utiliser une carte seconde de valeur supérieure ou égale à 4.
@@ -1110,18 +1110,17 @@ coureursentrainedanschute(Listeidcaseschute, Positions, Passetour,Listepassetour
 
 
 %Vérifie que la carte seconde dont  le joueur souhaite se défausser est dans sa liste de carte seconde
-%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-% A R2VISER !!!!!!!!
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),Joueur1,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,NouvTascarte1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_))):-
+
+defaussecarte(Deck,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Joueur1,Carte,Cartessecondesrestantes,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]]):-
   tasdecartejoueur(Joueur1,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), member(Carte,Tasjoueur1), delete(Tasjoueur1,Carte,NouvTascarte1),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),Joueur2,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,NouvTascarte2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_))):-
+defaussecarte(Deck,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Joueur2,Carte,Cartessecondesrestantes,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]]):-
   tasdecartejoueur(Joueur2,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur2), member(Carte,Tasjoueur2), delete(Tasjoueur2,Carte,NouvTascarte2),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),Joueur3,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,NouvTascarte3],[Joueur4,Tasjoueur4]],_,_,_))):-
+defaussecarte(Deck,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Joueur3,Carte,Cartessecondesrestantes,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]]):-
     tasdecartejoueur(Joueur3,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur3), member(Carte,Tasjoueur3), delete(Tasjoueur3,Carte,NouvTascarte3),insert(Deckcartes,Carte,Cartessecondesrestantes).
 
-defaussecarte(jeu(Deck,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),Joueur4,Carte,jeu(Cartessecondesrestantes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]],_,_,_))):-
+defaussecarte(Deck,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Joueur4,Carte,Cartessecondesrestantes,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,NouvTascarte4]]):-
       tasdecartejoueur(Joueur4,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur4), member(Carte,Tasjoueur4), delete(Tasjoueur4,Carte,NouvTascarte4),insert(Deckcartes,Carte,Cartessecondesrestantes)
 
 
