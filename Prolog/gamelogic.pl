@@ -1227,16 +1227,16 @@ occurrencede([H|T] , H2,Count):-
    dif(H,H2), occurrencede(T,H2,Count).
 
 %2 gagnants (même temps total minimal)
-deuxgagnant(Gagnant1,Gagnant2):-
-  findall(Tempstotal, tempstotal(jeu(_,_,_,_,_,_),Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 2), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum).
+deuxgagnant(Listetemps,Gagnant1,Gagnant2):-
+  findall(Tempstotal, tempstotal(Listetemps,Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 2), tempstotal(Listetemps,Gagnant1,Minimum),  tempstotal(Listetemps,Gagnant2,Minimum).
 
 %3 gagnants (même temps total minimal)
-troisgagnant(Gagnant1,Gagnant2,Gagnant3):-
-    findall(Tempstotal, tempstotal(Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 3), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum),tempstotal(Gagnant3,Minimum).
+troisgagnant(Listetemps,Gagnant1,Gagnant2,Gagnant3):-
+    findall(Tempstotal, tempstotal(Listetemps,Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 3), tempstotal(Listetemps,Gagnant1,Minimum),  tempstotal(Listetemps,Gagnant2,Minimum),tempstotal(Listetemps,Gagnant3,Minimum).
 
 %4 gagnants (même temps total minimal)
-quatregagnant(Gagnant1,Gagnant2,Gagnant3,Gagnant4):-
-      findall(Tempstotal, tempstotal(Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 4), tempstotal(Gagnant1,Minimum),  tempstotal(Gagnant2,Minimum),tempstotal(Gagnant3,Minimum),tempstotal(Gagnant4,Minimum).
+quatregagnant(Listetemps,Gagnant1,Gagnant2,Gagnant3,Gagnant4):-
+      findall(Tempstotal, tempstotal(Listetemps,Joueur, Tempstotal),Listetemps), min_list(Listetemps, Minimum), occurrencede(Listetemps, Minimum, 4), tempstotal(Listetemps,Gagnant1,Minimum),  tempstotal(Listetemps,Gagnant2,Minimum),tempstotal(Listetemps,Gagnant3,Minimum),tempstotal(Listetemps,Gagnant4,Minimum).
 
 
 /*
