@@ -1129,19 +1129,19 @@ insert(X, [Y | Listeelements], [X,Y | listeelements]) :- X @< Y, !.
 insert(X, [Y | Liste1], [Y | liste2]) :- insert(X, liste1, liste2).
 
 
-repiocher5cartes(Joueur1, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Nouvtas1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_)):-
+repiocher5cartes(Joueur1, Deckcartes,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Deck5,[[Joueur1,Nouvtas1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]]):-
    tasdecartejoueur(Joueur1,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas1, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas1, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas1, Cartechoisie3),
    random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas1, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas1, Cartechoisie5)
 
-repiocher5cartes(Joueur2, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Nouvtas2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_)):-
+repiocher5cartes(Joueur2, Deckcartes,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Deck5,[[Joueur1,Tasjoueur1],[Joueur2,Nouvtas2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]]):-
   tasdecartejoueur(Joueur2,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur2), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas2, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas2, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas2, Cartechoisie3),
   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas2, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas2, Cartechoisie5)
 
-repiocher5cartes(Joueur3, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Nouvtas3],[Joueur4,Tasjoueur4]],_,_,_)):-
+repiocher5cartes(Joueur3,Deckcartes,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Deck5,,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Nouvtas3],[Joueur4,Tasjoueur4]]):-
   tasdecartejoueur(Joueur3,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur3), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas3, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas3, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas3, Cartechoisie3),
   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas3, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas3, Cartechoisie5)
 
-repiocher5cartes(Joueur4, jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],_,_,_),[,jeu(Deckcartes,_,_,_,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Nouvtas4]],_,_,_)):-
+repiocher5cartes(Joueur4, Deckcartes,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Deck5,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Nouvtas4]]):-
   tasdecartejoueur(Joueur4,[[Joueur1,Tasjoueur1],[Joueur2,Tasjoueur2],[Joueur3,Tasjoueur3],[Joueur4,Tasjoueur4]],Tasjoueur1), random_select(Cartechoisie1,Deckcartes, Deck1), nth0(0, Nouvtas4, Cartechoisie1),  random_select(Cartechoisie2, Deck1, Deck2), nth0(1, Nouvtas4, Cartechoisie2), random_select(Cartechoisie3,Deck2, Deck3), nth0(2, Nouvtas4, Cartechoisie3),
   random_select(Cartechoisie4,Deck3, Deck4), nth0(0, Nouvtas4, Cartechoisie4), random_select(Cartechoisie5,Deck4, Deck5), nth0(0, Nouvtas4, Cartechoisie5)
 
