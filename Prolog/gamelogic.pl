@@ -1076,7 +1076,7 @@ mouvementlibre(Nomcoureur,Valeurcarteseconde,Listeposition,Idcasearrivee):-
 %si la carte seconde jouée appartient au joueur dont c'est le tour
 %si la distance entre le coureur et celui le plus proche derrière après le déplacement est supérieure à 4
 
-mouvementlibreok(Nomcoureur,Listecoureur,Listetas,Valeurcarteseconde,Coureurs):-
+mouvementlibreok(Nomcoureur,Listecoureur,Listetas,Valeurcarteseconde,Casearrivee):-
   coureurdejoueur(Nomjoueur, Listecoureur),tasdecartejoueur(Nomjoueur,Listetas,Tascartejoueur), member(Valeurcarteseconde,Cartessecondes),mouvementlibre(Nomcoureur,Listecoureur,Valeurcarteseconde,Casearrivee),regledesquatresec(Nomcoureur,Casearrivee,Listeposition).
 
 /*
