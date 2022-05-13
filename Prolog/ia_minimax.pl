@@ -25,7 +25,7 @@ transition(jeu(Deck,Passetour,Positions,faux,Listetas,12,Ordre,_),jeu(Nouvdeck,P
     not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Positions,Listetas,Valeurcarteseconde,NouvPos) not(casechance(NouvPos)),miseajourpositioncoureur(Nomcoureur,Nouvposition,Positions,Resultatction),coureurdejoueur(Nomjoueur,Listecoureur), member(Nomcoureur,Listecoureur),defaussecarte(Deck,Listetas,Nomjoueur,Valeurcarteseconde,Nouvdeck,NouvListetas),
     coureurs(Coureurs),not(chute(Positions, Coureurs,Nouvposition)), ordre(Resultatction,NouvListetas,Phase, Nouvordre).
 
-%Pas dans Passetour,Position dans tour < 12, pas d'arrivée sur un case chance , pas de chute, personne n'a passé la ligne d'arrivée et avec l'action le coureur dont c'est le tour ne l'a pas non plus passée
+%Pas dans Passetour,Position dans tour < 12, pas d'arrivée sur un case chance , pas de chute, quelqu'una passé la ligne d'arrivée et avec l'action le coureur dont c'est le tour ne l'a pas  passée (temps partiel de coureur +10)
 transition(jeu(Deck,Passetour,Positions,vrai,Listetas,Valtour,Ordre,Listetemps),jeu(Nouvdeck,Passetour,Resultatction,vrai,NouvListetas,Nouvvaltour,Ordre,Nouvlistetemps),estletourde(Nomcoureur,Ordre,Valtour,_),depassement(Nomcoureur,Positions, Valeurcarteseconde,Nouvposition)):-
   Valtour =\= 12, not(member(Nomcoureur,Passetour)), trouver_position(Nomcoureur,Positions,Idcase), not(apasselignearrivee(Nomcoureur,Idcase)),tempspartielplusdix(Listetemps,Nomcoureur,Nouvlistetemps),peutdepasser(Nomcoureur,Positions,Listetas,Valeurcarteseconde,NouvPos), not(casechance(NouvPos)),miseajourpositioncoureur(Nomcoureur,Nouvposition,Positions,Resultatction),
   coureurdejoueur(Nomjoueur,Listecoureur), member(Nomcoureur,Listecoureur),defaussecarte(Deck,Listetas,Nomjoueur,Valeurcarteseconde,Nouvdeck,NouvListetas),
@@ -58,15 +58,17 @@ transition(jeu(Deck,Passetour,Positions,faux,Listetas,12,Ordre,_),jeu(Nouvdeck,P
   coureurdejoueur(Nomjoueur,Listecoureur), member(Nomcoureur,Listecoureur),defaussecarte(Deck,Listetas,Nomjoueur,Valeurcarteseconde,Nouvdeck,NouvListetas),ordre(Resultatction,NouvListetas,Phase, Nouvordre).
 
 
-%Pas dans Passetour,Position dans tour < 12, arrivée sur un case chance , pas de chute, personne n'a passé la ligne d'arrivée et avec l'action le coureur dont c'est le tour  a pu passé la ligne d'arrivée
+%Pas dans Passetour,Position dans tour < 12, arrivée sur un case chance , pas de chute, quelqu'una passé la ligne d'arrivée et avec l'action le coureur dont c'est le tour ne l'a pas  passée (temps partiel de coureur +10)
 transition(jeu(Deck,Passetour,Positions,vrai,Listetas,Valtour,Ordre,Listetemps),jeu(Nouvdeck,Passetour,Resultatction,vrai,NouvListetas,Nouvvaltour,Ordre,Nouvlistetemps),estletourde(Nomcoureur,Ordre,Valtour,_),depassement(Nomcoureur,Positions, Valeurcarteseconde,Nouvposition)):-
-    Valtour =\= 12,not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Positions,Listetas,Valeurcarteseconde,NouvPos),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),coureurs(Coureurs),not(chute(Coureurs,Idnouvellecase)),apasselignearrivee(Nomcoureur,Idnouvellecase),
+    Valtour =\= 12,not(member(Nomcoureur,Passetour)),  trouver_position(Nomcoureur,Positions,Idcase), not(apasselignearrivee(Nomcoureur,Idcase)), tempspartielplusdix(Listetemps,Nomcoureur,Nouvlistetemps),peutdepasser(Nomcoureur,Positions,Listetas,Valeurcarteseconde,NouvPos),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),
+    miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),coureurs(Coureurs),not(chute(Coureurs,Idnouvellecase)),apasselignearrivee(Nomcoureur,Idnouvellecase),
     coureurdejoueur(Nomjoueur,Listecoureur), member(Nomcoureur,Listecoureur),defaussecarte(Deck,Listetas,Nomjoueur,Valeurcarteseconde,Nouvdeck,NouvListetas), Nouvvaltour is Valtour +1 ,tempspartiellignearrivee(Listetemps,Nomcoureur,NouvPos,Nouvlistetemps).
 
 
-%Pas dans Passetour,Position dans tour == 12 (remise à 1 et recalcul ordre),arrivée sur un case chance , pas de chute, personne n'a passé la ligne d'arrivée et avec l'action le coureur dont c'est le tour ne l'a pas non plus passée
+%Pas dans Passetour,Position dans tour == 12 (remise à 1 et recalcul ordre),arrivée sur un case chance , pas de chute, quelqu'una passé la ligne d'arrivée et avec l'action le coureur dont c'est le tour ne l'a pas  passée (temps partiel de coureur +10)
 transition(jeu(Deck,Passetour,Positions,vrai,12,Listetemps),jeu(Nouvdeck,Passetour,Resultatction,vrai,1,Nouvlistetemps),estletourde(Nomcoureur,Ordre,Valtour,_),depassement(Nomcoureur,Positions, Valeurcarteseconde,Nouvposition)):-
-  not(member(Nomcoureur,Passetour)),peutdepasser(Nomcoureur,Positions,Listetas,Valeurcarteseconde,NouvPos),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),coureurs(Coureurs),not(chute(Coureurs,Idnouvellecase)),apasselignearrivee(Nomcoureur,Idnouvellecase),
+  not(member(Nomcoureur,Passetour)), trouver_position(Nomcoureur,Positions,Idcase), not(apasselignearrivee(Nomcoureur,Idcase)), tempspartielplusdix(Listetemps,Nomcoureur,Nouvlistetemps),peutdepasser(Nomcoureur,Positions,Listetas,Valeurcarteseconde,NouvPos),casechance(NouvPos),random_between(-3, 3, Valmouvement),traitementcasechance(Idcase,Valeurmouvement, Idnouvellecase),
+  miseajourpositioncoureur(Nomcoureur,Idnouvellecase,Positions,Resultatction),coureurs(Coureurs),not(chute(Coureurs,Idnouvellecase)),apasselignearrivee(Nomcoureur,Idnouvellecase),
   coureurdejoueur(Nomjoueur,Listecoureur), member(Nomcoureur,Listecoureur),defaussecarte(Deck,Listetas,Nomjoueur,Valeurcarteseconde,Nouvdeck,NouvListetas),ordre(Resultatction,NouvListetas,Phase, Nouvordre) ,tempspartiellignearrivee(Listetemps,Nomcoureur,NouvPos,Nouvlistetemps).
 
 
