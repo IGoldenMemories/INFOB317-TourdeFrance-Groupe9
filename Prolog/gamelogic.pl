@@ -731,18 +731,7 @@ secondmaxchaquejoueur(Nomjoueur, Listetasdecartes, Plushauteval,Secondeplushaute
 %Permet de trouver le joueur la plus haute parmi ceux de la liste récursivement
 %(Quand leur carte la plus haute est la même, va chercher la seconde carte la plus haute et ainsi de suite)
 
-%à terminer
-%maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-% if plushautevaluecom in liste joueur in list then --> search fornext highest value (prédicat secong highest with delete) compare those next value x >y
-%maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-% if plushautevaluecom in liste joueur in list then --> search fornext highest value (prédicat secong highest with delete) compare those next value x==y
-%maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-
-%maxentrejoueurs([J1,J2,J3,J4], Plushautevalcom, Maxj):-
 
-%maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
-%maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
-%maxentrejoueurs([J1,J2,J3], Plushautevalcom, Maxj):-
-
-%maxentrejoueurs([J1,J2], Plushautevalcommune, Maxj):-
-%maxentrejoueurs([J1,J2], Plushautevalcommune, Maxj):-
 
 %-----Premier joueur -----
 %cas où un et un seul joueur a la plus haute carte
