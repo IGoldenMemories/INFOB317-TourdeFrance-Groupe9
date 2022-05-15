@@ -26,8 +26,8 @@
 
 /*                      !!!    A MODIFIER   !!!                          */
 
-produire_reponse([fin],[L1]) :-  
-   L1 = [merci, de, m, '\'', avoir, consulte], !.    
+produire_reponse([fin],[L1]) :-
+   L1 = [merci, de, m, '\'', avoir, consulte], !.
 
 produire_reponse(L,Rep) :-
 %   write(L),
@@ -59,11 +59,11 @@ within_dist(N,Pattern,[_|Lmots],Lmots_rem) :-
   within_dist(Naux,Pattern,Lmots,Lmots_rem).
 
 
-sublist(SL,L) :- 
+sublist(SL,L) :-
    prefix(SL,L), !.
 sublist(SL,[_|T]) :- sublist(SL,T).
 
-sublistrem(SL,L,Lr) :- 
+sublistrem(SL,L,Lr) :-
    prefixrem(SL,L,Lr), !.
 sublistrem(SL,[_|T],Lr) :- sublistrem(SL,T,Lr).
 
@@ -90,15 +90,15 @@ mclef(aspiration,5).
 mclef(echange,5).
 mclef(chance,5).
 mclef(sprint,5).
-mclef(montees,5).
+mclef(montee,5).
 mclef(descente,5).
 mclef(chutes,5).
 mclef(depassement,5).
-mclef(fin,5).
-mclef(sec_bonif, 5).
-mclef(pts_bonif,5).
-mclef(class_pts, 5).
-mclef(class_inter, 5).
+mclef(termine,5).
+mclef(secondes, 5).
+mclef(points,5).
+mclef(classement, 5).
+mclef(intermediaire, 5).
 
 % ----------------------------------------------------------------%
 
@@ -119,9 +119,9 @@ regle_rep(equipe,5,
 
 regle_rep(but,5,
    [ [quel],3,[but],4,[jeu]],
-   [ [dans, ce, jeu, vous, participez, aux, etapes, par, equipe, de, trois, coureurs, votre, equipe, doit, tenter, d, '\'', obtenir, le, meilleur, score, possible, 
-      le, classement, est, tenu, par, joueur, et, par, equipe, un, tour, comprends, plusieurs, etapes, le, coureur, le, plus, rapide, sur, l, '\'', ensemble, des, 
-      etapes, porte, le, maillot, jaune, le, vainqueur, du, tour, est, le, joueur, dont, l, '\'', equipe, obtient, le, meilleur, temps, et, remporte, le, plus, de, 
+   [ [dans, ce, jeu, vous, participez, aux, etapes, par, equipe, de, trois, coureurs, votre, equipe, doit, tenter, d, '\'', obtenir, le, meilleur, score, possible,
+      le, classement, est, tenu, par, joueur, et, par, equipe, un, tour, comprends, plusieurs, etapes, le, coureur, le, plus, rapide, sur, l, '\'', ensemble, des,
+      etapes, porte, le, maillot, jaune, le, vainqueur, du, tour, est, le, joueur, dont, l, '\'', equipe, obtient, le, meilleur, temps, et, remporte, le, plus, de,
       points, au, classement, general]]).
 
 %-----------------------------------------------------------------%
@@ -129,9 +129,9 @@ regle_rep(but,5,
 regle_rep(preparation,5,
    [ [comment], 3, [preparer], 1, [partie]],
    [ [determinez, tout, d, '\'', abord, le, nombre, d, '\'', etapes, de, la, partie, vous, trouverez, dans, la, boite, le, plateau, de, jeu, recto,
-      verso, une, face, represente, une, etape, de, plaine, et, l, '\'', autre, de, montagne, nous, vous, conseillons, de, commencer, par, le, plat, le, 
-      joueur, qui, pioche, la, carte, seconde, la, plus, elevee, commence, melangez, toutes, les, cartes, secondes, et, distribuez, cinq, cartes, par, 
-      coureurs, lorsque, vous, aurez, joue, toutes, vos, cartes, vous, recevrez, cinq, nouvelles, cartes, seconde, par, coureur, designez, ensuite, quel, joueur, 
+      verso, une, face, represente, une, etape, de, plaine, et, l, '\'', autre, de, montagne, nous, vous, conseillons, de, commencer, par, le, plat, le,
+      joueur, qui, pioche, la, carte, seconde, la, plus, elevee, commence, melangez, toutes, les, cartes, secondes, et, distribuez, cinq, cartes, par,
+      coureurs, lorsque, vous, aurez, joue, toutes, vos, cartes, vous, recevrez, cinq, nouvelles, cartes, seconde, par, coureur, designez, ensuite, quel, joueur,
       charge, de, tenir, le, classement, en, notant, les, resultats, a, chaque, etapes]]).
 
 %-----------------------------------------------------------------%
@@ -139,7 +139,7 @@ regle_rep(preparation,5,
 regle_rep(debut, 2,
    [ [debut], 2, [partie]],
    [ [lorsque, les, cartes, sont, distribuees, la, partie, peut, commencer, le, premier, joueur, choisit, une, de, ses, cartes, seconde, et, la, pose, sur, la, table,
-      il, deplace, son, premier, coureurs, du, nombre, de, secondes, '\'', de, cases, '\'', correspondant, a, la, carte, seconde, jouee, vous, determinez, vous, meme, 
+      il, deplace, son, premier, coureurs, du, nombre, de, secondes, '\'', de, cases, '\'', correspondant, a, la, carte, seconde, jouee, vous, determinez, vous, meme,
       le, rythme, de, votre, coureur, ce, dernier, peut, se, deplacer, tout, droit, ou, en, diagonale, mais, pas, sur, le, cote, '\'', meme, numero, de, case, '\'', ni,
       en, arriere, vous, ne, pouvez, pas, traverse, de, case, deja, occupe, car, risque, de, chute, en, serie]]).
 
@@ -201,13 +201,13 @@ regle_rep(sprint, 5,
 
 %-----------------------------------------------------------------%
 
-regle_rep(montees, 5,
+regle_rep(montee, 5,
    [ [quels], 2, [changements], 3, [montee]],
    [ [en, montee, les, coureurs, avancent, nettement, moins, vite, que, sur, une, etape, de, plaine, les, cases, sont, situees, en, montee, sont, marquees, par, des, fleches, rouges, pour, determiner,
      la, vitesse, d, '\'', un, coureur, en, montee, divisez, par, deux, la, valeur, de, la, carte, jouee, et, arrondissez, au, plus, bas, un, coureur, en, montee, ne, peut, pas, profiter, du, phenemone,
      d, '\'', aspiration]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
 
 regle_rep(descente, 5,
    [ [quels], 2, [changements], 3, [descente]],
@@ -216,10 +216,10 @@ regle_rep(descente, 5,
     vous, pouvez, doubler, le, coureur, situe, devant, vous, vous, pouvez, depasser, le, coureur, d, '\'', une, case, maximum, et, prendre, la, tete, de, la, course, comme, pour, les, etapes, de, plaine, vous,
     n, '\'', etes, pas, oblige, d, '\'', utiliser, la, prise, de, vitesse, vous, pouvez, donc, avancer, d, '\'', une, seconde, au, lieu, de, deux, si, cela, s, '\'', avere, plus, prioritaire]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
 
 regle_rep(chutes, 5,
-   [ [comment], 1, [chute], 2, [arriver]],
+   [ [comment], 1, [chutes], 2, [arriver]],
    [ [une, chute, en, serie, peut, etre, provoquer, par, une, carte, chance, ou, par, le, deplacement, d, '\'', un, coureur, il, n, '\'', est, pas, possible, de, passer, par, la, case, d, '\'', un, autre, coureurs,
      ou, de, s, '\'', y, arreter, tout, contact, entre, deux, coureurs, provoque, une, chute, en, serie, lors, d, '\'', une, chute, en, serie, les, coureurs, concernes, doivent, se, defausser, d, '\'', une, carte, seconde,
      puis, passer, un, tour, une, chute, en, serie, a, lieu, sur, toute, la, largeur, de, la, route, et, implique, les, coureurs, suivants, le, coureurs, ayant, provoque, la, chute, le, coureur, avec, lequel, il, est, entre,
@@ -231,18 +231,18 @@ regle_rep(chutes, 5,
      les, joueurs, ayant, chutes, passent, leur, tour, les, autres, coureurs, peuvent, traverser, la, zone, normalement, attention, si, vous, avez, le, choix, entre, plusieurs, voies, et, qu, '\'', une, chute, en, serie, est, inevitable, vous,
      devez, opter, pour, la, case, cide, la, plus, eloignee, des, cases, numerotees, afin, que, la, chute, en, serie, n, '\'', ait, pas, lieu, sur, le, cote, prioritaire, de, la, route]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
 
 regle_rep(depassement, 5,
-   [ [comment], 3, [depasser], 2, [coureur]],
+   [ [comment], 3, [fonctionne], 2, [depassement]],
    [ [pour, limiter, le, nombre, de, chutes, en, serie, un, coureur, qui, choisit, deliberement, d, '\'', avancer, lentement, doit, systematiquement, tenir, compte, des, coureurs, qui, le, suivent, c, '\'', est, la, que, s, '\'', applique, la, regle,
      de, depassement, vous, devez, laisse, au, coureur, situe, juste, derriere, vous, la, possibilite, d, '\'', utiliser, une, carte, quatre, secondes, ou, une, carte, six, secondes, si, en, montee, sauf, si, ce, coureur, peut, vous, doubler, normalement,
      les, coureurs, suivants, n, '\'', ont, le, droit, de, provoquer, une, chute, en, serie, que, si, cette, derniere, est, inevitable, le, joueur, a, l, '\'', origine, de, la, chute, doit, alors, montrer, ses, cartes, secondes, restantes, afin, de, prouver,
      qu, '\'', il, ne, pouvait, pas, faire, autrement]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
 
-regle_rep(fin, 5,
+regle_rep(termine, 5,
    [ [comment], 2, [termine], 1, [etape]],
    [ [le, coureur, qui, termine, le, plus, loin, derriere, la, ligne, d, '\'', arrivee, obtient, le, meilleur, temps, et, gagne, l, '\'', etape, comment, calculer, et, noter, le, temps, de, chaque, coureur, les, coureurs, qui, passe, la, ligne, d, '\'',
      arrivee, combinent, le, chiffre, inscrit, dans, leur, case, d, '\'', arrivee, au, nombre, total, de, cases, de, l, '\'', etape, par, exemple, si, l, '\'', etape, fait, nonente, cinq, cases, et, que, le, coureur, termine, sur, la, case, moins, quatre, alors, nonente, cinq,
@@ -254,36 +254,37 @@ regle_rep(fin, 5,
      suivant, leur, temps, est, calcule, comme, suit, nombre, de, cases, de, l, '\'', etape, plus, dix, secondes, de, penalite, au, tour, suivant, moins, le, nombre, de, cases, situees, apres, la, ligne, d, '\'', arrivee, cela, permet, a, tous, les, coureurs, de, temriner,
      la, course, a, chaque, nouveau, tour, de, jeu, n, '\'', oubliez, pas, d, '\'', ajouter, les, dix, secondes, de, penalite, aux, temps, d, '\'', arrivee, des, coureurs, encore, en, lice]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
 
-regle_rep(sec_bonif, 5,
+regle_rep(secondes, 5,
    [ [comment], 2, [secondes], 1, [bonification]],
    [ [lors, d, '\'', une, etape, le, joueur, obtient, des, secondes, de, bonification, lors, de, sprints, intermediaires, ces, secondes,compteront, dans, le, temps, final, des, coureurs, au, classment, par, exemple, si, un, coureur, a, gagne, quatre, secondes, de, bonification,
      son, temps, est, calcule, comme, suit, total, des, secondes, de, l, '\'', etape, moins, les, quatre, secondes, de, bonification, moins, le, nombre, de, cases, situees, apres, la, ligne, d, '\'', arrivee, attention, les, secondes, de, bonification, comptent, uniquement, dans,
      le, classement, intermediaire, et, le, classement, general, elles, ne, comptent, pas, dans, le, calcul, du, resultat, d, '\'', une, etape, et, seront, directement, integrees, au, classement, sprints, intermediaires, pour, determiner, qui, portera, le, maillot, jaune]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
 
-regle_rep(pts_bonif,5,
+regle_rep(points,5,
    [ [comment], 2, [points], 1, [bonification]],
    [ [lors, d, '\'', une, etape, le, joueur, obtient, des, points, de, bonification, lors, des, sprints, intermediaires, le, classement, par, points, vaut, pour, toute, une, equipe, les, points, obtenus, par, tous, les, coureurs, d, '\'', une, equipe, sont, additionnes, par, equipe]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
 
-regle_rep(class_pts, 5,
+regle_rep(classement, 5,
    [ [comment], 2, [calculer], 1, [classement], 1, [points]],
-   [ [le, classement, par, points, est, un, classement, par, equipes, vos, coureurs, peuvent, gagner, des, points, pour, votre, equipe, toute, entiere, a, chaque, etape, en, plus, des, secondes, de, bonification, vous, pouvez, gagner, des, points, en, fonction, de, la, place, d, '\'', arrivee, 
+   [ [le, classement, par, points, est, un, classement, par, equipes, vos, coureurs, peuvent, gagner, des, points, pour, votre, equipe, toute, entiere, a, chaque, etape, en, plus, des, secondes, de, bonification, vous, pouvez, gagner, des, points, en, fonction, de, la, place, d, '\'', arrivee,
      de, vos, coureurs, a, la, fin, de, l, '\'', etape, formule, de, calcul, des, points, total, des, points, egal, '\'', onze, moins, position, d, '\'', arrivee, du, coureur, soit, zero, si, negatif, plus, les, points, de, bonification, obtenus]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
 
-regle_rep(class_inter, 5,
+regle_rep(intermediaire, 5,
    [ [comment], 2, [calculer], 1, [classement], 1, [intermediaire]],
    [ [le, classement, des, sprints, intermediaires, est, calcule, apres, chaque, etape, pour, determiner, qui, portera, le, maillot, jaune, l, '\'', equipe, la, plus, rapide, et, le, meneur, du, classement, par, points, le, coureur, qui, obtient, le, meilleur, score, total, est, le, coureur, le, plus,
      rapide, du, classement, intermediaire, et, obtient, le, maillot, jaune, a, la, fin, de, la, partie, le, maillot, jaune, remporte, des, points, supplementaires, si, vous, decidez, de, ne, jouer, qu, '\'', une, seule, etape, il, n, '\'', y, aura, pas, de, classement, intermediaire, et, le, coureur, le,
      plus, rapide, de, l, '\'', etape, remportera, directement, le, maillot, jaune]]).
 
-%-----------------------------------------------------------------% 
+%-----------------------------------------------------------------%
+
 
 /* --------------------------------------------------------------------- */
 /*                                                                       */
@@ -292,7 +293,7 @@ regle_rep(class_inter, 5,
 /*                                                                       */
 /* --------------------------------------------------------------------- */
 
-% lire_question(L_Mots) 
+% lire_question(L_Mots)
 
 lire_question(LMots) :- read_atomics(LMots).
 
@@ -477,24 +478,24 @@ ecrire_reponse(L) :-
 
 % ecrire_li_reponse(Ll,M,E)
 % input : Ll, liste de listes de mots (tout en minuscules)
-%         M, indique si le premier caractere du premier mot de 
+%         M, indique si le premier caractere du premier mot de
 %            la premiere ligne doit etre mis en majuscule (1 si oui, 0 si non)
-%         E, indique le nombre d'espaces avant ce premier mot 
+%         E, indique le nombre d'espaces avant ce premier mot
 
-ecrire_li_reponse([],_,_) :- 
+ecrire_li_reponse([],_,_) :-
     nl.
 
-ecrire_li_reponse([Li|Lls],Mi,Ei) :- 
+ecrire_li_reponse([Li|Lls],Mi,Ei) :-
    ecrire_ligne(Li,Mi,Ei,Mf),
    ecrire_li_reponse(Lls,Mf,2).
 
 % ecrire_ligne(Li,Mi,Ei,Mf)
 % input : Li, liste de mots a ecrire
 %         Mi, Ei booleens tels que decrits ci-dessus
-% output : Mf, booleen tel que decrit ci-dessus a appliquer 
+% output : Mf, booleen tel que decrit ci-dessus a appliquer
 %          a la ligne suivante, si elle existe
 
-ecrire_ligne([],M,_,M) :- 
+ecrire_ligne([],M,_,M) :-
    nl.
 
 ecrire_ligne([M|L],Mi,Ei,Mf) :-
@@ -541,12 +542,12 @@ fin(L) :- member(fin,L).
 /*                                                                       */
 /* --------------------------------------------------------------------- */
 
-tourdefrance :- 
+tourdefrance :-
 
    nl, nl, nl,
    write('Bonjour, je suis TBot, le bot explicateur du Tour de France.'), nl,
-   write('En quoi puis-je vous aider ?'), 
-   nl, nl, 
+   write('En quoi puis-je vous aider ?'),
+   nl, nl,
 
    repeat,
       write('Vous : '), ttyflush,
@@ -554,7 +555,7 @@ tourdefrance :-
       produire_reponse(L_Mots,L_ligne_reponse),
       ecrire_reponse(L_ligne_reponse),
    fin(L_Mots), !.
-   
+
 
 /* --------------------------------------------------------------------- */
 /*                                                                       */
@@ -563,13 +564,3 @@ tourdefrance :-
 /* --------------------------------------------------------------------- */
 
 :- tourdefrance.
-
-
-
-
-
-
-
-
-
-
