@@ -90,15 +90,15 @@ mclef(aspiration,5).
 mclef(echange,5).
 mclef(chance,5).
 mclef(sprint,5).
-mclef(montees,5).
+mclef(montee,5).
 mclef(descente,5).
 mclef(chutes,5).
 mclef(depassement,5).
-mclef(fin,5).
-mclef(sec_bonif, 5).
-mclef(pts_bonif,5).
-mclef(class_pts, 5).
-mclef(class_inter, 5).
+mclef(termine,5).
+mclef(secondes, 5).
+mclef(points,5).
+mclef(classement, 5).
+mclef(intermediaire, 5).
 
 % ----------------------------------------------------------------%
 
@@ -201,7 +201,7 @@ regle_rep(sprint, 5,
 
 %-----------------------------------------------------------------%
 
-regle_rep(montees, 5,
+regle_rep(montee, 5,
    [ [quels], 2, [changements], 3, [montee]],
    [ [en, montee, les, coureurs, avancent, nettement, moins, vite, que, sur, une, etape, de, plaine, les, cases, sont, situees, en, montee, sont, marquees, par, des, fleches, rouges, pour, determiner,
      la, vitesse, d, '\'', un, coureur, en, montee, divisez, par, deux, la, valeur, de, la, carte, jouee, et, arrondissez, au, plus, bas, un, coureur, en, montee, ne, peut, pas, profiter, du, phenemone,
@@ -219,7 +219,7 @@ regle_rep(descente, 5,
 %-----------------------------------------------------------------% 
 
 regle_rep(chutes, 5,
-   [ [comment], 1, [chute], 2, [arriver]],
+   [ [comment], 1, [chutes], 2, [arriver]],
    [ [une, chute, en, serie, peut, etre, provoquer, par, une, carte, chance, ou, par, le, deplacement, d, '\'', un, coureur, il, n, '\'', est, pas, possible, de, passer, par, la, case, d, '\'', un, autre, coureurs,
      ou, de, s, '\'', y, arreter, tout, contact, entre, deux, coureurs, provoque, une, chute, en, serie, lors, d, '\'', une, chute, en, serie, les, coureurs, concernes, doivent, se, defausser, d, '\'', une, carte, seconde,
      puis, passer, un, tour, une, chute, en, serie, a, lieu, sur, toute, la, largeur, de, la, route, et, implique, les, coureurs, suivants, le, coureurs, ayant, provoque, la, chute, le, coureur, avec, lequel, il, est, entre,
@@ -234,7 +234,7 @@ regle_rep(chutes, 5,
 %-----------------------------------------------------------------% 
 
 regle_rep(depassement, 5,
-   [ [comment], 3, [depasser], 2, [coureur]],
+   [ [comment], 3, [fonctionne], 2, [depassement]],
    [ [pour, limiter, le, nombre, de, chutes, en, serie, un, coureur, qui, choisit, deliberement, d, '\'', avancer, lentement, doit, systematiquement, tenir, compte, des, coureurs, qui, le, suivent, c, '\'', est, la, que, s, '\'', applique, la, regle,
      de, depassement, vous, devez, laisse, au, coureur, situe, juste, derriere, vous, la, possibilite, d, '\'', utiliser, une, carte, quatre, secondes, ou, une, carte, six, secondes, si, en, montee, sauf, si, ce, coureur, peut, vous, doubler, normalement,
      les, coureurs, suivants, n, '\'', ont, le, droit, de, provoquer, une, chute, en, serie, que, si, cette, derniere, est, inevitable, le, joueur, a, l, '\'', origine, de, la, chute, doit, alors, montrer, ses, cartes, secondes, restantes, afin, de, prouver,
@@ -242,7 +242,7 @@ regle_rep(depassement, 5,
 
 %-----------------------------------------------------------------% 
 
-regle_rep(fin, 5,
+regle_rep(termine, 5,
    [ [comment], 2, [termine], 1, [etape]],
    [ [le, coureur, qui, termine, le, plus, loin, derriere, la, ligne, d, '\'', arrivee, obtient, le, meilleur, temps, et, gagne, l, '\'', etape, comment, calculer, et, noter, le, temps, de, chaque, coureur, les, coureurs, qui, passe, la, ligne, d, '\'',
      arrivee, combinent, le, chiffre, inscrit, dans, leur, case, d, '\'', arrivee, au, nombre, total, de, cases, de, l, '\'', etape, par, exemple, si, l, '\'', etape, fait, nonente, cinq, cases, et, que, le, coureur, termine, sur, la, case, moins, quatre, alors, nonente, cinq,
@@ -256,7 +256,7 @@ regle_rep(fin, 5,
 
 %-----------------------------------------------------------------% 
 
-regle_rep(sec_bonif, 5,
+regle_rep(secondes, 5,
    [ [comment], 2, [secondes], 1, [bonification]],
    [ [lors, d, '\'', une, etape, le, joueur, obtient, des, secondes, de, bonification, lors, de, sprints, intermediaires, ces, secondes,compteront, dans, le, temps, final, des, coureurs, au, classment, par, exemple, si, un, coureur, a, gagne, quatre, secondes, de, bonification,
      son, temps, est, calcule, comme, suit, total, des, secondes, de, l, '\'', etape, moins, les, quatre, secondes, de, bonification, moins, le, nombre, de, cases, situees, apres, la, ligne, d, '\'', arrivee, attention, les, secondes, de, bonification, comptent, uniquement, dans,
@@ -264,20 +264,20 @@ regle_rep(sec_bonif, 5,
 
 %-----------------------------------------------------------------% 
 
-regle_rep(pts_bonif,5,
+regle_rep(points,5,
    [ [comment], 2, [points], 1, [bonification]],
    [ [lors, d, '\'', une, etape, le, joueur, obtient, des, points, de, bonification, lors, des, sprints, intermediaires, le, classement, par, points, vaut, pour, toute, une, equipe, les, points, obtenus, par, tous, les, coureurs, d, '\'', une, equipe, sont, additionnes, par, equipe]]).
 
 %-----------------------------------------------------------------% 
 
-regle_rep(class_pts, 5,
+regle_rep(classement, 5,
    [ [comment], 2, [calculer], 1, [classement], 1, [points]],
    [ [le, classement, par, points, est, un, classement, par, equipes, vos, coureurs, peuvent, gagner, des, points, pour, votre, equipe, toute, entiere, a, chaque, etape, en, plus, des, secondes, de, bonification, vous, pouvez, gagner, des, points, en, fonction, de, la, place, d, '\'', arrivee, 
      de, vos, coureurs, a, la, fin, de, l, '\'', etape, formule, de, calcul, des, points, total, des, points, egal, '\'', onze, moins, position, d, '\'', arrivee, du, coureur, soit, zero, si, negatif, plus, les, points, de, bonification, obtenus]]).
 
 %-----------------------------------------------------------------% 
 
-regle_rep(class_inter, 5,
+regle_rep(intermediaire, 5,
    [ [comment], 2, [calculer], 1, [classement], 1, [intermediaire]],
    [ [le, classement, des, sprints, intermediaires, est, calcule, apres, chaque, etape, pour, determiner, qui, portera, le, maillot, jaune, l, '\'', equipe, la, plus, rapide, et, le, meneur, du, classement, par, points, le, coureur, qui, obtient, le, meilleur, score, total, est, le, coureur, le, plus,
      rapide, du, classement, intermediaire, et, obtient, le, maillot, jaune, a, la, fin, de, la, partie, le, maillot, jaune, remporte, des, points, supplementaires, si, vous, decidez, de, ne, jouer, qu, '\'', une, seule, etape, il, n, '\'', y, aura, pas, de, classement, intermediaire, et, le, coureur, le,
