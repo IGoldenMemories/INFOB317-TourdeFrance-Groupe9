@@ -1111,12 +1111,17 @@ coureursentrainedanschute(Listeidcaseschute, Positions, Passetour,Listepassetour
 
 %Vérifie que la carte seconde dont  le joueur souhaite se défausser est dans sa liste de carte seconde
 %ajout des cas où liste devient vide et repioche de 5 cartes
+%cas de début de partie( tas de carte vide --> première pioche)
 defaussecarte(Deck,Listetas,Nomjoueur,Carte,NouvDeck,Listetasfinal):-
-  idjoueur(Nomjoueur,Idjoueur),tasdecartejoueur(Nomjoueur,Listetas,Tasjoueur), member(Carte,Tasjoueur), delete(Tasjoueur,Carte,NouvTascarte) ,insert(Deck,Carte,Cartessecondesrestantes)
+  idjoueur(Nomjoueur,Idjoueur),tasdecartejoueur(Nomjoueur,Listetas,Tasjoueur), length(Tasjoueur,0),
+   repiocher5cartes(Nomjoueur,Tasjoueur,Deck,NouvDeck,Listetasfinal).
+%cas où tas devient vide après défausse -> repioche
+defaussecarte(Deck,Listetas,Nomjoueur,Carte,NouvDeck,Listetasfinal):-
+  idjoueur(Nomjoueur,Idjoueur),tasdecartejoueur(Nomjoueur,Listetas,Tasjoueur), member(Carte,Tasjoueur), delete(Tasjoueur,Carte,NouvTascarte) ,insert(Deck,Carte,Cartessecondesrestantes),
    length(NouvTascarte,Length), Length ===0, repiocher5cartes(Nomjoueur,NouvTascarte,Cartessecondesrestantes,NouvDeck,Listetasfinal).
 
 defaussecarte(Deck,Listetas,Nomjoueur,Carte,Cartessecondesrestantes,NouvListetas):-
-  idjoueur(Nomjoueur,Idjoueur),tasdecartejoueur(Nomjoueur,Listetas,Tasjoueur), member(Carte,Tasjoueur), delete(Tasjoueur,Carte,NouvTascarte) ,insert(Deck,Carte,Cartessecondesrestantes)
+  idjoueur(Nomjoueur,Idjoueur),tasdecartejoueur(Nomjoueur,Listetas,Tasjoueur), member(Carte,Tasjoueur), delete(Tasjoueur,Carte,NouvTascarte) ,insert(Deck,Carte,Cartessecondesrestantes),
   length(NouvTascarte,Length), Length > 0,  replace(Listetas,Idjoueur,1,NouvTascarte,Nouvlistetas).
 
 
